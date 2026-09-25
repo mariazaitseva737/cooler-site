@@ -1,0 +1,69 @@
+---
+import '@fontsource/onest/400.css';
+import '@fontsource/onest/500.css';
+import '@fontsource/onest/600.css';
+import '@fontsource/onest/700.css';
+import '@fontsource/literata/400.css';
+import '@fontsource/literata/600.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
+import { APP_NAME, ui, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;          // full <title>
+  description: string;
+  path: string;           // this page's path, e.g. /blog/some-slug/
+  alternates?: { ru?: string; en?: string };
+  ogType?: 'website' | 'article';
+  jsonLd?: object[];
+  noindex?: boolean;
+  current?: 'home' | 'blog';
+  footerNote?: string;
+  article?: { slug: string; topic: string; key: string };
+}
+const { lang, title, description, path, alternates = {}, ogType = 'website', jsonLd = [], noindex = false, current, footerNote, article } = Astro.props;
+const pageType = path === ui[lang].home ? 'home' : path === ui[lang].blog ? 'blog' : path.includes('/blog/') ? 'article' : path.includes('thanks') ? 'thanks' : 'other';
+const site = Astro.site!;
+const canonical = new URL(path, site).href;
+const altLang: Lang = lang === 'ru' ? 'en' : 'ru';
+const altPath = alternates[altLang] ?? ui[altLang].home;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.ru && <link rel="alternate" hreflang="ru" href={new URL(alternates.ru, site).href} />}
+    {alternates.en && <link rel="alternate" hreflang="en" href={new URL(alternates.en, site).href} />}
+    {alternates.en && <link rel="alternate" hreflang="x-default" href={new URL(alternates.en, site).href} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={APP_NAME[lang]} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ui[lang].locale} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#F3F7F5" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+  </head>
+  <body data-page={pageType} data-article-slug={article?.slug} data-topic={article?.topic} data-article-key={article?.key}>
+    <div class="page">
+      <a class="skip" href="#main">{lang === 'ru' ? 'Перейти к содержанию' : 'Skip to content'}</a>
+      <Header lang={lang} altHref={altPath} current={current} />
+      <main id="main">
+        <slot />
+      </main>
+      <Footer lang={lang} note={footerNote} altHref={altPath} />
+    </div>
+    <Analytics />
+  </body>
+</html>

@@ -1,0 +1,198 @@
+---
+// Amplitude on the website. Turns on only when PUBLIC_AMPLITUDE_API_KEY is set.
+//
+// Privacy choices (keep the landing's privacy text in sync with these):
+//   - IP address is not sent (trackingOptions.ipAddress = false).
+//   - No cookies. A random device id is kept in localStorage so we can see
+//     returning visitors and connect the landing to the app (same site, /app/).
+//   - No element autocapture: it would record on-page text. Every event below is named by hand.
+//   - Email addresses are never sent. Form events carry only the form's place.
+//
+// Events (all carry page_type, lang, path):
+//   page_viewed              page_type, article_slug?, topic?, referrer_host, utm_*
+//   section_viewed           section              (≥40% on screen, once per page)
+//   cta_clicked              cta, place           (any element with data-track)
+//   app_link_clicked         place                (links into /app/, also cta_clicked)
+//   faq_opened               question_index, question
+//   lang_switched            to
+//   screenshot_viewed        screen               (landing gallery)
+//   blog_topic_filtered      topic
+//   article_card_clicked     article_slug, position, featured
+//   article_read_depth       article_slug, percent (25/50/75/100)
+//   article_engaged_time     article_slug, seconds (15/30/60/120/240, tab visible only)
+//   article_source_clicked   article_slug, source_host
+//   waitlist_form_started    place
+//   waitlist_form_submitted  place
+//   waitlist_form_succeeded  place
+//   waitlist_form_failed     place, reason
+//   outbound_link_clicked    host
+// Autocaptured by Amplitude: session start/end, marketing attribution (first touch utm/referrer).
+const key = import.meta.env.PUBLIC_AMPLITUDE_API_KEY || '';
+const zone = (import.meta.env.PUBLIC_AMPLITUDE_SERVER_ZONE || 'US').toUpperCase() === 'EU' ? 'EU' : 'US';
+---
+{key && <script is:inline define:vars={{ key, zone }}>window.__COOLER_AMP__ = { key, zone };</script>}
+<script>
+  import * as amplitude from '@amplitude/analytics-browser';
+
+  type Props = Record<string, unknown>;
+  const cfg = (window as any).__COOLER_AMP__ as { key: string; zone: 'US' | 'EU' } | undefined;
+  const lang = document.documentElement.lang || 'en';
+  const path = location.pathname;
+  const body = document.body.dataset;
+  const pageType = body.page || 'other';
+  const base: Props = { page_type: pageType, lang, path };
+  if (body.articleSlug) Object.assign(base, { article_slug: body.articleSlug, topic: body.topic, article_key: body.articleKey });
+
+  const track = (event: string, props: Props = {}) => {
+    if (!cfg) return;
+    amplitude.track(event, { ...base, ...props });
+  };
+  (window as any).coolerTrack = track;
+  // Wait (briefly) for queued events to leave before navigating away.
+  (window as any).coolerFlush = (ms = 800) => cfg
+    ? Promise.race([amplitude.flush().promise, new Promise((r) => setTimeout(r, ms))])
+    : Promise.resolve();
+
+  if (cfg) {
+    amplitude.init(cfg.key, {
+      serverZone: cfg.zone,
+      identityStorage: 'localStorage',
+      trackingOptions: { ipAddress: false, language: true, platform: true },
+      autocapture: {
+        attribution: { excludeReferrers: [location.hostname] },
+        pageViews: false,
+        sessions: true,
+        formInteractions: false,
+        fileDownloads: false,
+        elementInteractions: false,
+        frustrationInteractions: false,
+        networkTracking: false,
+        webVitals: false,
+      },
+      remoteConfig: { fetchRemoteConfig: false },
+      enableDiagnostics: false,
+    });
+
+    // Pages that close right after a click: send the rest with sendBeacon.
+    addEventListener('pagehide', () => { amplitude.setTransport('beacon'); amplitude.flush(); });
+
+    // ── page view ──
+    const q = new URLSearchParams(location.search);
+    const utm: Props = {};
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => { if (q.get(k)) utm[k] = q.get(k); });
+    let referrerHost: string | undefined;
+    try { referrerHost = document.referrer ? new URL(document.referrer).hostname : undefined; } catch {}
+    if (referrerHost === location.hostname) referrerHost = 'internal';
+    track('page_viewed', { referrer_host: referrerHost || 'direct', ...utm });
+    // keep utm for the app link on later pages of the same visit
+    try { if (Object.keys(utm).length) sessionStorage.setItem('cooler.utm', JSON.stringify(utm)); } catch {}
+
+    // ── sections seen ──
+    const seen = new Set<string>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        const name = (en.target as HTMLElement).dataset.section!;
+        if (en.isIntersecting && !seen.has(name)) { seen.add(name); track('section_viewed', { section: name }); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll<HTMLElement>('[data-section]').forEach((el) => io.observe(el));
+
+    // ── screenshots seen (landing gallery) ──
+    const shotIo = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { track('screenshot_viewed', { screen: (en.target as HTMLElement).dataset.shot }); shotIo.unobserve(en.target); }
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll<HTMLElement>('[data-shot]').forEach((el) => shotIo.observe(el));
+
+    // ── article: read depth + engaged time ──
+    const prose = document.querySelector<HTMLElement>('[data-read-body]');
+    if (prose) {
+      const marks = [25, 50, 75, 100];
+      const hit = new Set<number>();
+      const onScroll = () => {
+        const r = prose.getBoundingClientRect();
+        const read = Math.min(1, Math.max(0, (window.innerHeight - r.top) / r.height));
+        marks.forEach((m) => { if (read * 100 >= m && !hit.has(m)) { hit.add(m); track('article_read_depth', { percent: m }); } });
+        if (hit.size === marks.length) window.removeEventListener('scroll', onScroll);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      const steps = [15, 30, 60, 120, 240];
+      let secs = 0;
+      const timer = setInterval(() => {
+        if (document.visibilityState !== 'visible') return;
+        secs += 5;
+        if (steps.includes(secs)) track('article_engaged_time', { seconds: secs });
+        if (secs >= steps[steps.length - 1]) clearInterval(timer);
+      }, 5000);
+    }
+  }
+
+  // ── pass the analytics id + utm into the app, so landing → app is one funnel ──
+  function decorateAppLink(a: HTMLAnchorElement) {
+    if (!cfg) return;
+    try {
+      const u = new URL(a.href, location.href);
+      if (!u.pathname.startsWith('/app')) return;
+      const id = amplitude.getDeviceId();
+      if (id) u.searchParams.set('aid', id);
+      const utm = JSON.parse(sessionStorage.getItem('cooler.utm') || '{}');
+      Object.entries(utm).forEach(([k, v]) => u.searchParams.set(k, String(v)));
+      if (!u.searchParams.get('utm_source')) u.searchParams.set('utm_source', 'site');
+      u.searchParams.set('utm_content', a.dataset.trackPlace || pageType);
+      a.href = u.toString();
+    } catch {}
+  }
+
+  // ── clicks ──
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const a = target.closest<HTMLAnchorElement>('a[href]');
+    const el = target.closest<HTMLElement>('[data-track]');
+    if (el) track('cta_clicked', { cta: el.dataset.track, place: el.dataset.trackPlace });
+    if (!a) return;
+    let url: URL;
+    try { url = new URL(a.href, location.href); } catch { return; }
+    if (url.origin === location.origin && url.pathname.startsWith('/app')) {
+      decorateAppLink(a);
+      track('app_link_clicked', { place: a.dataset.trackPlace || pageType });
+      return;
+    }
+    if (a.matches('[data-lang-switch]')) { track('lang_switched', { to: a.getAttribute('hreflang') }); return; }
+    const card = a.closest<HTMLElement>('[data-card]');
+    if (card) {
+      const all = Array.from(document.querySelectorAll('[data-card]'));
+      track('article_card_clicked', { target_slug: card.dataset.slug, position: all.indexOf(card) + 1, featured: card.hasAttribute('data-featured') });
+      return;
+    }
+    if (a.closest('[data-sources]')) { track('article_source_clicked', { source_host: url.hostname }); return; }
+    if (a.closest('[data-read-next]')) { track('read_next_clicked', { target_path: url.pathname }); return; }
+    if (url.origin !== location.origin && /^https?:/.test(url.protocol)) track('outbound_link_clicked', { host: url.hostname });
+  }, { capture: true });
+
+  // ── FAQ ──
+  document.querySelectorAll<HTMLDetailsElement>('[data-faq] details').forEach((d, i) => {
+    let first = d.open; // the first question starts open; don't count that
+    d.addEventListener('toggle', () => {
+      if (first) { first = false; if (d.open) return; }
+      if (d.open) track('faq_opened', { question_index: i + 1, question: d.querySelector('summary')?.firstChild?.textContent?.trim().slice(0, 120) });
+    });
+  });
+
+  // ── blog topic filter ──
+  document.querySelector('[data-topics]')?.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+    if (b) track('blog_topic_filtered', { topic: b.dataset.topic || 'all' });
+  });
+
+  // ── waitlist form (WaitlistForm.astro dispatches the result events) ──
+  document.querySelectorAll<HTMLFormElement>('form.waitlist').forEach((f) => {
+    const place = f.dataset.trackPlace;
+    let started = false;
+    f.addEventListener('focusin', () => { if (!started) { started = true; track('waitlist_form_started', { place }); } });
+    f.addEventListener('waitlist:submit', () => track('waitlist_form_submitted', { place }));
+    f.addEventListener('waitlist:ok', () => track('waitlist_form_succeeded', { place }));
+    f.addEventListener('waitlist:fail', (e) => track('waitlist_form_failed', { place, reason: (e as CustomEvent).detail }));
+  });
+</script>
