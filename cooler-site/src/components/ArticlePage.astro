@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import { articlePath, realReviewer, type Article } from '../lib/articles';
-import { APP_URL, formatDate, ui, type Lang } from '../i18n/ui';
+import { appHref as appLink, formatDate, ui, type Lang } from '../i18n/ui';
 interface Props { entry: Article; others: Article[] }
 const { entry, others } = Astro.props;
 const d = entry.data;
@@ -10,7 +10,7 @@ const t = ui[lang];
 const { Content } = await render(entry);
 const reviewer = realReviewer(d.reviewer);
 const updated = d.updated ?? d.published;
-const appHref = APP_URL || `${t.home}#waitlist`;
+const appHref = appLink(lang);
 ---
 <div class="wrap article-wrap">
   <nav class="crumbs" aria-label={lang === 'ru' ? 'Навигация' : 'Breadcrumb'}>
@@ -31,17 +31,17 @@ const appHref = APP_URL || `${t.home}#waitlist`;
         </p>
       </header>
 
-      <div class="prose"><Content /></div>
+      <div class="prose" data-read-body><Content /></div>
 
       {d.flag && (
-        <div class="flag" role="note">
+        <div class="flag" role="note" data-section="article_flag">
           <strong>{t.dontWait}</strong>
           <p>{d.flag}</p>
         </div>
       )}
 
       {d.faq.length > 0 && (
-        <section class="faq" aria-labelledby="faq-title">
+        <section class="faq" data-section="article_faq" aria-labelledby="faq-title">
           <h2 id="faq-title">{t.faqTitle}</h2>
           {d.faq.map((f) => (
             <div class="qa">
@@ -53,7 +53,7 @@ const appHref = APP_URL || `${t.home}#waitlist`;
       )}
 
       {d.sources.length > 0 && (
-        <section class="sources" aria-labelledby="src-title">
+        <section class="sources" data-section="article_sources" data-sources aria-labelledby="src-title">
           <h2 id="src-title">{t.sourcesTitle}</h2>
           <ol>{d.sources.map((s) => <li><a href={s.url} rel="noopener" target="_blank">{s.label}</a></li>)}</ol>
           <p>{t.blogFooterNote}</p>
@@ -67,7 +67,7 @@ const appHref = APP_URL || `${t.home}#waitlist`;
         <ul class="ticks">{d.summary.map((s) => <li>{s}</li>)}</ul>
       </section>
 
-      {d.terms.length > 0 && (
+      {lang === 'ru' && d.terms.length > 0 && (
         <section class="box">
           <h2>{t.termsTitle}</h2>
           <p class="small">{t.termsNote}</p>
@@ -80,13 +80,13 @@ const appHref = APP_URL || `${t.home}#waitlist`;
       <section class="box box-deep">
         <h2>{t.todayTitle}</h2>
         <p>{d.today}</p>
-        <a class="btn btn-glass btn-sm" href={appHref} data-track="try_click" data-track-place="article">{t.openApp}</a>
+        <a class="btn btn-glass btn-sm" href={appHref} data-track="try_app" data-track-place="article">{t.openApp}</a>
       </section>
 
       {others.length > 0 && (
         <section class="box">
           <h2>{t.readNext}</h2>
-          <ul class="next">
+          <ul class="next" data-read-next>
             {others.map((o) => (
               <li><a href={articlePath(lang, o.data.slug)}><span class="next-topic">{o.data.topic}</span><span class="next-title">{o.data.title}</span></a></li>
             ))}

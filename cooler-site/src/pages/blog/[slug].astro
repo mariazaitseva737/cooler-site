@@ -6,12 +6,12 @@ import { articleJsonLd } from '../../lib/seo';
 import { APP_NAME, ui } from '../../i18n/ui';
 
 export async function getStaticPaths() {
-  const list = await getArticles('ru');
+  const list = await getArticles('en');
   return list.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry, list } }));
 }
 const { entry, list } = Astro.props as { entry: Article; list: Article[] };
 const d = entry.data;
-const lang = 'ru';
+const lang = 'en';
 const translation = await getTranslation(entry);
 const alternates = {
   [lang]: articlePath(lang, d.slug),
@@ -20,6 +20,7 @@ const alternates = {
 const others = list.filter((a) => a.id !== entry.id).slice(0, 4);
 ---
 <Base lang={lang} title={`${d.seoTitle} | ${APP_NAME[lang]}`} description={d.description} path={articlePath(lang, d.slug)}
-  alternates={alternates} ogType="article" current="blog" jsonLd={articleJsonLd(entry, Astro.site!)} footerNote={ui[lang].blogFooterNote}>
+  alternates={alternates} ogType="article" current="blog" jsonLd={articleJsonLd(entry, Astro.site!)} footerNote={ui[lang].blogFooterNote}
+  article={{ slug: d.slug, topic: d.topic, key: d.translationKey }}>
   <ArticlePage entry={entry} others={others} />
 </Base>

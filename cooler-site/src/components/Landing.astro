@@ -1,18 +1,27 @@
 ---
 import WaitlistForm from './WaitlistForm.astro';
-import { APP_NAME, APP_NAME_IN, APP_URL, ui, type Lang } from '../i18n/ui';
+import { APP_NAME, APP_NAME_IN, APP_URL, appHref, ui, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = ui[lang];
 const name = APP_NAME[lang];
-const tryHref = APP_URL || '#waitlist';
+const tryHref = appHref(lang);
 
 const copy = {
   ru: {
     kicker: 'Для женщин после менопаузы',
     h1: 'Впереди ещё тридцать лет. Пусть они будут хорошими.',
     sub: `${name} поможет пережить приливы, плохой сон и перепады настроения. А когда они пройдут, напомнит позаботиться о костях, сердце и мышцах. Приложение работает на русском и английском.`,
+    shotsKicker: 'Как это выглядит',
+    shotsTitle: 'Крупный текст, понятные кнопки, ничего лишнего',
+    shots: [
+      ['today', 'Главный экран', 'Лекарства на сегодня, отметка дня и кнопка на случай прилива.'],
+      ['breathing', 'Начался прилив', 'Две минуты спокойного дыхания: вдох на 4, выдох на 6.'],
+      ['trends', 'Динамика', 'Что влияет на приливы и сон именно у вас. Видно уже через неделю.'],
+      ['doctor', 'К врачу', 'Итог за 30 дней и ваши вопросы. Можно показать на приёме или отправить.'],
+    ],
+    heroShotAlt: 'Главный экран приложения: лекарства на сегодня и кнопка «Начался прилив»',
     notAloneTitle: 'Узнаёте себя? Вы не одна',
     notAloneSub: 'Так бывает у очень многих. Просто вслух об этом говорят редко.',
     situations: [
@@ -49,7 +58,7 @@ const copy = {
     privacyCards: [
       ['Отметки хранятся на вашем телефоне', 'Симптомы, лечение и всё из интимного раздела остаются в браузере на телефоне. К нам на сервер они не попадают.'],
       ['Мы ничего не передаём и не продаём', 'Ни рекламодателям, ни партнёрам, никому.'],
-      ['Что мы всё-таки считаем', 'Мы видим анонимную статистику: сколько человек открыли приложение и сколько вернулись. Ни симптомов, ни имени в ней нет. Email у нас есть, только если вы сами его оставили.'],
+      ['Что мы всё-таки считаем', 'Какие страницы и экраны открывают и сколько людей возвращается. Для этого мы используем сервис Amplitude, IP-адрес не сохраняем. В приложении вы сами решаете, можно ли связывать эти визиты с вами. Записи, давление и лекарства туда не попадают никогда. Email у нас есть, только если вы сами его оставили.'],
     ],
     faqTitle: 'Частые вопросы',
     faq: [
@@ -66,6 +75,15 @@ const copy = {
     kicker: 'For women after menopause',
     h1: 'Thirty more years ahead. They can be good ones.',
     sub: `${name} helps you get through hot flashes, bad nights and mood swings. Once those pass, it reminds you to look after your bones, heart and muscles.`,
+    shotsKicker: 'What it looks like',
+    shotsTitle: 'Large text, clear buttons, nothing extra',
+    shots: [
+      ['today', 'Today', 'Today’s medicines, a quick check-in and a button for when a hot flash starts.'],
+      ['breathing', 'Hot flash started', 'Two minutes of calm breathing: in for 4, out for 6.'],
+      ['trends', 'Trends', 'What affects your hot flashes and sleep. You start seeing it after a week.'],
+      ['doctor', 'For the doctor', 'A 30-day summary and your questions. Show it at the appointment or send it.'],
+    ],
+    heroShotAlt: 'The app’s Today screen: medicines for today and a “Hot flash started” button',
     notAloneTitle: 'Sound familiar? You’re not alone',
     notAloneSub: 'It happens to a lot of women. People just rarely say it out loud.',
     situations: [
@@ -84,7 +102,7 @@ const copy = {
       ['Log your day in 30 seconds', 'Note how your hot flashes, sleep, mood, energy and joints are today. The app suggests one thing to try for whatever is bothering you most.'],
       ['Spot your own patterns', 'After five check-ins, you’ll see what keeps repeating for you. For example, that your hot flashes are worse on days with afternoon coffee.'],
       ['Look after your bones, heart and strength', 'Programs for strength training, pelvic floor exercises and better sleep. Reminders for your treatment, if you’re on one, and a list of checkups that are due.'],
-      ['Understand what’s going on', 'Short answers to the questions you feel awkward about or never get time to ask your doctor. Key terms come in English and Russian, which helps if you see doctors in more than one country.'],
+      ['Understand what’s going on', 'Short, honest answers to the questions you feel awkward about or never get time to ask your doctor.'],
     ],
     terms: [['hot flashes', 'приливы'], ['HRT', 'ЗГТ'], ['bone density scan', 'денситометрия']],
     intimateKicker: 'Intimate health',
@@ -94,7 +112,7 @@ const copy = {
       'This section only opens when you choose to open it',
       'Notifications on your lock screen never mention anything intimate',
       'Pelvic floor exercises on a simple schedule',
-      'Terms in English and Russian, so it’s easier to bring up with a doctor',
+      'Plain words and questions to bring it up with your doctor',
     ],
     privacyKicker: 'Privacy',
     privacyTitle: 'Your data stays with you',
@@ -102,7 +120,7 @@ const copy = {
     privacyCards: [
       ['Your logs live on your phone', 'Symptoms, treatment and everything in the intimate health section stay in the browser on your phone. They never reach our servers.'],
       ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
-      ['What we do count', 'Anonymous numbers only: how many people opened the app and how many came back. No symptoms and no names. We only have your email if you gave it to us.'],
+      ['What we do count', 'Which pages and screens get opened, and how many people come back. We use a service called Amplitude for this and don’t store IP addresses. In the app, you decide whether those visits can be linked to you. Your entries, blood pressure and medicines never go there. We only have your email if you gave it to us.'],
     ],
     faqTitle: 'Questions',
     faq: [
@@ -117,18 +135,23 @@ const copy = {
   },
 }[lang];
 ---
-<section class="wrap hero">
+<section class="wrap hero" data-section="hero">
+  <div class="hero-text">
   <p class="kicker">{copy.kicker}</p>
   <h1 class="hero-title">{copy.h1}</h1>
   <p class="hero-sub">{copy.sub}</p>
   <div class="hero-actions" id="waitlist">
-    {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_click" data-track-place="hero">{t.tryFree}</a>}
+    {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
     <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
     <p class="note">{t.emailNote}</p>
   </div>
+  </div>
+  <figure class="phone hero-phone" data-shot="hero_today">
+    <img src={`/screens/${lang}-today.webp`} width="390" height="844" alt={copy.heroShotAlt} fetchpriority="high" />
+  </figure>
 </section>
 
-<section class="section section-white">
+<section class="section section-white" data-section="not_alone">
   <div class="wrap stack-56">
     <div class="stack-16 narrow">
       <h2 class="h-section">{copy.notAloneTitle}</h2>
@@ -141,7 +164,26 @@ const copy = {
   </div>
 </section>
 
-<section class="section" id="features">
+<section class="section section-deep" id="screens" data-section="screens">
+  <div class="wrap stack-56 shots-wrap">
+    <div class="stack-16 narrow">
+      <p class="kicker kicker-light">{copy.shotsKicker}</p>
+      <h2 class="h-section">{copy.shotsTitle}</h2>
+    </div>
+    <ul class="shots" role="list">
+      {copy.shots.map(([id, h, p]) => (
+        <li data-shot={id}>
+          <figure class="phone"><img src={`/screens/${lang}-${id}.webp`} width="390" height="844" alt={`${h}. ${p}`} loading="lazy" decoding="async" /></figure>
+          <h3>{h}</h3>
+          <p>{p}</p>
+        </li>
+      ))}
+    </ul>
+    {APP_URL && <a class="btn btn-glass btn-lg shots-cta" href={tryHref} data-track="try_app" data-track-place="screens">{t.tryFree}</a>}
+  </div>
+</section>
+
+<section class="section" id="features" data-section="features">
   <div class="wrap stack-56">
     <div class="stack-16 narrow">
       <p class="kicker">{copy.featuresKicker}</p>
@@ -154,7 +196,7 @@ const copy = {
           <h3>{h}</h3>
           <div class="stack-16">
             <p>{p}</p>
-            {i === 4 && (
+            {i === 4 && lang === 'ru' && (
               <ul class="chips" aria-label={lang === 'ru' ? 'Примеры терминов' : 'Example terms'}>
                 {copy.terms.map(([a, b]) => <li><strong>{a}</strong> <span>{b}</span></li>)}
               </ul>
@@ -166,7 +208,7 @@ const copy = {
   </div>
 </section>
 
-<section class="wrap" id="intimate">
+<section class="wrap" id="intimate" data-section="intimate">
   <div class="intimate">
     <div class="stack-24">
       <p class="kicker kicker-light">{copy.intimateKicker}</p>
@@ -179,7 +221,7 @@ const copy = {
   </div>
 </section>
 
-<section class="section" id="privacy">
+<section class="section" id="privacy" data-section="privacy">
   <div class="wrap two-col">
     <div class="stack-24">
       <p class="kicker">{copy.privacyKicker}</p>
@@ -197,10 +239,10 @@ const copy = {
   </div>
 </section>
 
-<section class="section section-white" id="faq">
+<section class="section section-white" id="faq" data-section="faq">
   <div class="wrap two-col">
     <h2 class="h-section">{copy.faqTitle}</h2>
-    <div class="faq">
+    <div class="faq" data-faq>
       {copy.faq.map(([q, a], i) => (
         <details open={i === 0}>
           <summary>{q}<span class="plus" aria-hidden="true">+</span></summary>
@@ -211,12 +253,12 @@ const copy = {
   </div>
 </section>
 
-<section class="section cta">
+<section class="section cta" data-section="bottom_cta">
   <div class="wrap stack-24 center">
     <h2 class="h-section">{copy.ctaTitle}</h2>
     <p class="lead">{copy.ctaText}</p>
     {APP_URL
-      ? <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_click" data-track-place="bottom">{t.tryFree}</a>
+      ? <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="bottom">{t.tryFree}</a>
       : <div class="cta-form"><WaitlistForm lang={lang} id="bottom-email" source="bottom" buttonClass="btn btn-primary" /></div>}
   </div>
 </section>
@@ -235,7 +277,28 @@ const copy = {
   .narrow { max-width: 860px; }
   .center { justify-items: center; text-align: center; }
 
-  .hero { padding-block: clamp(40px, 7vw, 96px) clamp(64px, 8vw, 112px); display: grid; gap: 24px; max-width: 1440px; }
+  .hero { padding-block: clamp(40px, 7vw, 96px) clamp(64px, 8vw, 112px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 5vw, 80px); align-items: center; max-width: 1440px; }
+  .hero-text { display: grid; gap: 24px; }
+  .phone { margin: 0; border-radius: 40px; padding: 10px; background: var(--ink); box-shadow: 0 30px 60px -30px rgba(16, 48, 47, 0.45); }
+  .phone img { display: block; width: 100%; height: auto; border-radius: 30px; }
+  .hero-phone { width: clamp(260px, 24vw, 340px); transform: rotate(2deg); }
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: minmax(0, 1fr); }
+    .hero-phone { width: min(300px, 78vw); justify-self: center; transform: none; }
+  }
+  .section-deep { background: var(--lagoon-deep, #0B4446); color: var(--air); }
+  .section-deep .h-section { color: var(--air); }
+  .shots { list-style: none; padding: 0; margin: 0; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.5vw, 36px); }
+  .shots li { display: grid; gap: 12px; align-content: start; }
+  .shots .phone { background: #0A2E2D; box-shadow: none; margin-bottom: 8px; }
+  .shots h3 { font: 600 22px/1.25 var(--sans); color: var(--air); }
+  .shots p { font-size: 18px; line-height: 1.5; color: #CFE6DF; }
+  .shots-wrap { grid-template-columns: minmax(0, 1fr); }
+  .shots-cta { justify-self: start; }
+  @media (max-width: 1100px) {
+    .shots { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(270px, 74vw); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; margin-inline: calc(-1 * var(--gutter, 20px)); padding-inline: var(--gutter, 20px); scroll-padding-inline: var(--gutter, 20px); }
+    .shots li { scroll-snap-align: start; }
+  }
   .hero-title { font: 600 clamp(40px, 6.4vw, 80px)/1.05 var(--serif); letter-spacing: -0.025em; max-width: 1000px; }
   .hero-sub { font-size: clamp(19px, 2vw, 23px); line-height: 1.55; max-width: 720px; }
   .hero-actions { display: grid; gap: 18px; max-width: 640px; padding-top: 8px; scroll-margin-top: 24px; }

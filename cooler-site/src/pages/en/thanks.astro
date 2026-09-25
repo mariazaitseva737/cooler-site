@@ -1,7 +1,4 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Thanks from '../../components/Thanks.astro';
+import Redirect from '../../components/Redirect.astro';
 ---
-<Base lang="en" title="Thank you!" description="You’re on the list." path="/en/thanks/" alternates={{ ru: '/thanks/', en: '/en/thanks/' }} noindex>
-  <Thanks lang="en" />
-</Base>
+<Redirect to="/thanks/" />

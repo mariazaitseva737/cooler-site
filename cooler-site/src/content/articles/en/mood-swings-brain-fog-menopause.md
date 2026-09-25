@@ -47,6 +47,6 @@ If for two weeks or longer you feel low or nothing brings you joy nearly every d
 ## What helps day to day
 
 - Movement: even a 20-minute walk lifts your mood.
-- Sleep: there is a separate [article on sleep](/en/blog/sleep-after-menopause/).
+- Sleep: there is a separate [article on sleep](/blog/sleep-after-menopause/).
 - People: talking to a friend helps more than you might think.
 - CBT helps with both mood swings and anxiety.

@@ -5,14 +5,16 @@ export const APP_NAME_IN = 'Прохладе';
 
 export type Lang = 'ru' | 'en';
 
-export const APP_URL: string = import.meta.env.PUBLIC_APP_URL || '';
+// The web app is built into /app/ of this site. Set PUBLIC_APP_URL only to point somewhere else.
+export const APP_URL: string = import.meta.env.PUBLIC_APP_URL || '/app/';
+export const appHref = (lang: 'ru' | 'en') => `${APP_URL}${APP_URL.includes('?') ? '&' : '?'}lang=${lang}`;
 
 export const ui = {
   ru: {
     locale: 'ru_RU',
-    home: '/',
-    blog: '/blog/',
-    thanks: '/thanks/',
+    home: '/ru/',
+    blog: '/ru/blog/',
+    thanks: '/ru/thanks/',
     navFeatures: 'Что умеет',
     navIntimate: 'Интимное здоровье',
     navPrivacy: 'Приватность',
@@ -63,9 +65,9 @@ export const ui = {
   },
   en: {
     locale: 'en_US',
-    home: '/en/',
-    blog: '/en/blog/',
-    thanks: '/en/thanks/',
+    home: '/',
+    blog: '/blog/',
+    thanks: '/thanks/',
     navFeatures: 'Features',
     navIntimate: 'Intimate health',
     navPrivacy: 'Privacy',

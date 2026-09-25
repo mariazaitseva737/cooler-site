@@ -21,7 +21,7 @@ const topics = [...new Set(articles.map((a) => a.data.topic))];
   </div>
 
   {featured && (
-    <article class="featured" data-card data-topic={featured.data.topic}>
+    <article class="featured" data-card data-featured data-slug={featured.data.slug} data-topic={featured.data.topic}>
       <p class="meta">{featured.data.topic} · {featured.data.readingTime} {t.minRead}</p>
       <h2><a href={articlePath(lang, featured.data.slug)}>{featured.data.title}</a></h2>
       <p class="excerpt">{featured.data.lead}</p>
@@ -31,7 +31,7 @@ const topics = [...new Set(articles.map((a) => a.data.topic))];
 
   <ul class="cards">
     {rest.map((a) => (
-      <li data-card data-topic={a.data.topic}>
+      <li data-card data-slug={a.data.slug} data-topic={a.data.topic}>
         <article class="card-article">
           <p class="meta">{a.data.topic} · {a.data.readingTime}</p>
           <h2><a href={articlePath(lang, a.data.slug)}>{a.data.title}</a></h2>
@@ -41,7 +41,7 @@ const topics = [...new Set(articles.map((a) => a.data.topic))];
     ))}
   </ul>
 
-  <section class="subscribe" aria-labelledby="subscribe-title">
+  <section class="subscribe" data-section="subscribe" aria-labelledby="subscribe-title">
     <div class="sub-text">
       <h2 id="subscribe-title">{t.subscribeTitle}</h2>
       <p>{t.subscribeText}</p>

@@ -48,7 +48,7 @@ If you have had breast cancer, blood clots, a stroke or a heart attack, have liv
 
 ## Local therapy is different
 
-For vaginal dryness and frequent urinary infections, doctors use local treatments with very low doses of hormones. Very little reaches the bloodstream, and the rules for them are different from regular HRT. More on this in the [article on intimate health](/en/blog/vaginal-dryness-after-menopause/).
+For vaginal dryness and frequent urinary infections, doctors use local treatments with very low doses of hormones. Very little reaches the bloodstream, and the rules for them are different from regular HRT. More on this in the [article on intimate health](/blog/vaginal-dryness-after-menopause/).
 
 ## What to ask your doctor
 

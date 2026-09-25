@@ -1,11 +1,11 @@
 ---
 import Logo from './Logo.astro';
-import { APP_NAME, APP_URL, ui, type Lang } from '../i18n/ui';
+import { APP_NAME, appHref, ui, type Lang } from '../i18n/ui';
 interface Props { lang: Lang; altHref: string; current?: 'home' | 'blog' }
 const { lang, altHref, current } = Astro.props;
 const t = ui[lang];
 const home = t.home;
-const tryHref = APP_URL || `${home}#waitlist`;
+const tryHref = appHref(lang);
 ---
 <header class="wrap site-header">
   <a class="logo" href={home}><Logo /><span>{APP_NAME[lang]}</span></a>
@@ -17,9 +17,9 @@ const tryHref = APP_URL || `${home}#waitlist`;
     <a href={`${home}#faq`}>{t.navFaq}</a>
   </nav>
   <div class="header-actions">
-    <a class="lang" href={altHref} hreflang={lang === 'ru' ? 'en' : 'ru'} aria-label={t.langAria}>
+    <a class="lang" data-lang-switch href={altHref} hreflang={lang === 'ru' ? 'en' : 'ru'} aria-label={t.langAria}>
       {lang === 'ru' ? <><strong>RU</strong>&nbsp;· EN</> : <>RU&nbsp;· <strong>EN</strong></>}
     </a>
-    <a class="btn btn-primary btn-sm" href={tryHref} data-track="try_click" data-track-place="header">{t.tryFree}</a>
+    <a class="btn btn-primary btn-sm" href={tryHref} data-track="try_app" data-track-place="header">{t.tryFree}</a>
   </div>
 </header>

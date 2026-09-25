@@ -14,7 +14,7 @@ export async function getTranslation(entry: Article): Promise<Article | undefine
   return list.find((e) => e.data.translationKey === entry.data.translationKey);
 }
 
-export const articlePath = (lang: Lang, slug: string) => (lang === 'ru' ? `/blog/${slug}/` : `/en/blog/${slug}/`);
+export const articlePath = (lang: Lang, slug: string) => (lang === 'ru' ? `/ru/blog/${slug}/` : `/blog/${slug}/`);
 
 // Reviewer placeholders like "[ИМЯ ВРАЧА]" are hidden on the live site until a real name is filled in.
 export const realReviewer = (r?: string) => (r && !r.trim().startsWith('[') ? r : undefined);
