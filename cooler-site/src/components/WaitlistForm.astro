@@ -1,0 +1,18 @@
+---
+import { APP_URL, ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang; id: string; source: string; label?: string; button?: string; buttonClass?: string }
+const { lang, id, source, label, button, buttonClass = 'btn btn-outline' } = Astro.props;
+const t = ui[lang];
+const text = label ?? (APP_URL ? t.emailLabelLive : t.emailLabel);
+---
+<form name="waitlist" method="POST" action={t.thanks} data-netlify="true" netlify-honeypot="bot-field" data-track-submit="email_submit" data-track-place={source}>
+  <input type="hidden" name="form-name" value="waitlist" />
+  <input type="hidden" name="lang" value={lang} />
+  <input type="hidden" name="source" value={source} />
+  <p class="hp"><label>Не заполняйте это поле <input name="bot-field" /></label></p>
+  <label class="field-label" for={id}>{text}</label>
+  <div class="field-row">
+    <input class="input" id={id} name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+    <button class={buttonClass} type="submit">{button ?? t.emailButton}</button>
+  </div>
+</form>

@@ -1,0 +1,33 @@
+---
+// Analytics turns on only when PUBLIC_POSTHOG_KEY is set.
+// Cookieless: nothing is stored on the visitor's device, no session recording, no autocapture.
+// Sends page views plus the events named in data-track / data-track-submit attributes.
+const key = import.meta.env.PUBLIC_POSTHOG_KEY || '';
+const host = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com';
+---
+{key && <script is:inline define:vars={{ key, host }}>window.__COOLER_ANALYTICS__ = { key, host };</script>}
+<script>
+  const cfg = (window as any).__COOLER_ANALYTICS__;
+  if (cfg) {
+    import('posthog-js').then(({ default: posthog }) => {
+      posthog.init(cfg.key, {
+        api_host: cfg.host,
+        persistence: 'memory',
+        autocapture: false,
+        capture_pageview: true,
+        capture_pageleave: false,
+        disable_session_recording: true,
+        person_profiles: 'identified_only',
+      });
+      const lang = document.documentElement.lang;
+      document.addEventListener('click', (e) => {
+        const el = (e.target as HTMLElement).closest<HTMLElement>('[data-track]');
+        if (el) posthog.capture(el.dataset.track!, { place: el.dataset.trackPlace, lang });
+      });
+      document.addEventListener('submit', (e) => {
+        const f = e.target as HTMLElement;
+        if (f.dataset.trackSubmit) posthog.capture(f.dataset.trackSubmit, { place: f.dataset.trackPlace, lang });
+      });
+    });
+  }
+</script>

@@ -1,0 +1,90 @@
+---
+import WaitlistForm from './WaitlistForm.astro';
+import { articlePath, type Article } from '../lib/articles';
+import { ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang; articles: Article[] }
+const { lang, articles } = Astro.props;
+const t = ui[lang];
+const featured = articles.find((a) => a.data.featured) ?? articles[0];
+const rest = articles.filter((a) => a !== featured);
+const topics = [...new Set(articles.map((a) => a.data.topic))];
+---
+<section class="wrap blog">
+  <header class="blog-head">
+    <h1>{t.blogTitle}</h1>
+    <p class="lead">{t.blogIntro}</p>
+  </header>
+
+  <div class="topics" role="group" aria-label={t.topicsAria} data-topics>
+    <button type="button" aria-pressed="true" data-topic="">{t.allTopics}</button>
+    {topics.map((tp) => <button type="button" aria-pressed="false" data-topic={tp}>{tp}</button>)}
+  </div>
+
+  {featured && (
+    <article class="featured" data-card data-topic={featured.data.topic}>
+      <p class="meta">{featured.data.topic} · {featured.data.readingTime} {t.minRead}</p>
+      <h2><a href={articlePath(lang, featured.data.slug)}>{featured.data.title}</a></h2>
+      <p class="excerpt">{featured.data.lead}</p>
+      <a class="btn btn-primary" href={articlePath(lang, featured.data.slug)} aria-hidden="true" tabindex="-1">{t.readArticle}</a>
+    </article>
+  )}
+
+  <ul class="cards">
+    {rest.map((a) => (
+      <li data-card data-topic={a.data.topic}>
+        <article class="card-article">
+          <p class="meta">{a.data.topic} · {a.data.readingTime}</p>
+          <h2><a href={articlePath(lang, a.data.slug)}>{a.data.title}</a></h2>
+          <p class="excerpt">{a.data.description}</p>
+        </article>
+      </li>
+    ))}
+  </ul>
+
+  <section class="subscribe" aria-labelledby="subscribe-title">
+    <div class="sub-text">
+      <h2 id="subscribe-title">{t.subscribeTitle}</h2>
+      <p>{t.subscribeText}</p>
+    </div>
+    <WaitlistForm lang={lang} id="blog-email" source="blog" label={t.subscribeLabel} button={t.subscribeButton} buttonClass="btn btn-dark" />
+  </section>
+</section>
+
+<script>
+  const bar = document.querySelector('[data-topics]');
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+    const topic = btn.dataset.topic || '';
+    bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    document.querySelectorAll<HTMLElement>('[data-card]').forEach((c) => {
+      c.hidden = !!topic && c.dataset.topic !== topic;
+    });
+  });
+</script>
+
+<style>
+  .blog { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(32px, 4vw, 48px); padding-block: clamp(32px, 5vw, 56px) clamp(64px, 8vw, 96px); }
+  .blog-head { display: grid; gap: 16px; max-width: 860px; }
+  h1 { font: 600 clamp(44px, 6vw, 72px)/1.05 var(--serif); letter-spacing: -0.025em; }
+  .topics { display: flex; flex-wrap: wrap; gap: 10px; }
+  .topics button { min-height: 48px; padding: 0 20px; border-radius: 24px; font: 500 18px/1 var(--sans); background: var(--white); color: var(--ink); border: 1.5px solid var(--line); cursor: pointer; }
+  .topics button[aria-pressed="true"] { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .meta { font-size: 17px; font-weight: 600; color: var(--lagoon); }
+  h2 a { color: inherit; text-decoration: none; }
+  h2 a:hover { text-decoration: underline; text-underline-offset: 5px; }
+  .featured { background: var(--lagoon-deep); color: var(--air); border-radius: 36px; padding: clamp(28px, 5vw, 64px); display: grid; gap: 18px; justify-items: start; }
+  .featured .meta { color: var(--glass); }
+  .featured h2 { font: 600 clamp(30px, 4vw, 48px)/1.12 var(--serif); letter-spacing: -0.02em; max-width: 900px; }
+  .featured .excerpt { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.55; max-width: 760px; color: #E3EFEB; }
+  .featured .btn { background: var(--glass); color: var(--lagoon-dark); }
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 20px; }
+  .card-article { height: 100%; background: var(--white); border-radius: var(--radius); padding: 28px; display: grid; gap: 12px; align-content: start; border-top: 6px solid var(--glass); }
+  .card-article h2 { font: 600 clamp(23px, 2.2vw, 26px)/1.25 var(--serif); }
+  .card-article .excerpt { font-size: 18px; color: var(--ink-soft); }
+  .subscribe { background: var(--glass); border-radius: 36px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 32px; align-items: center; }
+  .sub-text { display: grid; gap: 12px; }
+  .sub-text h2 { font: 600 clamp(28px, 3vw, 40px)/1.15 var(--serif); }
+  .sub-text p { font-size: 20px; color: var(--ink-2); }
+  .subscribe :global(.field-label) { color: var(--ink); font-weight: 500; }
+</style>

@@ -1,0 +1,15 @@
+---
+import { ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const t = ui[Astro.props.lang];
+---
+<section class="wrap thanks">
+  <h1>{t.thanksTitle}</h1>
+  <p>{t.thanksText}</p>
+  <a class="btn btn-primary" href={t.home}>{t.backHome}</a>
+</section>
+<style>
+  .thanks { padding-block: clamp(64px, 12vw, 160px); display: grid; gap: 24px; justify-items: start; }
+  h1 { font: 600 clamp(40px, 6vw, 72px)/1.05 var(--serif); }
+  p { font-size: 22px; }
+</style>
