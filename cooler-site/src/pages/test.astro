@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import SymptomTest from '../components/SymptomTest.astro';
+import { APP_NAME } from '../i18n/ui';
+const site = Astro.site!;
+---
+<Base
+  lang="en"
+  title={`Menopause symptom test (MRS): 2 minutes | ${APP_NAME.en}`}
+  description="How much are menopause symptoms affecting you? Take the 11-question Menopause Rating Scale in 2 minutes and see your score for body, mood and intimate health. Free, no sign-up."
+  path="/test/"
+  alternates={{ en: '/test/', ru: '/ru/test/' }}
+  current="test"
+  jsonLd={[{
+    '@context': 'https://schema.org',
+    '@type': 'MedicalWebPage',
+    name: 'Menopause symptom test (Menopause Rating Scale)',
+    url: new URL('/test/', site).href,
+    inLanguage: 'en',
+    about: { '@type': 'MedicalCondition', name: 'Menopause' },
+    audience: { '@type': 'PeopleAudience', suggestedGender: 'female', suggestedMinAge: 40 },
+  }]}
+>
+  <SymptomTest lang="en" />
+</Base>

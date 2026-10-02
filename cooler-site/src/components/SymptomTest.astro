@@ -1,0 +1,373 @@
+---
+// Menopause Rating Scale (MRS) self-check.
+// Scale: Heinemann K. et al., Health Qual Life Outcomes 2004;2:45 (11 items, 0-4 each, total 0-44).
+// Bands follow the published MRS severity categories. The test does not diagnose anything.
+import { appHref, ui, type Lang } from '../i18n/ui';
+import { articlePath } from '../lib/articles';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const copy = {
+  en: {
+    title: 'How much is menopause getting in your way?',
+    intro: '11 questions, about 2 minutes. For each symptom, pick how much it bothers you right now. This is the Menopause Rating Scale (MRS), a questionnaire doctors use in research and clinics.',
+    start: 'Start the test',
+    question: (i: number, n: number) => `Question ${i} of ${n}`,
+    back: 'Back',
+    options: ['None', 'Mild', 'Moderate', 'Severe', 'Very severe'],
+    items: [
+      ['Hot flashes and sweating', 'Waves of heat, episodes of sweating'],
+      ['Heart discomfort', 'Unusual awareness of your heartbeat, skipping, racing or tightness'],
+      ['Sleep problems', 'Trouble falling asleep, waking in the night, waking too early'],
+      ['Low mood', 'Feeling down or sad, close to tears, no drive, mood swings'],
+      ['Irritability', 'Feeling nervous, tense inside, snapping at people'],
+      ['Anxiety', 'Inner restlessness, feeling panicky'],
+      ['Physical and mental exhaustion', 'Less energy, poorer memory and concentration, forgetfulness'],
+      ['Sexual problems', 'Changes in desire, sexual activity or satisfaction'],
+      ['Bladder problems', 'Trouble urinating, needing to go more often, leaking'],
+      ['Vaginal dryness', 'Dryness or burning, discomfort during sex'],
+      ['Joint and muscle pain', 'Aching joints, stiffness, muscle pain'],
+    ],
+    resultLabel: 'Your score',
+    of: 'of 44',
+    bands: [
+      ['Barely in your way', 'Your symptoms are mild or absent right now. This is a good time to look after the long game: bones, heart and muscles.'],
+      ['Mild', 'Symptoms are there, but mostly manageable. Tracking them for a couple of weeks shows what makes them better or worse.'],
+      ['Moderate', 'Symptoms are noticeably affecting your days. This is worth bringing to a doctor. Effective treatments exist, both with and without hormones.'],
+      ['Severe', 'Symptoms are taking a real toll. Please talk to a doctor soon. You do not have to just put up with this, and a lot can be treated.'],
+    ],
+    subTitle: 'Where it comes from',
+    subs: ['Body: hot flashes, heart, sleep, joints', 'Mood: low mood, irritability, anxiety, exhaustion', 'Intimate health: sex, bladder, dryness'],
+    readMore: 'Read about this',
+    lastTime: (s: number, d: string) => `Last time you scored ${s} (${d}).`,
+    nextTitle: 'See how it changes',
+    nextText: 'One score is a snapshot. Log how you feel for 30 seconds a day in Cooler and take the test again in a week. You will also get a 30-day summary to show your doctor.',
+    openApp: 'Start tracking for free',
+    shareResult: 'Share my result',
+    sendTest: 'Send the test to mom or a friend',
+    shareText: (s: number) => `My menopause symptom score is ${s} of 44. Here is the 2-minute test:`,
+    sendText: 'This 2-minute test shows how much menopause symptoms are affecting you:',
+    copied: 'Link copied',
+    retake: 'Take the test again',
+    note: 'This test does not diagnose anything and does not replace a doctor. Your answers stay on this device.',
+    sourcesTitle: 'Source',
+    noscript: 'The test needs JavaScript to count your score.',
+  },
+  ru: {
+    title: 'Насколько менопауза мешает вам жить?',
+    intro: '11 вопросов, около 2 минут. Для каждого симптома отметьте, насколько он беспокоит вас сейчас. Это шкала MRS (Menopause Rating Scale), её используют врачи в клиниках и исследованиях.',
+    start: 'Пройти тест',
+    question: (i: number, n: number) => `Вопрос ${i} из ${n}`,
+    back: 'Назад',
+    options: ['Нет', 'Слабо', 'Умеренно', 'Сильно', 'Очень сильно'],
+    items: [
+      ['Приливы и потливость', 'Волны жара, приступы потливости'],
+      ['Неприятные ощущения в сердце', 'Непривычно чувствуете сердцебиение, перебои, частый пульс, стеснение в груди'],
+      ['Проблемы со сном', 'Трудно уснуть, просыпаетесь ночью или слишком рано'],
+      ['Подавленное настроение', 'Грустно, хочется плакать, нет сил ни на что, перепады настроения'],
+      ['Раздражительность', 'Нервозность, внутреннее напряжение, срываетесь на других'],
+      ['Тревожность', 'Внутреннее беспокойство, ощущение паники'],
+      ['Физическое и умственное истощение', 'Меньше сил, хуже память и внимание, забывчивость'],
+      ['Сексуальные проблемы', 'Изменились желание, близость или удовольствие от неё'],
+      ['Проблемы с мочевым пузырём', 'Трудно мочиться, чаще хочется в туалет, подтекает моча'],
+      ['Сухость влагалища', 'Сухость или жжение, дискомфорт при близости'],
+      ['Боли в суставах и мышцах', 'Ноют суставы, скованность, ломота в мышцах'],
+    ],
+    resultLabel: 'Ваш результат',
+    of: 'из 44',
+    bands: [
+      ['Почти не мешает', 'Симптомов сейчас мало или нет. Самое время позаботиться о том, что важно надолго: кости, сердце и мышцы.'],
+      ['Слабо', 'Симптомы есть, но в целом терпимы. Если отмечать их пару недель, станет видно, что помогает, а что ухудшает.'],
+      ['Умеренно', 'Симптомы заметно влияют на ваши дни. С этим стоит прийти к врачу: есть работающее лечение, и гормональное, и без гормонов.'],
+      ['Сильно', 'Симптомы серьёзно портят жизнь. Пожалуйста, поговорите с врачом в ближайшее время. Терпеть не нужно, многое лечится.'],
+    ],
+    subTitle: 'Откуда это',
+    subs: ['Тело: приливы, сердце, сон, суставы', 'Настроение: подавленность, раздражительность, тревога, усталость', 'Интимное здоровье: близость, мочевой пузырь, сухость'],
+    readMore: 'Почитать об этом',
+    lastTime: (s: number, d: string) => `В прошлый раз было ${s} (${d}).`,
+    nextTitle: 'Посмотрите, как это меняется',
+    nextText: 'Один результат показывает только сегодняшний день. Отмечайте самочувствие в Прохладе 30 секунд в день и пройдите тест снова через неделю. А через 30 дней получите итог, который можно показать врачу.',
+    openApp: 'Начать отмечать бесплатно',
+    shareResult: 'Поделиться результатом',
+    sendTest: 'Отправить тест маме или подруге',
+    shareText: (s: number) => `Мой результат по шкале симптомов менопаузы: ${s} из 44. Вот тест на 2 минуты:`,
+    sendText: 'Тест на 2 минуты: насколько симптомы менопаузы мешают жить',
+    copied: 'Ссылка скопирована',
+    retake: 'Пройти ещё раз',
+    note: 'Тест не ставит диагноз и не заменяет врача. Ваши ответы остаются на этом устройстве.',
+    sourcesTitle: 'Источник',
+    noscript: 'Чтобы посчитать результат, тесту нужен JavaScript.',
+  },
+}[lang];
+
+// Item indexes per subscale (0-based) and band cut-offs (upper bounds of bands 0-2; above = band 3).
+const subscales = [
+  { items: [0, 1, 2, 10], cuts: [2, 4, 8], article: lang === 'ru' ? 'prilivy-skolko-dlyatsya-chto-pomogaet' : 'hot-flashes-how-long-what-helps' },
+  { items: [3, 4, 5, 6], cuts: [1, 3, 6], article: lang === 'ru' ? 'nastroenie-i-tuman-v-golove' : 'mood-swings-brain-fog-menopause' },
+  { items: [7, 8, 9], cuts: [0, 1, 3], article: lang === 'ru' ? 'sukhost-i-diskomfort-posle-menopauzy' : 'vaginal-dryness-after-menopause' },
+].map((s, i) => ({ ...s, label: copy.subs[i], max: s.items.length * 4, href: articlePath(lang, s.article) }));
+
+const config = {
+  totalCuts: [4, 8, 15],
+  bands: copy.bands,
+  subscales: subscales.map(({ items, cuts, max }) => ({ items, cuts, max })),
+  text: {
+    question: copy.items.map((_, i) => copy.question(i + 1, copy.items.length)),
+    copied: copy.copied,
+    shareText: copy.shareText(999),
+    sendText: copy.sendText,
+  },
+  lastTimeTemplate: copy.lastTime(111, '__DATE__'),
+  locale: lang === 'ru' ? 'ru-RU' : 'en-US',
+};
+const appLink = `${appHref(lang)}&from=test`;
+---
+<div class="wrap mrs" data-mrs data-config={JSON.stringify(config)}>
+  <section class="mrs-intro" data-step="intro">
+    <h1 class="mrs-title">{copy.title}</h1>
+    <p class="lead">{copy.intro}</p>
+    <div class="mrs-scale-preview" aria-hidden="true">
+      {copy.options.map((o, i) => <span class={`heat heat-${i}`}>{o}</span>)}
+    </div>
+    <button type="button" class="btn btn-primary btn-lg" data-start>{copy.start}</button>
+    <p class="mrs-note">{copy.note}</p>
+    <noscript><p class="mrs-note">{copy.noscript}</p></noscript>
+  </section>
+
+  <form class="mrs-form" data-form hidden>
+    <div class="mrs-progress" aria-hidden="true"><span data-bar></span></div>
+    {copy.items.map(([name, hint], i) => (
+      <fieldset class="mrs-q" data-q={i} hidden={i > 0}>
+        <legend class="mrs-q-legend"><span class="mrs-count">{copy.question(i + 1, copy.items.length)}</span><span class="mrs-q-title">{name}</span></legend>
+        <p class="mrs-q-hint">{hint}</p>
+        <div class="mrs-options">
+          {copy.options.map((o, v) => (
+            <label class={`mrs-opt heat-${v}`}>
+              <input type="radio" name={`q${i}`} value={v} required />
+              <span>{o}</span>
+            </label>
+          ))}
+        </div>
+        {i > 0 && <button type="button" class="mrs-back" data-back>{copy.back}</button>}
+      </fieldset>
+    ))}
+  </form>
+
+  <section class="mrs-result" data-result hidden aria-live="polite">
+    <div class="mrs-score-block">
+      <p class="mrs-count">{copy.resultLabel}</p>
+      <p class="mrs-score"><span data-score>0</span> <small>{copy.of}</small></p>
+      <div class="mrs-thermo" aria-hidden="true">
+        <span class="seg heat-1"></span><span class="seg heat-2"></span><span class="seg heat-3"></span><span class="seg heat-4"></span>
+        <i data-marker></i>
+      </div>
+      <h2 class="mrs-band" data-band-title></h2>
+      <p class="mrs-band-text" data-band-text></p>
+      <p class="mrs-last" data-last hidden></p>
+    </div>
+
+    <div class="mrs-subs">
+      <h2 class="mrs-subtitle">{copy.subTitle}</h2>
+      {subscales.map((s, i) => (
+        <div class="mrs-sub" data-sub={i}>
+          <div class="mrs-sub-head"><span>{s.label}</span><strong data-sub-score>0 / {s.max}</strong></div>
+          <div class="mrs-sub-bar"><span data-sub-bar></span></div>
+          <a href={s.href} class="mrs-sub-link" data-sub-link hidden>{copy.readMore}</a>
+        </div>
+      ))}
+    </div>
+
+    <div class="mrs-next">
+      <h2>{copy.nextTitle}</h2>
+      <p>{copy.nextText}</p>
+      <a class="btn btn-glass btn-lg" href={appLink} data-track="try_app" data-track-place="test_result">{copy.openApp}</a>
+    </div>
+
+    <div class="mrs-share">
+      <button type="button" class="btn btn-outline" data-share="result">{copy.shareResult}</button>
+      <button type="button" class="btn btn-outline" data-share="test">{copy.sendTest}</button>
+      <span class="mrs-copied" data-copied role="status"></span>
+    </div>
+
+    <p><button type="button" class="mrs-back" data-retake>{copy.retake}</button></p>
+    <p class="mrs-note">{copy.note}</p>
+    <p class="mrs-note">{copy.sourcesTitle}: <a href="https://pubmed.ncbi.nlm.nih.gov/15345062/" rel="noopener" target="_blank">Heinemann K. et al. The Menopause Rating Scale (MRS) scale. Health Qual Life Outcomes, 2004</a></p>
+  </section>
+</div>
+
+<script>
+  type Cfg = {
+    totalCuts: number[];
+    bands: string[][];
+    subscales: { items: number[]; cuts: number[]; max: number }[];
+    text: { question: string[]; copied: string; shareText: string; sendText: string };
+    lastTimeTemplate: string;
+    locale: string;
+  };
+  const root = document.querySelector<HTMLElement>('[data-mrs]');
+  if (root) {
+    const cfg: Cfg = JSON.parse(root.dataset.config || '{}');
+    const track = (e: string, p: Record<string, unknown> = {}) => (window as any).coolerTrack?.(e, p);
+    const intro = root.querySelector<HTMLElement>('[data-step="intro"]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const result = root.querySelector<HTMLElement>('[data-result]')!;
+    const qs = [...root.querySelectorAll<HTMLFieldSetElement>('[data-q]')];
+    const bar = root.querySelector<HTMLElement>('[data-bar]')!;
+    const KEY = 'cooler_mrs_last';
+    let current = 0;
+    let lastScore = 0;
+
+    const band = (v: number, cuts: number[]) => { const i = cuts.findIndex((c) => v <= c); return i === -1 ? cuts.length : i; };
+    const show = (i: number) => {
+      current = i;
+      qs.forEach((q, j) => (q.hidden = j !== i));
+      bar.style.width = `${(i / qs.length) * 100}%`;
+      qs[i].querySelector<HTMLInputElement>('input:checked, input')?.focus({ preventScroll: true });
+      root.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    };
+
+    root.querySelector('[data-start]')!.addEventListener('click', () => {
+      intro.hidden = true; form.hidden = false; show(0);
+      track('test_started');
+    });
+
+    form.addEventListener('change', (e) => {
+      const input = e.target as HTMLInputElement;
+      const i = Number(input.name.slice(1));
+      track('test_answered', { question_index: i }); // answers never leave the device
+      setTimeout(() => (i < qs.length - 1 ? show(i + 1) : finish()), 220);
+    });
+    root.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', () => show(Math.max(0, current - 1))));
+
+    function finish() {
+      const vals = qs.map((_, i) => Number((form.elements.namedItem(`q${i}`) as RadioNodeList).value || 0));
+      const total = vals.reduce((a, b) => a + b, 0);
+      lastScore = total;
+      const b = band(total, cfg.totalCuts);
+      form.hidden = true; result.hidden = false;
+      root!.querySelector('[data-score]')!.textContent = String(total);
+      root!.querySelector<HTMLElement>('[data-marker]')!.style.left = `${(total / 44) * 100}%`;
+      root!.querySelector('[data-band-title]')!.textContent = cfg.bands[b][0];
+      root!.querySelector('[data-band-text]')!.textContent = cfg.bands[b][1];
+
+      const subBands = cfg.subscales.map((s, i) => {
+        const v = s.items.reduce((a, k) => a + vals[k], 0);
+        const el = root!.querySelector<HTMLElement>(`[data-sub="${i}"]`)!;
+        el.querySelector('[data-sub-score]')!.textContent = `${v} / ${s.max}`;
+        el.querySelector<HTMLElement>('[data-sub-bar]')!.style.width = `${(v / s.max) * 100}%`;
+        const sb = band(v, s.cuts);
+        el.dataset.level = String(sb);
+        return sb;
+      });
+      // Point to reading only where a subscale is moderate or worse
+      subBands.forEach((sb, i) => { root!.querySelector<HTMLElement>(`[data-sub="${i}"] [data-sub-link]`)!.hidden = sb < 2; });
+
+      const last = root!.querySelector<HTMLElement>('[data-last]')!;
+      try {
+        const prev = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (prev && typeof prev.score === 'number') {
+          const d = new Date(prev.at).toLocaleDateString(cfg.locale, { day: 'numeric', month: 'long' });
+          last.textContent = cfg.lastTimeTemplate.replace('111', String(prev.score)).replace('__DATE__', d);
+          last.hidden = false;
+        }
+        localStorage.setItem(KEY, JSON.stringify({ score: total, subs: subBands, at: Date.now() }));
+      } catch {}
+
+      bar.style.width = '100%';
+      result.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      track('test_completed'); // no score or answers: they are health data and stay on the device
+    }
+
+    root.querySelector('[data-retake]')!.addEventListener('click', () => {
+      form.reset(); result.hidden = true; form.hidden = false; show(0);
+      track('test_retaken');
+    });
+
+    const copied = root.querySelector<HTMLElement>('[data-copied]')!;
+    root.querySelectorAll<HTMLButtonElement>('[data-share]').forEach((btn) => btn.addEventListener('click', async () => {
+      const kind = btn.dataset.share!;
+      const url = `${location.origin}${location.pathname}?utm_source=share&utm_medium=${kind === 'result' ? 'test_result' : 'test_invite'}`;
+      const text = kind === 'result' ? cfg.text.shareText.replace('999', String(lastScore)) : cfg.text.sendText;
+      track('test_shared', { kind });
+      try {
+        if (navigator.share) { await navigator.share({ text, url }); return; }
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        copied.textContent = cfg.text.copied;
+        setTimeout(() => (copied.textContent = ''), 2500);
+      } catch {}
+    }));
+  }
+</script>
+
+<style>
+  .mrs [hidden] { display: none !important; }
+  .mrs { max-width: 880px; padding-block: clamp(32px, 6vw, 72px) clamp(64px, 8vw, 104px); display: grid; gap: 32px; }
+  .mrs-intro, .mrs-result { display: grid; gap: 24px; }
+  .mrs-intro > .btn { justify-self: start; }
+  .mrs-title { font: 600 clamp(36px, 5.4vw, 64px)/1.08 var(--serif); letter-spacing: -0.02em; }
+  .mrs-note { font-size: 17px; color: var(--ink-soft); }
+
+  /* The answer scale reads as a temperature: cool for "none", warm for "very severe" */
+  .heat-0 { --heat: var(--glass-light); --heat-ink: var(--ink); }
+  .heat-1 { --heat: var(--glass); --heat-ink: var(--ink); }
+  .heat-2 { --heat: #F3D9B8; --heat-ink: var(--ink); }
+  .heat-3 { --heat: #EDB487; --heat-ink: var(--ink); }
+  .heat-4 { --heat: var(--apricot); --heat-ink: #3A1608; }
+  .mrs-scale-preview { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mrs-scale-preview .heat { background: var(--heat); color: var(--heat-ink); border-radius: 999px; padding: 8px 16px; font-size: 17px; }
+
+  .mrs-form { display: grid; gap: 20px; }
+  .mrs-progress { height: 8px; border-radius: 8px; background: var(--line-soft); overflow: hidden; }
+  .mrs-progress span { display: block; height: 100%; width: 0; background: var(--lagoon); transition: width .3s ease; }
+  .mrs-q { border: 0; margin: 0; padding: 0; display: grid; gap: 18px; min-width: 0; }
+  .mrs-count { font-size: 18px; font-weight: 600; color: var(--lagoon); }
+  .mrs-q-legend { padding: 0; display: grid; gap: 14px; }
+  .mrs-q-title { display: block; font: 600 clamp(30px, 4vw, 44px)/1.15 var(--serif); letter-spacing: -0.01em; }
+  .mrs-q-hint { font-size: clamp(19px, 1.8vw, 21px); color: var(--ink-soft); max-width: 640px; }
+  .mrs-options { display: grid; gap: 10px; margin-top: 8px; }
+  .mrs-opt { position: relative; display: flex; align-items: center; min-height: 64px; padding: 0 24px; border-radius: 18px; background: var(--white); border: 1.5px solid var(--line); cursor: pointer; font-size: 21px; font-weight: 500; }
+  .mrs-opt::before { content: ''; width: 22px; height: 22px; border-radius: 50%; background: var(--heat); border: 1.5px solid rgba(16,48,47,.25); margin-right: 16px; flex: none; }
+  .mrs-opt input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .mrs-opt:hover { border-color: var(--lagoon); }
+  .mrs-opt:has(input:focus-visible) { outline: 3px solid var(--apricot); outline-offset: 2px; }
+  .mrs-opt:has(input:checked) { background: var(--heat); border-color: var(--ink); }
+  .mrs-back { justify-self: start; background: none; border: 0; padding: 8px 0; font: 500 18px var(--sans); color: var(--lagoon); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+
+  .mrs-score-block { display: grid; gap: 14px; }
+  .mrs-score { font: 600 clamp(72px, 12vw, 128px)/1 var(--serif); letter-spacing: -0.03em; }
+  .mrs-score small { font: 500 clamp(22px, 2.4vw, 28px)/1 var(--sans); color: var(--ink-soft); letter-spacing: 0; }
+  .mrs-thermo { position: relative; display: grid; grid-template-columns: 5fr 4fr 7fr 29fr; height: 18px; border-radius: 18px; overflow: visible; margin: 8px 0 6px; }
+  .mrs-thermo .seg { background: var(--heat); }
+  .mrs-thermo .seg:first-child { border-radius: 18px 0 0 18px; }
+  .mrs-thermo .seg:last-of-type { border-radius: 0 18px 18px 0; }
+  .mrs-thermo i { position: absolute; top: -7px; width: 6px; height: 32px; border-radius: 3px; background: var(--ink); transform: translateX(-50%); transition: left .6s ease; }
+  .mrs-band { font: 600 clamp(28px, 3.4vw, 38px)/1.15 var(--serif); }
+  .mrs-band-text { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.55; max-width: 680px; }
+  .mrs-last { font-size: 18px; color: var(--ink-soft); }
+
+  .mrs-subs { display: grid; gap: 18px; background: var(--white); border-radius: var(--radius); padding: clamp(22px, 3vw, 32px); }
+  .mrs-subtitle { font: 700 22px/1.2 var(--sans); }
+  .mrs-sub { display: grid; gap: 8px; }
+  .mrs-sub-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 19px; }
+  .mrs-sub-head strong { white-space: nowrap; }
+  .mrs-sub-bar { height: 12px; border-radius: 12px; background: var(--line-soft); overflow: hidden; }
+  .mrs-sub-bar span { display: block; height: 100%; width: 0; background: var(--glass); transition: width .6s ease; }
+  .mrs-sub[data-level="2"] .mrs-sub-bar span { background: #EDB487; }
+  .mrs-sub[data-level="3"] .mrs-sub-bar span { background: var(--apricot); }
+  .mrs-sub-link { font-size: 18px; justify-self: start; }
+
+  .mrs-next { display: grid; gap: 14px; background: var(--lagoon-deep); color: var(--air); border-radius: var(--radius); padding: clamp(24px, 3.4vw, 40px); }
+  .mrs-next h2 { font: 600 clamp(26px, 3vw, 34px)/1.15 var(--serif); color: var(--white); }
+  .mrs-next p { font-size: 19px; max-width: 640px; }
+  .mrs-next .btn { justify-self: start; margin-top: 6px; white-space: normal; text-align: center; }
+
+  .mrs-share { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .mrs-share .btn { white-space: normal; text-align: center; }
+  .mrs-copied { font-size: 18px; color: var(--lagoon); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mrs-progress span, .mrs-thermo i, .mrs-sub-bar span { transition: none; }
+  }
+</style>

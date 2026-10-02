@@ -70,7 +70,7 @@ p { margin: 0; text-wrap: pretty; }
   border: 1.5px solid var(--line); background: var(--white); color: var(--ink); text-decoration: none; font-size: 18px;
 }
 .lang strong { color: var(--lagoon); }
-@media (max-width: 1240px) { .site-nav a:not(.keep) { display: none; } }
+@media (max-width: 1400px) { .site-nav a:not(.keep) { display: none; } }
 @media (max-width: 560px) {
   .site-header { gap: 12px; }
   .header-actions .btn { display: none; }
@@ -79,6 +79,7 @@ p { margin: 0; text-wrap: pretty; }
   .logo span { font-size: 20px; }
   .lang { padding: 0 12px; font-size: 17px; }
   .site-nav { font-size: 17px; }
+  .site-nav .nav-wide { display: none; }
 }
 
 /* Forms */

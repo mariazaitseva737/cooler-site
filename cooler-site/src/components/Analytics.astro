@@ -26,6 +26,8 @@
 //   waitlist_form_succeeded  place
 //   waitlist_form_failed     place, reason
 //   outbound_link_clicked    host
+//   test_started / test_answered (question_index) / test_completed / test_retaken / test_shared (kind)
+//                            symptom test; answers and score are never sent
 // Autocaptured by Amplitude: session start/end, marketing attribution (first touch utm/referrer).
 const key = import.meta.env.PUBLIC_AMPLITUDE_API_KEY || '';
 const zone = (import.meta.env.PUBLIC_AMPLITUDE_SERVER_ZONE || 'US').toUpperCase() === 'EU' ? 'EU' : 'US';

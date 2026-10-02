@@ -142,6 +142,7 @@ const copy = {
   <p class="hero-sub">{copy.sub}</p>
   <div class="hero-actions" id="waitlist">
     {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+    <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
     <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
     <p class="note">{t.emailNote}</p>
   </div>
@@ -303,6 +304,7 @@ const copy = {
   .hero-sub { font-size: clamp(19px, 2vw, 23px); line-height: 1.55; max-width: 720px; }
   .hero-actions { display: grid; gap: 18px; max-width: 640px; padding-top: 8px; scroll-margin-top: 24px; }
   .hero-actions > .btn { justify-self: start; }
+  .hero-test { justify-self: start; font-size: 19px; font-weight: 500; text-underline-offset: 5px; }
   .note { font-size: 18px; color: var(--ink-soft); }
 
   .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }

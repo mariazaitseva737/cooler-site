@@ -15,6 +15,9 @@ export const ui = {
     home: '/ru/',
     blog: '/ru/blog/',
     thanks: '/ru/thanks/',
+    test: '/ru/test/',
+    navTest: 'Тест',
+    heroTest: 'Не знаете, с чего начать? Пройдите тест на симптомы, это 2 минуты',
     navFeatures: 'Что умеет',
     navIntimate: 'Интимное здоровье',
     navPrivacy: 'Приватность',
@@ -68,6 +71,9 @@ export const ui = {
     home: '/',
     blog: '/blog/',
     thanks: '/thanks/',
+    test: '/test/',
+    navTest: 'Symptom test',
+    heroTest: 'Not sure where to start? Take the 2-minute symptom test',
     navFeatures: 'Features',
     navIntimate: 'Intimate health',
     navPrivacy: 'Privacy',
@@ -118,7 +124,7 @@ export const ui = {
   },
 } as const;
 
-export const CONTACT_EMAIL = 'hello@example.com'; // TODO: your real address
+export const CONTACT_EMAIL = 'mzaitceva@gmail.com';
 
 export function formatDate(d: Date, lang: Lang) {
   return d.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { year: 'numeric', month: 'long' });

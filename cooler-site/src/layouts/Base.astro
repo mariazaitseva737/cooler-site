@@ -20,16 +20,17 @@ interface Props {
   ogType?: 'website' | 'article';
   jsonLd?: object[];
   noindex?: boolean;
-  current?: 'home' | 'blog';
+  current?: 'home' | 'blog' | 'test';
   footerNote?: string;
   article?: { slug: string; topic: string; key: string };
 }
 const { lang, title, description, path, alternates = {}, ogType = 'website', jsonLd = [], noindex = false, current, footerNote, article } = Astro.props;
-const pageType = path === ui[lang].home ? 'home' : path === ui[lang].blog ? 'blog' : path.includes('/blog/') ? 'article' : path.includes('thanks') ? 'thanks' : 'other';
+const pageType = path === ui[lang].home ? 'home' : path === ui[lang].blog ? 'blog' : path.includes('/blog/') ? 'article' : path.includes('thanks') ? 'thanks' : path.endsWith('/test/') ? 'test' : 'other';
 const site = Astro.site!;
 const canonical = new URL(path, site).href;
 const altLang: Lang = lang === 'ru' ? 'en' : 'ru';
 const altPath = alternates[altLang] ?? ui[altLang].home;
+const ogImage = new URL(`/og-${lang}.png`, site).href;
 ---
 <!doctype html>
 <html lang={lang}>
@@ -49,7 +50,11 @@ const altPath = alternates[altLang] ?? ui[altLang].home;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={ui[lang].locale} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="theme-color" content="#F3F7F5" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />

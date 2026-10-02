@@ -1,7 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import { APP_NAME, appHref, ui, type Lang } from '../i18n/ui';
-interface Props { lang: Lang; altHref: string; current?: 'home' | 'blog' }
+interface Props { lang: Lang; altHref: string; current?: 'home' | 'blog' | 'test' }
 const { lang, altHref, current } = Astro.props;
 const t = ui[lang];
 const home = t.home;
@@ -13,7 +13,8 @@ const tryHref = appHref(lang);
     <a href={`${home}#features`}>{t.navFeatures}</a>
     <a href={`${home}#intimate`}>{t.navIntimate}</a>
     <a href={`${home}#privacy`}>{t.navPrivacy}</a>
-    <a class="keep" href={t.blog} aria-current={current === 'blog' ? 'page' : undefined}>{t.navBlog}</a>
+    <a class="keep" href={t.test} aria-current={current === 'test' ? 'page' : undefined} data-track="symptom_test" data-track-place="header">{t.navTest}</a>
+    <a class="keep nav-wide" href={t.blog} aria-current={current === 'blog' ? 'page' : undefined}>{t.navBlog}</a>
     <a href={`${home}#faq`}>{t.navFaq}</a>
   </nav>
   <div class="header-actions">

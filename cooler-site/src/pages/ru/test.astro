@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import SymptomTest from '../../components/SymptomTest.astro';
+import { APP_NAME } from '../../i18n/ui';
+const site = Astro.site!;
+---
+<Base
+  lang="ru"
+  title={`Тест на симптомы менопаузы (шкала MRS) за 2 минуты | ${APP_NAME.ru}`}
+  description="Насколько симптомы менопаузы мешают вам жить? Пройдите шкалу MRS из 11 вопросов за 2 минуты и посмотрите результат по телу, настроению и интимному здоровью. Бесплатно и без регистрации."
+  path="/ru/test/"
+  alternates={{ en: '/test/', ru: '/ru/test/' }}
+  current="test"
+  jsonLd={[{
+    '@context': 'https://schema.org',
+    '@type': 'MedicalWebPage',
+    name: 'Тест на симптомы менопаузы (шкала MRS)',
+    url: new URL('/ru/test/', site).href,
+    inLanguage: 'ru',
+    about: { '@type': 'MedicalCondition', name: 'Менопауза' },
+    audience: { '@type': 'PeopleAudience', suggestedGender: 'female', suggestedMinAge: 40 },
+  }]}
+>
+  <SymptomTest lang="ru" />
+</Base>
