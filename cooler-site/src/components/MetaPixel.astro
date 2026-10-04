@@ -1,0 +1,56 @@
+---
+// Meta Pixel for measuring the ad test. Turns on only when PUBLIC_META_PIXEL_ID is set.
+// It is loaded on website pages only. The app (/app/) is a separate build and never loads it.
+//
+// What it sends (keep the landing's privacy text in sync):
+//   PageView           every site page
+//   Lead               email form accepted (WaitlistForm dispatches waitlist:ok)
+//   ViewContent        the pricing block came into view  { content_name: 'pricing' }
+//   InitiateCheckout   "Become a founding member" clicked  { value, currency }
+//   Purchase           thanks page opened with ?paid=1    { value, currency }
+// Never sent: email, symptoms, medicines, test answers, anything typed into the app.
+const id = import.meta.env.PUBLIC_META_PIXEL_ID || '';
+---
+{id && (
+  <script is:inline define:vars={{ id }}>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', id);
+    fbq('track', 'PageView');
+  </script>
+)}
+<script>
+  type Params = Record<string, unknown>;
+  const pixel = (event: string, params?: Params) => {
+    const fbq = (window as any).fbq;
+    if (typeof fbq === 'function') params ? fbq('track', event, params) : fbq('track', event);
+  };
+  (window as any).coolerPixel = pixel;
+
+  // Lead: the email form was accepted
+  document.querySelectorAll<HTMLFormElement>('form.waitlist').forEach((f) => {
+    f.addEventListener('waitlist:ok', () => pixel('Lead'));
+  });
+
+  // ViewContent: the pricing block was seen (once)
+  const pricing = document.querySelector<HTMLElement>('[data-section="pricing"]');
+  if (pricing) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { pixel('ViewContent', { content_name: 'pricing' }); io.disconnect(); }
+    }, { threshold: 0.4 });
+    io.observe(pricing);
+  }
+
+  // InitiateCheckout: the founding member button
+  document.querySelectorAll<HTMLElement>('[data-checkout]').forEach((b) => {
+    b.addEventListener('click', () => pixel('InitiateCheckout', { value: Number(b.dataset.price || 0), currency: 'USD' }));
+  });
+
+  // Purchase: the payment provider sends people back to /thanks/?paid=1
+  if (document.body.dataset.page === 'thanks' && new URLSearchParams(location.search).get('paid') === '1') {
+    pixel('Purchase', { value: Number(document.body.dataset.price || 29), currency: 'USD' });
+  }
+</script>

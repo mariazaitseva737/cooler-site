@@ -1,3 +1,4 @@
+import { RU_ENABLED } from '../config.js';
 import { useState } from 'preact/hooks';
 import { update } from '../lib/store.js';
 import { useT, APP_NAME } from '../i18n.js';
@@ -53,7 +54,7 @@ export default function Onboarding() {
           <>
             <div class="row between">
               <div class="brand"><Logo /> {APP_NAME[lang]}</div>
-              <button class="btn btn-outline" style="min-height:44px;padding:0 14px;font-size:17px" onClick={() => update({ lang: lang === 'ru' ? 'en' : 'ru' })}>{lang === 'ru' ? 'English' : 'Русский'}</button>
+              {RU_ENABLED && <button class="btn btn-outline" style="min-height:44px;padding:0 14px;font-size:17px" onClick={() => update({ lang: lang === 'ru' ? 'en' : 'ru' })}>{lang === 'ru' ? 'English' : 'Русский'}</button>}
             </div>
             <div class="grow">
               <h1 class="h1">{t.obHello}</h1>

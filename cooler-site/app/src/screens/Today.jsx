@@ -2,9 +2,10 @@ import { useState, useEffect } from 'preact/hooks';
 import { update, useStore } from '../lib/store.js';
 import { useT, APP_NAME } from '../i18n.js';
 import { SYMPTOMS, LEVELS, SLEEP_LEVELS, TAGS, TIPS, RED_FLAGS } from '../data/content.js';
-import { PROGRAM, nextSession, sessionKey } from '../data/program.js';
+import { PROGRAM, EXERCISES, nextSession, sessionKey } from '../data/program.js';
 import { Logo, Icon, Scale, Chip } from '../ui/kit.jsx';
-import { Breathing, HeadacheSheet, BpSheet, WaistSheet } from './Sheets.jsx';
+import { Breathing, HeadacheSheet, BpSheet, WaistSheet, DaySheet } from './Sheets.jsx';
+import { DAY_TYPES, tipsFor } from '../data/days.js';
 import { dayKey, addDays, fmtWeekday, fmtTime, fmtDate, daysBetween, parseDay } from '../lib/dates.js';
 import {
   activeSymptoms, has, dosesOn, worstSymptom, insights, weekSummary, waistDue,
@@ -33,6 +34,8 @@ export default function Today() {
   const next = s.program ? nextSession(s.program.done) : null;
   const soon = checkupsSoon(s).filter((c) => !checkupStatus(s, c.id).due || true).slice(0, 1);
   const k = knowledgeOfDay(s);
+  // The nearest important day in the next 2 days, if any
+  const dayNext = (s.days || []).filter((d) => { const n = daysBetween(today, d.date); return n >= 0 && n <= 2; }).sort((a, b) => a.date.localeCompare(b.date))[0];
   const open = (kind, place) => { setSheet(kind); track('quick_log_opened', { kind, place }); };
   const [hotPlace, setHotPlace] = useState('today_big_button');
   // Cards that appeared today (once per day per card, for "seen → used" funnels)
@@ -56,10 +59,10 @@ export default function Today() {
       </header>
       <div>
         <p class="date">{fmtWeekday(today, lang)}</p>
-        <h1 class="h1">{away ? t.welcomeBack : t.hello}</h1>
+        <h1 class="h1">{away ? t.welcomeBack : t.greet(new Date().getHours())}</h1>
       </div>
 
-      {visitSoon(s) && (
+      {visitSoon(s) && dayNext?.type !== 'doctor' && (
         <section class="card deep">
           <p class="kicker">{t.visitSoon(fmtDate(s.visit, lang))}</p>
           <p class="h2" style="color:#fff">{t.visitPrep}</p>
@@ -69,43 +72,33 @@ export default function Today() {
 
       {doses.length > 0 && <MedsToday doses={doses} />}
 
-      {has(p, 'hot') && (
-        <section class="card">
-          <button class="big-hot" onClick={() => { setHotPlace('today_big_button'); open('hot', 'today_big_button'); }}>
-            <Icon name="wave" size={38} />
-            <b>{lang === 'ru' ? 'Начался прилив' : 'Hot flash started'}</b>
-            <span>{lang === 'ru' ? '2 минуты спокойного дыхания' : '2 minutes of calm breathing'}</span>
-          </button>
-          {eventsOn(s.events, today, 'hotflash').length > 0 && <p class="sub">{t.hotToday(eventsOn(s.events, today, 'hotflash').length)}</p>}
-        </section>
-      )}
+      <Practice onBreathe={() => { setHotPlace('practice'); open('calm', 'practice'); }} />
+
+      {dayNext && <DayCard d={dayNext} />}
 
       <CheckIn syms={syms} />
 
-      <section class="stack-s">
-        <p class="h3" style="padding:0 4px">{t.quick}</p>
-        <div class="quick">
-          {!has(p, 'hot') && <button onClick={() => { setHotPlace('quick_row'); open('hot', 'quick_row'); }}><Icon name="wave" /><span>{t.qHot}</span></button>}
-          <button onClick={() => open('head', 'quick_row')}><Icon name="head" /><span>{t.qHead}</span></button>
-          <button onClick={() => open('bp', 'quick_row')}><Icon name="bp" /><span>{t.qBp}</span></button>
-          {has(p, 'hot') && <button onClick={() => open('waist', 'quick_row')}><Icon name="ruler" /><span>{t.waist}</span></button>}
-        </div>
+      <section class="card tight">
+        <button class="hot-row" onClick={() => open('day', 'today_row')}>
+          <span class="hot-ico"><Icon name="cal" size={26} /></span>
+          <span class="hot-txt"><b>{t.dayAdd}</b><span>{t.dayAddSub}</span></span>
+          <span class="chev"><Icon name="chev" size={20} /></span>
+        </button>
       </section>
 
-      {wantsProgram && (
-        <section class="card">
-          <p class="kicker">{t.programCard} · {L(PROGRAM).title}</p>
-          {!s.program && <p class="sub">{L(PROGRAM).about}</p>}
-          {s.program && next && <p class="h3">{t.programWeek(next.week, next.n)}</p>}
-          {s.program && !next && <p class="sub">{t.programDoneAll}</p>}
-          {s.program && (
-            <div class="bar" aria-hidden="true"><i style={{ width: `${(s.program.done.length / (PROGRAM.weeks * PROGRAM.perWeek)) * 100}%` }} /></div>
-          )}
-          {s.program && next
-            ? <button class="btn btn-primary" onClick={() => { track('card_clicked', { card: 'program', action: 'start_session', week: next.week }); go(`health/program/${sessionKey(next.week, next.n)}`); }}><Icon name="dumbbell" /> {t.programStart}</button>
-            : <button class="btn btn-outline" onClick={() => { track('card_clicked', { card: 'program', action: 'about' }); go('health/program'); }}>{t.programAbout}</button>}
-        </section>
-      )}
+      <section class="card tight">
+        <button class="hot-row" onClick={() => { setHotPlace(has(p, 'hot') ? 'today_big_button' : 'quick_row'); open('hot', 'today_hot_row'); }}>
+          <span class="hot-ico"><Icon name="wave" size={28} /></span>
+          <span class="hot-txt"><b>{lang === 'ru' ? 'Начался прилив' : 'Hot flash started'}</b><span>{t.hotRowSub}</span></span>
+          <span class="chev"><Icon name="chev" size={20} /></span>
+        </button>
+        {eventsOn(s.events, today, 'hotflash').length > 0 && <p class="sub">{t.hotToday(eventsOn(s.events, today, 'hotflash').length)}</p>}
+        <div class="quick-links">
+          <button class="btn btn-ghost" onClick={() => open('head', 'quick_row')}>{t.qHead}</button>
+          <button class="btn btn-ghost" onClick={() => open('bp', 'quick_row')}>{t.qBp}</button>
+          <button class="btn btn-ghost" onClick={() => open('waist', 'quick_row')}>{t.waist}</button>
+        </div>
+      </section>
 
       {logCount >= 5 ? (
         <section class="card">
@@ -162,10 +155,77 @@ export default function Today() {
       <a class="btn btn-ghost" style="justify-self:center" href={FEEDBACK_URL} target="_blank" rel="noopener" onClick={() => track('feedback_clicked', { place: 'today' })}>{t.feedback}</a>
 
       {sheet === 'hot' && <Breathing place={hotPlace} onClose={() => setSheet(null)} />}
+      {sheet === 'day' && <DaySheet onClose={() => setSheet(null)} />}
+      {sheet === 'calm' && <Breathing mode="calm" place={hotPlace} onClose={() => setSheet(null)} />}
       {sheet === 'head' && <HeadacheSheet onClose={() => setSheet(null)} onBp={() => setSheet('bp')} />}
       {sheet === 'bp' && <BpSheet onClose={() => setSheet(null)} />}
       {sheet === 'waist' && <WaistSheet onClose={() => setSheet(null)} />}
     </div>
+  );
+}
+
+// ── Today's practice: one thing to do. Strength session, or calm breathing on a rest day. ──
+function Practice({ onBreathe }) {
+  const s = useStore();
+  const { t, lang, L } = useT();
+  const today = dayKey();
+  const dates = s.program?.doneDates || [];
+  const doneToday = dates.includes(today);
+  const restDay = !doneToday && dates.includes(addDays(today, -1));
+  const next = s.program ? nextSession(s.program.done) : { week: 1, n: 1 };
+  const list = next ? PROGRAM.session(next.week, next.n) : [];
+  const names = list.filter((x) => x.id !== 'warmup').map((x) => L(EXERCISES[x.id]).name);
+  const card = (kind) => track('card_clicked', { card: 'practice', action: kind });
+
+  if (doneToday || !next) {
+    return (
+      <section class="card practice">
+        <p class="kicker">✓ {t.practiceDone}</p>
+        <p class="sub">{t.practiceDoneText}</p>
+        <button class="btn btn-glass" onClick={() => { card('calm_after_done'); onBreathe(); }}>{t.practiceCalmGo}</button>
+      </section>
+    );
+  }
+  if (restDay) {
+    return (
+      <section class="card practice">
+        <p class="kicker">{t.practiceToday}</p>
+        <p class="h2">{t.practiceCalmTitle}</p>
+        <p class="sub">{t.practiceCalmMeta}</p>
+        <button class="btn btn-glass btn-block btn-lg" onClick={() => { card('calm'); onBreathe(); }}>{t.practiceCalmGo}</button>
+      </section>
+    );
+  }
+  const first = !s.program;
+  return (
+    <section class="card practice">
+      <p class="kicker">{t.practiceToday}</p>
+      <p class="h2">{first ? t.practiceFirstTitle : t.sessionTitle(next.week, next.n)}</p>
+      <p class="sub">{t.practiceStrengthMeta}</p>
+      <p class="moves">{names.join(', ')}</p>
+      {!first && <div class="bar" aria-hidden="true"><i style={{ width: `${(s.program.done.length / (PROGRAM.weeks * PROGRAM.perWeek)) * 100}%` }} /></div>}
+      <button class="btn btn-glass btn-block btn-lg" onClick={() => {
+        card(first ? 'first_session' : 'start_session');
+        go(first ? 'health/program' : `health/program/${sessionKey(next.week, next.n)}`);
+      }}><Icon name="dumbbell" /> {first ? t.practiceFirst : t.programStart}</button>
+    </section>
+  );
+}
+
+// ── An important day is close: how to get ready, based on what bothers her ──
+function DayCard({ d }) {
+  const s = useStore();
+  const { t, L } = useT();
+  const n = daysBetween(dayKey(), d.date);
+  const tips = tipsFor(d.type, s.profile.concerns || []);
+  useEffect(() => { track('important_day_card_shown', { type: d.type, days_ahead: n, tips: tips.length }); }, [d.id, n]);
+  return (
+    <section class="card glass day-card">
+      <p class="kicker" style="color:var(--lagoon-dark)">{t.dayWhen(n)} · {d.note || L(DAY_TYPES.find((x) => x.id === d.type))}</p>
+      <p class="h3">{t.dayPrep}</p>
+      <ul class="day-tips">{tips.map((tip) => <li>{L(tip)}</li>)}</ul>
+      {d.type === 'doctor' && <button class="btn btn-primary" onClick={() => { track('card_clicked', { card: 'important_day', action: 'doctor_summary' }); go('health/doctor'); }}>{t.dayDoctorOpen}</button>}
+    </section>
   );
 }
 
@@ -243,7 +303,8 @@ function CheckIn({ syms }) {
   const { t, lang, L } = useT();
   const today = dayKey();
   const saved = s.logs[today]?.saved;
-  const [editing, setEditing] = useState(!saved);
+  // Not logged yet: one question. Details (symptoms and what happened) only if she wants to add them.
+  const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(() => ({ tags: [], ...(s.logs[today] || {}) }));
   const yesterday = s.logs[addDays(today, -1)];
 
@@ -272,15 +333,29 @@ function CheckIn({ syms }) {
     save(v, 'same_as_yesterday');
   }
 
+  if (!saved && !editing) {
+    return (
+      <section class="card">
+        <h2 class="h2">{t.feelQ}</h2>
+        <div class="feel" role="group" aria-label={t.feelQ}>
+          {t.feel.map((label, v) => (
+            <button class={`l${v}`} onClick={() => { setDraft((d) => ({ ...d, overall: v })); save({ ...draft, overall: v }, 'one_tap'); }}>{label}</button>
+          ))}
+        </div>
+        <button class="btn btn-ghost" style="justify-self:start" onClick={() => { setEditing(true); track('checkin_details_opened', { place: 'before_quick' }); }}>{t.addDetails}</button>
+      </section>
+    );
+  }
+
   if (!editing) {
     const log = s.logs[today];
     const worst = worstSymptom(log);
-    const tip = TIPS[worst || 'calm'];
+    const tip = TIPS[worst || (log.overall >= 2 ? 'hardDay' : 'calm')];
     return (
       <section class="card">
         <div class="row between">
-          <p class="kicker">✓ {t.daySaved}</p>
-          <button class="btn btn-ghost" style="min-height:40px" onClick={() => { setDraft({ tags: [], ...log }); setEditing(true); track('checkin_edit_started'); }}>{t.editDay}</button>
+          <p class="kicker">✓ {log.overall != null ? `${t.feelSaved}: ${t.feel[log.overall]}` : t.daySaved}</p>
+          <button class="btn btn-ghost" style="min-height:40px" onClick={() => { setDraft({ tags: [], ...log }); setEditing(true); track('checkin_edit_started'); }}>{syms.some((id) => log[id] != null) ? t.editDay : t.addDetails}</button>
         </div>
         <div class="tipbox">
           <p class="kicker" style="color:var(--lagoon-dark)">{t.tipTitle}</p>

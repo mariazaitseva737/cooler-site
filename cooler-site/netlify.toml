@@ -12,6 +12,13 @@
   status = 301
   force = true
 
+# The Russian version is off while we test the US market. 302, so it can come back later.
+[[redirects]]
+  from = "/ru/*"
+  to = "/"
+  status = 302
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

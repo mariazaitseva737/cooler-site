@@ -8,7 +8,7 @@ import { checkupStatus, has } from '../lib/logic.js';
 import { dayKey, fmtDate } from '../lib/dates.js';
 import { go } from '../lib/router.js';
 import { ask } from '../lib/telegram.js';
-import { articleUrl } from '../config.js';
+import { articleUrl, RU_ENABLED } from '../config.js';
 import { track, analyticsMode, setAnalyticsMode, setUserProps } from '../lib/analytics.js';
 import Meds, { MedForm } from './Meds.jsx';
 import Program, { Session } from './Program.jsx';
@@ -162,13 +162,13 @@ function Settings() {
     <div class="stack">
       <Back />
       <h1 class="h1">{t.settings}</h1>
-      <section class="card">
+      {RU_ENABLED && <section class="card">
         <p class="h3">{t.lang}</p>
         <div class="row">
           <Choice on={lang === 'ru'} onClick={() => setLang('ru')}>Русский</Choice>
           <Choice on={lang === 'en'} onClick={() => setLang('en')}>English</Choice>
         </div>
-      </section>
+      </section>}
       <section class="card">
         <p class="h3">{t.concerns}</p>
         {CONCERNS.map((c) => <Choice multi on={has(s.profile, c.id)} onClick={() => toggle(c.id)}>{L(c)}</Choice>)}

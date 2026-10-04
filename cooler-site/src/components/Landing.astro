@@ -1,6 +1,6 @@
 ---
 import WaitlistForm from './WaitlistForm.astro';
-import { APP_NAME, APP_NAME_IN, APP_URL, appHref, ui, type Lang } from '../i18n/ui';
+import { APP_NAME, APP_NAME_IN, APP_URL, CHECKOUT_URL, FOUNDING_PRICE, FULL_PRICE_YEAR, PIXEL_ON, appHref, ui, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -57,7 +57,9 @@ const copy = {
     privacyText: 'В приложениях о женском здоровье уже были истории с передачей данных. Поэтому мы решили не хранить ваши отметки у себя вообще.',
     privacyCards: [
       ['Отметки хранятся на вашем телефоне', 'Симптомы, лечение и всё из интимного раздела остаются в браузере на телефоне. К нам на сервер они не попадают.'],
-      ['Мы ничего не передаём и не продаём', 'Ни рекламодателям, ни партнёрам, никому.'],
+      PIXEL_ON
+        ? ['Мы не продаём и не передаём ваши записи', 'На страницах сайта (не в приложении) стоит пиксель Meta: по нему мы видим, работает ли наша реклама. Он видит, какие страницы открывали, и никогда не видит симптомы, лекарства и всё, что вы вносите в приложение.']
+        : ['Мы ничего не передаём и не продаём', 'Ни рекламодателям, ни партнёрам, никому.'],
       ['Что мы всё-таки считаем', 'Какие страницы и экраны открывают и сколько людей возвращается. Для этого мы используем сервис Amplitude, IP-адрес не сохраняем. В приложении вы сами решаете, можно ли связывать эти визиты с вами. Записи, давление и лекарства туда не попадают никогда. Email у нас есть, только если вы сами его оставили.'],
     ],
     faqTitle: 'Частые вопросы',
@@ -74,16 +76,16 @@ const copy = {
   en: {
     kicker: 'For women after menopause',
     h1: 'Thirty more years ahead. They can be good ones.',
-    sub: `${name} helps you get through hot flashes, bad nights and mood swings. Once those pass, it reminds you to look after your bones, heart and muscles.`,
+    sub: `${name} is a daily wellness practice for life after menopause: a 10-second check-in, short sessions for your body, clear answers about what’s normal, and a one-page summary for your doctor.`,
     shotsKicker: 'What it looks like',
-    shotsTitle: 'Large text, clear buttons, nothing extra',
+    shotsTitle: 'Open it, do one thing, get on with your day',
     shots: [
-      ['today', 'Today', 'Today’s medicines, a quick check-in and a button for when a hot flash starts.'],
-      ['breathing', 'Hot flash started', 'Two minutes of calm breathing: in for 4, out for 6.'],
-      ['trends', 'Trends', 'What affects your hot flashes and sleep. You start seeing it after a week.'],
-      ['doctor', 'For the doctor', 'A 30-day summary and your questions. Show it at the appointment or send it.'],
+      ['today', 'Today', 'One practice for the day and a one-tap check-in. That’s the whole morning routine.'],
+      ['program', 'Bones & strength', '15-minute sessions with a chair and a water bottle, three times a week.'],
+      ['trends', 'Trends', 'After a week you start seeing what makes your hot flashes and sleep better or worse.'],
+      ['doctor', 'For your doctor', 'Your last 30 days and your questions on one page. Show it at the appointment.'],
     ],
-    heroShotAlt: 'The app’s Today screen: medicines for today and a “Hot flash started” button',
+    heroShotAlt: 'The app’s Today screen: today’s strength session and a one-tap “How do you feel today?” check-in',
     notAloneTitle: 'Sound familiar? You’re not alone',
     notAloneSub: 'It happens to a lot of women. People just rarely say it out loud.',
     situations: [
@@ -98,10 +100,10 @@ const copy = {
     featuresKicker: 'Features',
     featuresTitle: `What can you do with the ${name} app?`,
     features: [
-      ['Get through a hot flash', 'Tap the big “Hot flash started” button, and a circle on the screen will guide your breathing for two minutes.'],
-      ['Log your day in 30 seconds', 'Note how your hot flashes, sleep, mood, energy and joints are today. The app suggests one thing to try for whatever is bothering you most.'],
-      ['Spot your own patterns', 'After five check-ins, you’ll see what keeps repeating for you. For example, that your hot flashes are worse on days with afternoon coffee.'],
-      ['Look after your bones, heart and strength', 'Programs for strength training, pelvic floor exercises and better sleep. Reminders for your treatment, if you’re on one, and a list of checkups that are due.'],
+      ['One practice a day', 'Open the app and one thing is waiting: a 15-minute strength session, or two minutes of calm breathing on a rest day.'],
+      ['Check in with one tap', 'Good, okay, hard or very hard. Add details only if you want to, and get one tip for whatever is bothering you most.'],
+      ['Get ready for the days that matter', 'Add a flight, a doctor’s visit, a big meeting or a family celebration. Two days before, Cooler shows you how to get ready, based on what bothers you: hot flashes on a plane, sleep before a talk, the questions to ask your doctor.'],
+      ['Get through a hot flash', 'Tap “Hot flash started” and breathe with the circle for two minutes. The app logs it for you, so later you can see what sets them off.'],
       ['Understand what’s going on', 'Short, honest answers to the questions you feel awkward about or never get time to ask your doctor.'],
     ],
     terms: [['hot flashes', 'приливы'], ['HRT', 'ЗГТ'], ['bone density scan', 'денситометрия']],
@@ -119,7 +121,9 @@ const copy = {
     privacyText: 'Women’s health apps have been caught sharing user data before. So we decided not to keep your logs on our side at all.',
     privacyCards: [
       ['Your logs live on your phone', 'Symptoms, treatment and everything in the intimate health section stay in the browser on your phone. They never reach our servers.'],
-      ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
+      PIXEL_ON
+        ? ['We never sell or share your logs', 'On the pages of this website (not inside the app) we use the Meta pixel to see whether our ads work. It sees which pages were visited, never your symptoms, medicines or anything you enter in the app.']
+        : ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
       ['What we do count', 'Which pages and screens get opened, and how many people come back. We use a service called Amplitude for this and don’t store IP addresses. In the app, you decide whether those visits can be linked to you. Your entries, blood pressure and medicines never go there. We only have your email if you gave it to us.'],
     ],
     faqTitle: 'Questions',
@@ -132,25 +136,110 @@ const copy = {
     ],
     ctaTitle: 'Try it today. It takes a minute.',
     ctaText: 'It’s free, and you don’t need to sign up.',
+    // Hero copy per ad. The ad link carries utm_content=a_normal | b_body | c_doctor.
+    variants: {
+      a_normal: {
+        kicker: 'Life after menopause',
+        sub: 'So many new questions come up after menopause: what’s normal, what isn’t, and when it’s worth calling a doctor. Cooler gives you clear, calm answers and a 10-second daily check-in.',
+      },
+      b_body: {
+        kicker: 'For women after 50',
+        sub: 'Menopause isn’t the end of feeling good in your body. Cooler is a 10-minute daily practice of movement, breath and pelvic floor work, plus a check-in that shows what actually helps you.',
+      },
+      c_doctor: {
+        kicker: 'Before your next appointment',
+        sub: 'Thinking about HRT after menopause? Keep a simple medication diary, see how you feel week to week, and bring a clear one-page summary to your doctor.',
+      },
+    },
+    signupLabel: 'Join the founding group: one 10-minute practice in your inbox every week, and first access to the full version.',
+    signupButton: 'Join free',
+    testLink: 'Wondering if what you feel is normal? See how much symptoms affect you, 2 minutes',
+    signupNote: 'Free. Only practices and app news, unsubscribe in one click. Or open the app right away:',
+    pricingKicker: 'Pricing',
+    pricingTitle: 'Start free. Become a founding member if it helps.',
+    plans: [
+      {
+        name: 'Free',
+        price: '$0',
+        per: 'always',
+        points: ['10-second daily check-in', '“Hot flash started” breathing', 'Clear answers to “is this normal?”', 'Medication diary'],
+        cta: 'Start free',
+      },
+      {
+        name: 'Founding member',
+        price: `$${FOUNDING_PRICE}`,
+        per: `for your first year, then $${FULL_PRICE_YEAR} a year`,
+        points: ['Everything in Free', 'Every program as it launches: strength (ready now), pelvic floor, sleep, body confidence', 'One-page summary for your doctor', 'New programs first, and a say in what we build next'],
+        cta: 'Become a founding member',
+        refund: 'Full refund any time in your first 30 days.',
+      },
+    ],
+    breatheIdle: 'Try it now: two slow breaths, in for 4, out for 6.',
+    breatheIn: 'Breathe in',
+    breatheOut: 'Breathe out',
+    breatheDone: 'That’s it. In the app, this starts with one tap when a hot flash begins.',
+    breatheStart: 'Breathe with me',
+    breatheStop: 'Stop',
+    breatheAgain: 'Again',
+    diffTitle: 'Most menopause apps give you things to read. Cooler gives you something to do.',
+    diffs: [
+      ['Do something now, not just read', 'A hot flash starts, you tap one button and breathe with the circle for two minutes. Every day there is one short thing to do, not a feed of articles.'],
+      ['Your patterns, not generic tips', 'After five check-ins you see what keeps repeating for you, like worse nights after afternoon coffee or better mood on days you moved.'],
+      ['On your phone, not on our servers', 'Your logs, medicines and everything intimate stay on your phone. We never see them, so we can’t lose or sell them.'],
+    ],
+    bodyTitle: 'Feel at home in your body again',
+    bodyText: 'After menopause, the body changes and many women stop trusting it. Cooler brings that back with short sessions you can do in your living room, no gym and no special kit.',
+    bodyPoints: [
+      ['Strength, ready now', '8 weeks, 3 sessions a week, about 15 minutes. Chair, wall and stairs. Builds muscle and bone and trains balance.'],
+      ['Pelvic floor', 'A few minutes a day on a simple schedule. Helps with leaking and with how intimacy feels.'],
+      ['Movement and dance, coming next', 'Gentle practices created by a professional dance coach to help you move freely and feel confident again. Founding members get them first.'],
+    ],
+    checkoutSoon: 'Founding membership opens in a few days. Leave your email above and we’ll send you the link first, at the same price.',
   },
 }[lang];
+const en = lang === 'en' ? (copy as any) : null;
 ---
 <section class="wrap hero" data-section="hero">
   <div class="hero-text">
-  <p class="kicker">{copy.kicker}</p>
+  <p class="kicker" data-hero-kicker>{copy.kicker}</p>
   <h1 class="hero-title">{copy.h1}</h1>
-  <p class="hero-sub">{copy.sub}</p>
-  <div class="hero-actions" id="waitlist">
-    {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
-    <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
-    <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
-    <p class="note">{t.emailNote}</p>
-  </div>
+  <p class="hero-sub" data-hero-sub>{copy.sub}</p>
+  {en ? (
+    <div class="hero-actions" id="waitlist">
+      <WaitlistForm lang={lang} id="hero-email" source="hero" label={en.signupLabel} button={en.signupButton} buttonClass="btn btn-primary" />
+      <p class="note">{en.signupNote}</p>
+      <div class="hero-secondary">
+        {APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+        <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{en.testLink}</a>
+      </div>
+    </div>
+  ) : (
+    <div class="hero-actions" id="waitlist">
+      {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+      <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
+      <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
+      <p class="note">{t.emailNote}</p>
+    </div>
+  )}
   </div>
   <figure class="phone hero-phone" data-shot="hero_today">
     <img src={`/screens/${lang}-today.webp`} width="390" height="844" alt={copy.heroShotAlt} fetchpriority="high" />
   </figure>
 </section>
+{en && (
+  <script is:inline define:vars={{ variants: en.variants }}>
+    (function () {
+      var v = new URLSearchParams(location.search).get('utm_content');
+      var c = v && variants[v];
+      if (!c) return;
+      var k = document.querySelector('[data-hero-kicker]');
+      var p = document.querySelector('[data-hero-sub]');
+      if (k) k.textContent = c.kicker;
+      if (p) p.textContent = c.sub;
+      document.body.dataset.heroVariant = v;
+    })();
+  </script>
+)}
 
 <section class="section section-white" data-section="not_alone">
   <div class="wrap stack-56">
@@ -165,10 +254,64 @@ const copy = {
   </div>
 </section>
 
+{en && (
+  <section class="section" id="why" data-section="why">
+    <div class="wrap why">
+      <h2 class="h-section why-title">{en.diffTitle}</h2>
+      <div class="breathe" data-breathe data-section="breathe_demo">
+        <div class="breathe-stage" aria-hidden="true">
+          <span class="breathe-ring"></span>
+          <span class="breathe-core"></span>
+          <span class="breathe-count serif" data-breathe-count></span>
+        </div>
+        <p class="breathe-cue" data-breathe-cue aria-live="polite">{en.breatheIdle}</p>
+        <button class="btn btn-primary" type="button" data-breathe-btn data-track="breathe_demo" data-track-place="why">{en.breatheStart}</button>
+      </div>
+      <dl class="diffs plain-list">
+        {en.diffs.map(([h, p]: string[]) => (
+          <div><dt>{h}</dt><dd>{p}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+)}
+{en && (
+  <script is:inline define:vars={{ L: { idle: en.breatheIdle, inn: en.breatheIn, out: en.breatheOut, done: en.breatheDone, start: en.breatheStart, stop: en.breatheStop, again: en.breatheAgain } }}>
+    (function () {
+      var root = document.querySelector('[data-breathe]');
+      if (!root) return;
+      var btn = root.querySelector('[data-breathe-btn]');
+      var cue = root.querySelector('[data-breathe-cue]');
+      var count = root.querySelector('[data-breathe-count]');
+      var timers = [];
+      var running = false;
+      function clear() { timers.forEach(clearTimeout); timers = []; }
+      function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+      function phase(t0, secs, word, cls) {
+        at(t0, function () { root.className = 'breathe ' + cls; cue.textContent = word; });
+        for (var i = 0; i < secs; i++) (function (n) { at(t0 + n * 1000, function () { count.textContent = String(secs - n); }); })(i);
+      }
+      function stop(finished) {
+        clear(); running = false;
+        root.className = 'breathe';
+        count.textContent = '';
+        cue.textContent = finished ? L.done : L.idle;
+        btn.textContent = finished ? L.again : L.start;
+      }
+      btn.addEventListener('click', function () {
+        if (running) { stop(false); return; }
+        running = true; btn.textContent = L.stop;
+        var t = 0;
+        for (var c = 0; c < 2; c++) { phase(t, 4, L.inn, 'is-in'); t += 4000; phase(t, 6, L.out, 'is-out'); t += 6000; }
+        at(t, function () { stop(true); });
+      });
+    })();
+  </script>
+)}
+
 <section class="section section-deep" id="screens" data-section="screens">
   <div class="wrap stack-56 shots-wrap">
     <div class="stack-16 narrow">
-      <p class="kicker kicker-light">{copy.shotsKicker}</p>
       <h2 class="h-section">{copy.shotsTitle}</h2>
     </div>
     <ul class="shots" role="list">
@@ -187,13 +330,11 @@ const copy = {
 <section class="section" id="features" data-section="features">
   <div class="wrap stack-56">
     <div class="stack-16 narrow">
-      <p class="kicker">{copy.featuresKicker}</p>
       <h2 class="h-section">{copy.featuresTitle}</h2>
     </div>
-    <ol class="features">
+    <ul class="features">
       {copy.features.map(([h, p], i) => (
         <li>
-          <span class="num serif" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           <h3>{h}</h3>
           <div class="stack-16">
             <p>{p}</p>
@@ -205,14 +346,65 @@ const copy = {
           </div>
         </li>
       ))}
-    </ol>
+    </ul>
   </div>
 </section>
+
+{en && (
+  <section class="section" id="body" data-section="body">
+    <div class="wrap body-wrap">
+      <div class="stack-24">
+        <h2 class="h-section">{en.bodyTitle}</h2>
+        <p class="lead">{en.bodyText}</p>
+      </div>
+      <dl class="plain-list">
+        {en.bodyPoints.map(([h, p]: string[]) => (
+          <div><dt>{h}</dt><dd>{p}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+)}
+
+{en && (
+  <section class="section section-white" id="pricing" data-section="pricing">
+    <div class="wrap stack-56">
+      <div class="stack-16 narrow">
+        <h2 class="h-section">{en.pricingTitle}</h2>
+      </div>
+      <div class="plans">
+        {en.plans.map((plan: any, i: number) => (
+          <div class={i === 1 ? 'plan plan-featured' : 'plan'}>
+            <h3>{plan.name}</h3>
+            <p class="plan-price"><span class="serif">{plan.price}</span> {plan.per}</p>
+            <ul class="plan-points">{plan.points.map((pt: string) => <li>{pt}</li>)}</ul>
+            {i === 0
+              ? (APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="pricing">{plan.cta}</a>)
+              : (CHECKOUT_URL
+                  ? <a class="btn btn-primary" href={CHECKOUT_URL} data-checkout data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</a>
+                  : <button class="btn btn-primary" type="button" data-checkout data-checkout-soon data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</button>)}
+            {plan.refund && <p class="plan-refund">{plan.refund}</p>}
+            {i === 1 && !CHECKOUT_URL && <p class="plan-soon" data-checkout-msg hidden>{en.checkoutSoon}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+{en && !CHECKOUT_URL && (
+  <script is:inline>
+    document.querySelectorAll('[data-checkout-soon]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var m = document.querySelector('[data-checkout-msg]');
+        if (m) m.hidden = false;
+      });
+    });
+  </script>
+)}
 
 <section class="wrap" id="intimate" data-section="intimate">
   <div class="intimate">
     <div class="stack-24">
-      <p class="kicker kicker-light">{copy.intimateKicker}</p>
       <h2 class="h-section">{copy.intimateTitle}</h2>
       <p class="intimate-text">{copy.intimateText}</p>
     </div>
@@ -225,18 +417,14 @@ const copy = {
 <section class="section" id="privacy" data-section="privacy">
   <div class="wrap two-col">
     <div class="stack-24">
-      <p class="kicker">{copy.privacyKicker}</p>
       <h2 class="h-section">{copy.privacyTitle}</h2>
       <p class="lead">{copy.privacyText}</p>
     </div>
-    <div class="stack-16">
+    <dl class="plain-list">
       {copy.privacyCards.map(([h, p]) => (
-        <div class="card">
-          <h3>{h}</h3>
-          <p>{p}</p>
-        </div>
+        <div><dt>{h}</dt><dd>{p}</dd></div>
       ))}
-    </div>
+    </dl>
   </div>
 </section>
 
@@ -307,19 +495,17 @@ const copy = {
   .hero-test { justify-self: start; font-size: 19px; font-weight: 500; text-underline-offset: 5px; }
   .note { font-size: 18px; color: var(--ink-soft); }
 
-  .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
-  .situations li { background: var(--air); border-radius: var(--radius); padding: clamp(22px, 3vw, 32px); font-size: clamp(19px, 1.8vw, 22px); line-height: 1.5; }
+  .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 28px clamp(32px, 5vw, 64px); }
+  .situations li { border-top: 1.5px solid var(--line); padding-top: 18px; font-size: clamp(19px, 1.8vw, 22px); line-height: 1.5; max-width: 40ch; }
   .closing { font-size: clamp(24px, 2.6vw, 32px); line-height: 1.35; max-width: 900px; }
 
   .features { list-style: none; margin: 0; padding: 0; }
-  .features > li { display: grid; grid-template-columns: 100px minmax(0, 1fr) minmax(0, 1.2fr); gap: 32px; padding-block: 32px; border-top: 1.5px solid var(--line); align-items: baseline; }
+  .features > li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 32px; padding-block: 32px; border-top: 1.5px solid var(--line); align-items: baseline; }
   .features > li:last-child { border-bottom: 1.5px solid var(--line); }
-  .features .num { font-size: 40px; color: var(--lagoon); }
   .features h3 { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.25; }
   .features p { font-size: clamp(19px, 1.7vw, 21px); color: var(--ink-2); }
   @media (max-width: 860px) {
     .features > li { grid-template-columns: 1fr; gap: 10px; padding-block: 26px; }
-    .features .num { font-size: 28px; }
   }
   .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .chips li { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; padding: 0 18px; border-radius: 22px; background: var(--glass-light); font-size: 18px; }
@@ -334,9 +520,6 @@ const copy = {
 
   .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(32px, 6vw, 72px); align-items: start; }
   @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
-  .card { background: var(--white); border-radius: var(--radius); padding: clamp(22px, 3vw, 30px); display: grid; gap: 8px; }
-  .card h3 { font-size: 24px; }
-  .card p { font-size: 20px; color: var(--ink-2); }
 
   .faq details { border-top: 1.5px solid var(--line); padding-block: 6px; }
   .faq details:last-child { border-bottom: 1.5px solid var(--line); }
@@ -347,4 +530,45 @@ const copy = {
   .faq details p { font-size: clamp(19px, 1.8vw, 21px); color: var(--ink-2); padding-bottom: 22px; max-width: 760px; }
 
   .cta-form { width: 100%; max-width: 620px; text-align: left; }
+
+  .why { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: 'title breathe' 'diffs breathe'; gap: clamp(32px, 5vw, 64px) clamp(32px, 6vw, 96px); align-items: start; }
+  .why-title { grid-area: title; max-width: 18ch; }
+  .breathe { grid-area: breathe; display: grid; justify-items: center; gap: 20px; text-align: center; align-self: center; }
+  .diffs { grid-area: diffs; }
+  .plain-list { margin: 0; display: grid; gap: 28px; }
+  .plain-list > div { display: grid; gap: 8px; padding-left: 22px; border-left: 3px solid var(--glass); }
+  .plain-list dt { font: 600 clamp(22px, 2.2vw, 26px)/1.25 var(--sans); }
+  .plain-list dd { margin: 0; font-size: clamp(19px, 1.7vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 46ch; }
+  @media (max-width: 900px) {
+    .why { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'title' 'breathe' 'diffs'; }
+  }
+
+  .breathe-stage { position: relative; width: min(300px, 72vw); aspect-ratio: 1; display: grid; place-items: center; }
+  .breathe-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px dashed var(--glass); }
+  .breathe-core { position: absolute; inset: 22%; border-radius: 50%; background: var(--lagoon); box-shadow: 0 0 0 14px var(--glass-light); transform: scale(0.72); transition: transform 1.2s ease-in-out; }
+  .breathe.is-in .breathe-core { transform: scale(1.32); transition-duration: 4s; }
+  .breathe.is-out .breathe-core { transform: scale(0.72); transition-duration: 6s; }
+  .breathe-count { position: relative; font-size: 56px; font-weight: 600; color: var(--white); min-height: 1.2em; }
+  .breathe-cue { font-size: clamp(20px, 2vw, 23px); line-height: 1.45; max-width: 26ch; min-height: 2.9em; color: var(--ink); }
+  @media (prefers-reduced-motion: reduce) {
+    .breathe-core, .breathe.is-in .breathe-core, .breathe.is-out .breathe-core { transition: none; transform: scale(1); }
+  }
+  .body-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  @media (max-width: 900px) { .body-wrap { grid-template-columns: minmax(0, 1fr); } }
+  .hero-secondary { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(16px, 2.5vw, 28px); }
+  .plan { background: var(--air); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; align-content: start; }
+  .plan-featured { background: var(--lagoon-deep); color: var(--air); }
+  .plan h3 { font-size: 26px; }
+  .plan-price { font-size: 19px; color: var(--ink-soft); }
+  .plan-price span { font-size: 48px; font-weight: 600; color: var(--ink); margin-right: 6px; }
+  .plan-featured .plan-price, .plan-featured .plan-refund, .plan-featured .plan-soon { color: #CFE6DF; }
+  .plan-featured .plan-price span, .plan-featured h3 { color: var(--air); }
+  .plan-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .plan-points li { font-size: 19px; line-height: 1.45; padding-left: 30px; position: relative; }
+  .plan-points li::before { content: ''; position: absolute; left: 4px; top: 9px; width: 14px; height: 8px; border-left: 2.5px solid var(--lagoon); border-bottom: 2.5px solid var(--lagoon); transform: rotate(-45deg); }
+  .plan-featured .plan-points li::before { border-color: var(--glass); }
+  .plan .btn { justify-self: start; }
+  .plan-featured .btn-primary { background: var(--glass); color: var(--lagoon-dark); }
+  .plan-refund, .plan-soon { font-size: 18px; }
 </style>

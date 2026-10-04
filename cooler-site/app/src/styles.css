@@ -171,3 +171,27 @@ details.acc .acc-body { padding: 0 0 16px; display: grid; gap: 10px; font-size: 
   .nav, .top, .no-print { display: none !important; }
   body, .app { background: #fff; }
 }
+
+/* Today: practice of the day, one-tap check-in, hot flash row */
+.card.practice { background: var(--deep); color: var(--air); }
+.card.practice .kicker { color: var(--glass); }
+.card.practice .sub { color: #CFE3DE; }
+.card.practice .moves { font-size: 17px; line-height: 1.45; color: #E4F0EC; }
+.card.practice .bar { background: rgba(255,255,255,.18); }
+.card.practice .bar > i { background: var(--glass); }
+.btn-lg { min-height: 60px; font-size: 20px; }
+.feel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.feel button { min-height: 60px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--white); font-size: 18px; font-weight: 600; color: var(--ink); }
+.feel button:active { background: var(--glass-2); border-color: var(--lagoon); }
+.card.tight { gap: 4px; }
+.hot-row { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; text-align: left; background: none; border: 0; padding: 4px 0; width: 100%; color: inherit; }
+.hot-ico { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--glass-2); color: var(--lagoon); }
+.hot-txt { display: grid; gap: 2px; }
+.hot-txt b { font-size: 19px; }
+.hot-txt span { font-size: 16px; color: var(--ink-2); }
+.quick-links { display: flex; flex-wrap: wrap; gap: 4px 12px; border-top: 1px solid var(--line-2); padding-top: 6px; margin-top: 6px; }
+.quick-links .btn-ghost { min-height: 44px; font-size: 17px; padding: 0 2px; }
+.day-tips { margin: 0; padding-left: 22px; display: grid; gap: 8px; font-size: 18px; line-height: 1.45; }
+.day-item { border-top: 1px solid var(--line-2); padding-top: 4px; font-size: 17px; gap: 8px; }
+.day-item .btn-ghost { min-height: 44px; font-size: 16px; }
+.btn[disabled] { opacity: .5; }
