@@ -80,8 +80,12 @@ export const TIPS = {
     en: 'Joints usually do better with movement than rest. Try 10 minutes of gentle stretching today, even sitting down.',
   },
   calm: {
-    ru: 'Сегодня спокойный день, можно заняться силовыми. Мышцам и костям это полезно.',
-    en: 'A calm day. Good time for some strength training, which helps your muscles and bones.',
+    ru: 'Спокойный день. Прогулка при дневном свете поможет и настроению, и сну, и костям.',
+    en: 'A calm day. A walk in daylight helps your mood, your sleep and your bones.',
+  },
+  hardDay: {
+    ru: 'Тяжёлые дни бывают. Сегодня хватит одного маленького дела: две минуты дыхания или короткой прогулки. Если добавите подробности, через неделю станет видно, что на это влияет.',
+    en: 'Hard days happen. One small thing is enough today: two minutes of breathing or a short walk. If you add details, in a week you’ll start seeing what affects days like this.',
   },
 };
 
