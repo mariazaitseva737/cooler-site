@@ -76,7 +76,7 @@ const copy = {
   en: {
     kicker: 'For women after menopause',
     h1: 'Thirty more years ahead. They can be good ones.',
-    sub: `${name} helps you get through hot flashes, bad nights and mood swings. Once those pass, it reminds you to look after your bones, heart and muscles.`,
+    sub: `${name} is a daily wellness practice for life after menopause: a 10-second check-in, short sessions for your body, clear answers about what’s normal, and a one-page summary for your doctor.`,
     shotsKicker: 'What it looks like',
     shotsTitle: 'Large text, clear buttons, nothing extra',
     shots: [
@@ -153,6 +153,7 @@ const copy = {
     },
     signupLabel: 'Join the founding group: one 10-minute practice in your inbox every week, and first access to the full version.',
     signupButton: 'Join free',
+    testLink: 'Wondering if what you feel is normal? See how much symptoms affect you, 2 minutes',
     signupNote: 'Free. Only practices and app news, unsubscribe in one click. Or open the app right away:',
     pricingKicker: 'Pricing',
     pricingTitle: 'Start free. Become a founding member if it helps.',
@@ -168,10 +169,25 @@ const copy = {
         name: 'Founding member',
         price: `$${FOUNDING_PRICE}`,
         per: `for your first year, then $${FULL_PRICE_YEAR} a year`,
-        points: ['Everything in Free', 'All 4–8 week programs: body confidence, pelvic floor, sleep, strength', 'One-page summary for your doctor', 'New programs first, and a say in what we build next'],
+        points: ['Everything in Free', 'Every program as it launches: strength (ready now), pelvic floor, sleep, body confidence', 'One-page summary for your doctor', 'New programs first, and a say in what we build next'],
         cta: 'Become a founding member',
         refund: 'Full refund any time in your first 30 days.',
       },
+    ],
+    diffKicker: 'Why Cooler',
+    diffTitle: 'Most menopause apps give you things to read. Cooler gives you something to do.',
+    diffs: [
+      ['Do something now, not just read', 'A hot flash starts, you tap one button and breathe with the circle for two minutes. Every day there is one short thing to do, not a feed of articles.'],
+      ['Your patterns, not generic tips', 'After five check-ins you see what keeps repeating for you, like worse nights after afternoon coffee or better mood on days you moved.'],
+      ['On your phone, not on our servers', 'Your logs, medicines and everything intimate stay on your phone. We never see them, so we can’t lose or sell them.'],
+    ],
+    bodyKicker: 'Your body',
+    bodyTitle: 'Feel at home in your body again',
+    bodyText: 'After menopause, the body changes and many women stop trusting it. Cooler brings that back with short sessions you can do in your living room, no gym and no special kit.',
+    bodyPoints: [
+      ['Strength, ready now', '8 weeks, 3 sessions a week, about 15 minutes. Chair, wall and stairs. Builds muscle and bone and trains balance.'],
+      ['Pelvic floor', 'A few minutes a day on a simple schedule. Helps with leaking and with how intimacy feels.'],
+      ['Movement and dance, coming next', 'Gentle practices created by a professional dance coach to help you move freely and feel confident again. Founding members get them first.'],
     ],
     checkoutSoon: 'Founding membership opens in a few days. Leave your email above and we’ll send you the link first, at the same price.',
   },
@@ -189,7 +205,7 @@ const en = lang === 'en' ? (copy as any) : null;
       <p class="note">{en.signupNote}</p>
       <div class="hero-secondary">
         {APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
-        <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
+        <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{en.testLink}</a>
       </div>
     </div>
   ) : (
@@ -232,6 +248,22 @@ const en = lang === 'en' ? (copy as any) : null;
     <p class="closing serif">{copy.notAloneEnd}</p>
   </div>
 </section>
+
+{en && (
+  <section class="section" id="why" data-section="why">
+    <div class="wrap stack-56">
+      <div class="stack-16 narrow">
+        <p class="kicker">{en.diffKicker}</p>
+        <h2 class="h-section">{en.diffTitle}</h2>
+      </div>
+      <ul class="diffs">
+        {en.diffs.map(([h, p]: string[]) => (
+          <li><h3>{h}</h3><p>{p}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
 
 <section class="section section-deep" id="screens" data-section="screens">
   <div class="wrap stack-56 shots-wrap">
@@ -276,6 +308,23 @@ const en = lang === 'en' ? (copy as any) : null;
     </ol>
   </div>
 </section>
+
+{en && (
+  <section class="wrap" id="body" data-section="body">
+    <div class="body-block">
+      <div class="stack-24">
+        <p class="kicker kicker-light">{en.bodyKicker}</p>
+        <h2 class="h-section">{en.bodyTitle}</h2>
+        <p class="intimate-text">{en.bodyText}</p>
+      </div>
+      <ul class="body-points">
+        {en.bodyPoints.map(([h, p]: string[]) => (
+          <li><h3>{h}</h3><p>{p}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
 
 {en && (
   <section class="section section-white" id="pricing" data-section="pricing">
@@ -453,6 +502,16 @@ const en = lang === 'en' ? (copy as any) : null;
 
   .cta-form { width: 100%; max-width: 620px; text-align: left; }
 
+  .diffs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .diffs li { background: var(--white); border-radius: var(--radius); padding: clamp(22px, 3vw, 32px); display: grid; gap: 10px; align-content: start; }
+  .diffs h3 { font-size: clamp(22px, 2.2vw, 26px); line-height: 1.25; }
+  .diffs p { font-size: clamp(19px, 1.7vw, 21px); color: var(--ink-2); line-height: 1.5; }
+  .body-block { border-radius: 40px; background: var(--lagoon-deep); color: var(--air); padding: clamp(32px, 6vw, 88px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(32px, 5vw, 72px); margin-block: clamp(48px, 7vw, 96px); }
+  .body-block .h-section { color: var(--air); }
+  .body-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; align-self: center; }
+  .body-points li { background: rgba(255,255,255,0.07); border-radius: 22px; padding: 22px 24px; display: grid; gap: 6px; }
+  .body-points h3 { font-size: 22px; color: var(--air); }
+  .body-points p { font-size: clamp(18px, 1.6vw, 20px); line-height: 1.45; color: #E3EFEB; }
   .hero-secondary { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
   .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(16px, 2.5vw, 28px); }
   .plan { background: var(--air); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; align-content: start; }
