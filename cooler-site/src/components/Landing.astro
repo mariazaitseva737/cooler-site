@@ -267,7 +267,7 @@ const en = lang === 'en' ? (copy as any) : null;
         <p class="breathe-cue" data-breathe-cue aria-live="polite">{en.breatheIdle}</p>
         <button class="btn btn-primary" type="button" data-breathe-btn data-track="breathe_demo" data-track-place="why">{en.breatheStart}</button>
       </div>
-      <dl class="diffs">
+      <dl class="diffs plain-list">
         {en.diffs.map(([h, p]: string[]) => (
           <div><dt>{h}</dt><dd>{p}</dd></div>
         ))}
@@ -312,7 +312,6 @@ const en = lang === 'en' ? (copy as any) : null;
 <section class="section section-deep" id="screens" data-section="screens">
   <div class="wrap stack-56 shots-wrap">
     <div class="stack-16 narrow">
-      <p class="kicker kicker-light">{copy.shotsKicker}</p>
       <h2 class="h-section">{copy.shotsTitle}</h2>
     </div>
     <ul class="shots" role="list">
@@ -331,13 +330,11 @@ const en = lang === 'en' ? (copy as any) : null;
 <section class="section" id="features" data-section="features">
   <div class="wrap stack-56">
     <div class="stack-16 narrow">
-      <p class="kicker">{copy.featuresKicker}</p>
       <h2 class="h-section">{copy.featuresTitle}</h2>
     </div>
-    <ol class="features">
+    <ul class="features">
       {copy.features.map(([h, p], i) => (
         <li>
-          <span class="num serif" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           <h3>{h}</h3>
           <div class="stack-16">
             <p>{p}</p>
@@ -349,22 +346,22 @@ const en = lang === 'en' ? (copy as any) : null;
           </div>
         </li>
       ))}
-    </ol>
+    </ul>
   </div>
 </section>
 
 {en && (
-  <section class="wrap" id="body" data-section="body">
-    <div class="body-block">
+  <section class="section" id="body" data-section="body">
+    <div class="wrap body-wrap">
       <div class="stack-24">
         <h2 class="h-section">{en.bodyTitle}</h2>
-        <p class="intimate-text">{en.bodyText}</p>
+        <p class="lead">{en.bodyText}</p>
       </div>
-      <ul class="body-points">
+      <dl class="plain-list">
         {en.bodyPoints.map(([h, p]: string[]) => (
-          <li><h3>{h}</h3><p>{p}</p></li>
+          <div><dt>{h}</dt><dd>{p}</dd></div>
         ))}
-      </ul>
+      </dl>
     </div>
   </section>
 )}
@@ -373,7 +370,6 @@ const en = lang === 'en' ? (copy as any) : null;
   <section class="section section-white" id="pricing" data-section="pricing">
     <div class="wrap stack-56">
       <div class="stack-16 narrow">
-        <p class="kicker">{en.pricingKicker}</p>
         <h2 class="h-section">{en.pricingTitle}</h2>
       </div>
       <div class="plans">
@@ -409,7 +405,6 @@ const en = lang === 'en' ? (copy as any) : null;
 <section class="wrap" id="intimate" data-section="intimate">
   <div class="intimate">
     <div class="stack-24">
-      <p class="kicker kicker-light">{copy.intimateKicker}</p>
       <h2 class="h-section">{copy.intimateTitle}</h2>
       <p class="intimate-text">{copy.intimateText}</p>
     </div>
@@ -422,18 +417,14 @@ const en = lang === 'en' ? (copy as any) : null;
 <section class="section" id="privacy" data-section="privacy">
   <div class="wrap two-col">
     <div class="stack-24">
-      <p class="kicker">{copy.privacyKicker}</p>
       <h2 class="h-section">{copy.privacyTitle}</h2>
       <p class="lead">{copy.privacyText}</p>
     </div>
-    <div class="stack-16">
+    <dl class="plain-list">
       {copy.privacyCards.map(([h, p]) => (
-        <div class="card">
-          <h3>{h}</h3>
-          <p>{p}</p>
-        </div>
+        <div><dt>{h}</dt><dd>{p}</dd></div>
       ))}
-    </div>
+    </dl>
   </div>
 </section>
 
@@ -504,19 +495,17 @@ const en = lang === 'en' ? (copy as any) : null;
   .hero-test { justify-self: start; font-size: 19px; font-weight: 500; text-underline-offset: 5px; }
   .note { font-size: 18px; color: var(--ink-soft); }
 
-  .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
-  .situations li { background: var(--air); border-radius: var(--radius); padding: clamp(22px, 3vw, 32px); font-size: clamp(19px, 1.8vw, 22px); line-height: 1.5; }
+  .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 28px clamp(32px, 5vw, 64px); }
+  .situations li { border-top: 1.5px solid var(--line); padding-top: 18px; font-size: clamp(19px, 1.8vw, 22px); line-height: 1.5; max-width: 40ch; }
   .closing { font-size: clamp(24px, 2.6vw, 32px); line-height: 1.35; max-width: 900px; }
 
   .features { list-style: none; margin: 0; padding: 0; }
-  .features > li { display: grid; grid-template-columns: 100px minmax(0, 1fr) minmax(0, 1.2fr); gap: 32px; padding-block: 32px; border-top: 1.5px solid var(--line); align-items: baseline; }
+  .features > li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 32px; padding-block: 32px; border-top: 1.5px solid var(--line); align-items: baseline; }
   .features > li:last-child { border-bottom: 1.5px solid var(--line); }
-  .features .num { font-size: 40px; color: var(--lagoon); }
   .features h3 { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.25; }
   .features p { font-size: clamp(19px, 1.7vw, 21px); color: var(--ink-2); }
   @media (max-width: 860px) {
     .features > li { grid-template-columns: 1fr; gap: 10px; padding-block: 26px; }
-    .features .num { font-size: 28px; }
   }
   .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .chips li { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; padding: 0 18px; border-radius: 22px; background: var(--glass-light); font-size: 18px; }
@@ -531,9 +520,6 @@ const en = lang === 'en' ? (copy as any) : null;
 
   .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(32px, 6vw, 72px); align-items: start; }
   @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
-  .card { background: var(--white); border-radius: var(--radius); padding: clamp(22px, 3vw, 30px); display: grid; gap: 8px; }
-  .card h3 { font-size: 24px; }
-  .card p { font-size: 20px; color: var(--ink-2); }
 
   .faq details { border-top: 1.5px solid var(--line); padding-block: 6px; }
   .faq details:last-child { border-bottom: 1.5px solid var(--line); }
@@ -548,10 +534,11 @@ const en = lang === 'en' ? (copy as any) : null;
   .why { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: 'title breathe' 'diffs breathe'; gap: clamp(32px, 5vw, 64px) clamp(32px, 6vw, 96px); align-items: start; }
   .why-title { grid-area: title; max-width: 18ch; }
   .breathe { grid-area: breathe; display: grid; justify-items: center; gap: 20px; text-align: center; align-self: center; }
-  .diffs { grid-area: diffs; margin: 0; display: grid; gap: 28px; }
-  .diffs > div { display: grid; gap: 8px; padding-left: 22px; border-left: 3px solid var(--glass); }
-  .diffs dt { font: 600 clamp(22px, 2.2vw, 26px)/1.25 var(--sans); }
-  .diffs dd { margin: 0; font-size: clamp(19px, 1.7vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 46ch; }
+  .diffs { grid-area: diffs; }
+  .plain-list { margin: 0; display: grid; gap: 28px; }
+  .plain-list > div { display: grid; gap: 8px; padding-left: 22px; border-left: 3px solid var(--glass); }
+  .plain-list dt { font: 600 clamp(22px, 2.2vw, 26px)/1.25 var(--sans); }
+  .plain-list dd { margin: 0; font-size: clamp(19px, 1.7vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 46ch; }
   @media (max-width: 900px) {
     .why { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'title' 'breathe' 'diffs'; }
   }
@@ -566,12 +553,8 @@ const en = lang === 'en' ? (copy as any) : null;
   @media (prefers-reduced-motion: reduce) {
     .breathe-core, .breathe.is-in .breathe-core, .breathe.is-out .breathe-core { transition: none; transform: scale(1); }
   }
-  .body-block { border-radius: 40px; background: var(--lagoon-deep); color: var(--air); padding: clamp(32px, 6vw, 88px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(32px, 5vw, 72px); margin-block: clamp(48px, 7vw, 96px); }
-  .body-block .h-section { color: var(--air); }
-  .body-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; align-self: center; }
-  .body-points li { background: rgba(255,255,255,0.07); border-radius: 22px; padding: 22px 24px; display: grid; gap: 6px; }
-  .body-points h3 { font-size: 22px; color: var(--air); }
-  .body-points p { font-size: clamp(18px, 1.6vw, 20px); line-height: 1.45; color: #E3EFEB; }
+  .body-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  @media (max-width: 900px) { .body-wrap { grid-template-columns: minmax(0, 1fr); } }
   .hero-secondary { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
   .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(16px, 2.5vw, 28px); }
   .plan { background: var(--air); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; align-content: start; }
