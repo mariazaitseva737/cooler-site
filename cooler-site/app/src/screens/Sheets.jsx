@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'preact/hooks';
 import { createPortal } from 'preact/compat';
-import { getState, update } from '../lib/store.js';
+import { getState, update, useStore } from '../lib/store.js';
 import { useT } from '../i18n.js';
-import { Sheet, Scale, toast } from '../ui/kit.jsx';
+import { Sheet, Scale, toast, Choice, Field } from '../ui/kit.jsx';
 import { bpLevel, localIso, painkillerDaysThisMonth, eventsOn } from '../lib/logic.js';
-import { dayKey, fmtTime, fmtDate } from '../lib/dates.js';
+import { dayKey, fmtTime, fmtDate, addDays, daysBetween } from '../lib/dates.js';
+import { addToCalendar } from '../lib/ics.js';
+import { DAY_TYPES } from '../data/days.js';
 import { track } from '../lib/analytics.js';
 import { haptic } from '../lib/telegram.js';
 
@@ -160,6 +162,72 @@ export function WaistSheet({ onClose }) {
       <p class="sub">{t.waistIntro}</p>
       <label class="field"><span>{t.waistCm}</span><input class="input" inputmode="decimal" type="number" value={cm} onInput={(e) => setCm(e.currentTarget.value)} /></label>
       <button class="btn btn-primary btn-block" disabled={!(Number(cm) > 40 && Number(cm) < 200)} onClick={save}>{t.save}</button>
+    </Sheet>
+  );
+}
+
+// ── Important day: she adds it by hand, Today shows how to get ready ──
+export function DaySheet({ onClose }) {
+  const s = useStore();
+  const { t, lang, L } = useT();
+  const today = dayKey();
+  const [type, setType] = useState(null);
+  const [date, setDate] = useState('');
+  const [note, setNote] = useState('');
+  const [saved, setSaved] = useState(null);
+  const upcoming = (s.days || []).filter((d) => d.date >= today).sort((a, b) => a.date.localeCompare(b.date));
+  const valid = type && date && date >= today;
+  const save = () => {
+    const d = { id: String(Date.now()), type, date, note: note.trim() };
+    update((st) => {
+      st.days = [...(st.days || []), d];
+      // A doctor's visit also drives the existing "appointment soon" reminder and the doctor summary.
+      if (type === 'doctor' && (!st.visit || st.visit < today || date < st.visit)) st.visit = date;
+      return st;
+    });
+    track('important_day_added', { type, days_ahead: daysBetween(today, date), with_note: !!d.note });
+    haptic();
+    setSaved(d);
+  };
+  const cal = () => {
+    addToCalendar({ title: t.dayCalTitle, times: ['19:00'], start: addDays(saved.date, -1) });
+    track('calendar_reminder_added', { kind: 'important_day', type: saved.type });
+  };
+  const remove = (id) => { update((st) => { st.days = (st.days || []).filter((d) => d.id !== id); return st; }); track('important_day_removed'); };
+  return (
+    <Sheet title={t.dayAdd} onClose={onClose} closeLabel={t.close}>
+      {saved ? (
+        <>
+          <div class="okbox">{t.daySavedText}</div>
+          {saved.date > today && <button class="btn btn-outline btn-block" onClick={cal}>{t.dayCal}</button>}
+          <button class="btn btn-primary btn-block" onClick={onClose}>{t.done}</button>
+        </>
+      ) : (
+        <>
+          <div class="stack-s">
+            <p class="h3">{t.dayType}</p>
+            {DAY_TYPES.map((d) => <Choice on={type === d.id} onClick={() => setType(d.id)}>{L(d)}</Choice>)}
+          </div>
+          <Field label={t.dayDate} id="day-date">
+            <input class="input" id="day-date" type="date" min={today} value={date} onInput={(e) => setDate(e.currentTarget.value)} />
+          </Field>
+          <Field label={t.dayNote} hint={t.dayNoteHint} id="day-note">
+            <input class="input" id="day-note" maxLength={60} value={note} onInput={(e) => setNote(e.currentTarget.value)} />
+          </Field>
+          <button class="btn btn-primary btn-block" disabled={!valid} onClick={save}>{t.daySave}</button>
+          {upcoming.length > 0 && (
+            <div class="stack-s">
+              <p class="h3">{t.dayUpcoming}</p>
+              {upcoming.map((d) => (
+                <div class="row between day-item">
+                  <span>{d.note || L(DAY_TYPES.find((x) => x.id === d.type))} · {fmtDate(d.date, lang, { day: 'numeric', month: 'short' })}</span>
+                  <button class="btn btn-ghost" onClick={() => remove(d.id)}>{t.dayRemove}</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </Sheet>
   );
 }

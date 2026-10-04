@@ -4,7 +4,8 @@ import { useT, APP_NAME } from '../i18n.js';
 import { SYMPTOMS, LEVELS, SLEEP_LEVELS, TAGS, TIPS, RED_FLAGS } from '../data/content.js';
 import { PROGRAM, EXERCISES, nextSession, sessionKey } from '../data/program.js';
 import { Logo, Icon, Scale, Chip } from '../ui/kit.jsx';
-import { Breathing, HeadacheSheet, BpSheet, WaistSheet } from './Sheets.jsx';
+import { Breathing, HeadacheSheet, BpSheet, WaistSheet, DaySheet } from './Sheets.jsx';
+import { DAY_TYPES, tipsFor } from '../data/days.js';
 import { dayKey, addDays, fmtWeekday, fmtTime, fmtDate, daysBetween, parseDay } from '../lib/dates.js';
 import {
   activeSymptoms, has, dosesOn, worstSymptom, insights, weekSummary, waistDue,
@@ -33,6 +34,8 @@ export default function Today() {
   const next = s.program ? nextSession(s.program.done) : null;
   const soon = checkupsSoon(s).filter((c) => !checkupStatus(s, c.id).due || true).slice(0, 1);
   const k = knowledgeOfDay(s);
+  // The nearest important day in the next 2 days, if any
+  const dayNext = (s.days || []).filter((d) => { const n = daysBetween(today, d.date); return n >= 0 && n <= 2; }).sort((a, b) => a.date.localeCompare(b.date))[0];
   const open = (kind, place) => { setSheet(kind); track('quick_log_opened', { kind, place }); };
   const [hotPlace, setHotPlace] = useState('today_big_button');
   // Cards that appeared today (once per day per card, for "seen → used" funnels)
@@ -59,7 +62,7 @@ export default function Today() {
         <h1 class="h1">{away ? t.welcomeBack : t.greet(new Date().getHours())}</h1>
       </div>
 
-      {visitSoon(s) && (
+      {visitSoon(s) && dayNext?.type !== 'doctor' && (
         <section class="card deep">
           <p class="kicker">{t.visitSoon(fmtDate(s.visit, lang))}</p>
           <p class="h2" style="color:#fff">{t.visitPrep}</p>
@@ -71,7 +74,17 @@ export default function Today() {
 
       <Practice onBreathe={() => { setHotPlace('practice'); open('calm', 'practice'); }} />
 
+      {dayNext && <DayCard d={dayNext} />}
+
       <CheckIn syms={syms} />
+
+      <section class="card tight">
+        <button class="hot-row" onClick={() => open('day', 'today_row')}>
+          <span class="hot-ico"><Icon name="cal" size={26} /></span>
+          <span class="hot-txt"><b>{t.dayAdd}</b><span>{t.dayAddSub}</span></span>
+          <span class="chev"><Icon name="chev" size={20} /></span>
+        </button>
+      </section>
 
       <section class="card tight">
         <button class="hot-row" onClick={() => { setHotPlace(has(p, 'hot') ? 'today_big_button' : 'quick_row'); open('hot', 'today_hot_row'); }}>
@@ -142,6 +155,7 @@ export default function Today() {
       <a class="btn btn-ghost" style="justify-self:center" href={FEEDBACK_URL} target="_blank" rel="noopener" onClick={() => track('feedback_clicked', { place: 'today' })}>{t.feedback}</a>
 
       {sheet === 'hot' && <Breathing place={hotPlace} onClose={() => setSheet(null)} />}
+      {sheet === 'day' && <DaySheet onClose={() => setSheet(null)} />}
       {sheet === 'calm' && <Breathing mode="calm" place={hotPlace} onClose={() => setSheet(null)} />}
       {sheet === 'head' && <HeadacheSheet onClose={() => setSheet(null)} onBp={() => setSheet('bp')} />}
       {sheet === 'bp' && <BpSheet onClose={() => setSheet(null)} />}
@@ -194,6 +208,23 @@ function Practice({ onBreathe }) {
         card(first ? 'first_session' : 'start_session');
         go(first ? 'health/program' : `health/program/${sessionKey(next.week, next.n)}`);
       }}><Icon name="dumbbell" /> {first ? t.practiceFirst : t.programStart}</button>
+    </section>
+  );
+}
+
+// ── An important day is close: how to get ready, based on what bothers her ──
+function DayCard({ d }) {
+  const s = useStore();
+  const { t, L } = useT();
+  const n = daysBetween(dayKey(), d.date);
+  const tips = tipsFor(d.type, s.profile.concerns || []);
+  useEffect(() => { track('important_day_card_shown', { type: d.type, days_ahead: n, tips: tips.length }); }, [d.id, n]);
+  return (
+    <section class="card glass day-card">
+      <p class="kicker" style="color:var(--lagoon-dark)">{t.dayWhen(n)} · {d.note || L(DAY_TYPES.find((x) => x.id === d.type))}</p>
+      <p class="h3">{t.dayPrep}</p>
+      <ul class="day-tips">{tips.map((tip) => <li>{L(tip)}</li>)}</ul>
+      {d.type === 'doctor' && <button class="btn btn-primary" onClick={() => { track('card_clicked', { card: 'important_day', action: 'doctor_summary' }); go('health/doctor'); }}>{t.dayDoctorOpen}</button>}
     </section>
   );
 }

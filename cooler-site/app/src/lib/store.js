@@ -22,6 +22,7 @@ export const emptyState = () => ({
   waist: [],       // { date, cm }
   checkups: {},    // key -> { last: 'YYYY-MM-DD', every: months }
   visit: null,     // 'YYYY-MM-DD' of the next doctor's appointment
+  days: [],        // important days: { id, type: 'doctor'|'travel'|'talk'|'party', date: 'YYYY-MM-DD', note }
   seenInsights: [],
   analytics: null,       // null (not asked → basic) | 'full' | 'basic' | 'off'
   analyticsAsked: false,
