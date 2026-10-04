@@ -129,7 +129,7 @@ export const ui = {
   },
 } as const;
 
-export const CONTACT_EMAIL = 'mzaitceva@gmail.com';
+export const CONTACT_EMAIL = 'hello@cooler-app.com';
 
 export function formatDate(d: Date, lang: Lang) {
   return d.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { year: 'numeric', month: 'long' });
