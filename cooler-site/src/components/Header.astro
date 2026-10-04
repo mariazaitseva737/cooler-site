@@ -18,9 +18,6 @@ const tryHref = appHref(lang);
     <a href={`${home}#faq`}>{t.navFaq}</a>
   </nav>
   <div class="header-actions">
-    <a class="lang" data-lang-switch href={altHref} hreflang={lang === 'ru' ? 'en' : 'ru'} aria-label={t.langAria}>
-      {lang === 'ru' ? <><strong>RU</strong>&nbsp;· EN</> : <>RU&nbsp;· <strong>EN</strong></>}
-    </a>
     <a class="btn btn-primary btn-sm" href={tryHref} data-track="try_app" data-track-place="header">{t.tryFree}</a>
   </div>
 </header>

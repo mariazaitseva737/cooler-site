@@ -1,3 +1,4 @@
+import { RU_ENABLED } from './config.js';
 import { useStore } from './lib/store.js';
 
 // Interface text. Product name is set in one place.
@@ -327,6 +328,6 @@ export function plural(n, one, few, many) {
 
 export function useT() {
   const s = useStore();
-  const lang = s.lang === 'en' ? 'en' : 'ru';
+  const lang = !RU_ENABLED || s.lang === 'en' ? 'en' : 'ru';
   return { t: S[lang], lang, L: (obj) => (obj ? obj[lang] ?? obj.ru : '') };
 }

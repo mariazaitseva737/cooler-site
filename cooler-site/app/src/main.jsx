@@ -14,6 +14,7 @@ import { initAnalytics, track, trackFirstOpen, screenName } from './lib/analytic
 import { useT } from './i18n.js';
 import { Icon, Toaster } from './ui/kit.jsx';
 import { go } from './lib/router.js';
+import { RU_ENABLED } from './config.js';
 import Onboarding from './screens/Onboarding.jsx';
 import Today from './screens/Today.jsx';
 import Trends from './screens/Trends.jsx';
@@ -23,6 +24,7 @@ import Learn from './screens/Learn.jsx';
 // ── Language: ?lang= from the site → saved choice → Telegram → phone settings ──
 (function pickLang() {
   const s = getState();
+  if (!RU_ENABLED) { if (s.lang !== 'en') update({ lang: 'en' }); return; }
   const q = new URLSearchParams(location.search).get('lang');
   if (q === 'ru' || q === 'en') { if (s.lang !== q) update({ lang: q }); return; }
   if (s.lang) return;

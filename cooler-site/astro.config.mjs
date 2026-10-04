@@ -10,7 +10,6 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     sitemap({
-      i18n: { defaultLocale: 'en', locales: { en: 'en', ru: 'ru' } },
       // skip thank-you pages and the old /en/ addresses, which now only redirect
       filter: (page) => !page.includes('/thanks/') && !new URL(page).pathname.startsWith('/en/'),
     }),
