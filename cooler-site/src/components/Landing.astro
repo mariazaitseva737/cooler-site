@@ -174,14 +174,19 @@ const copy = {
         refund: 'Full refund any time in your first 30 days.',
       },
     ],
-    diffKicker: 'Why Cooler',
+    breatheIdle: 'Try it now: two slow breaths, in for 4, out for 6.',
+    breatheIn: 'Breathe in',
+    breatheOut: 'Breathe out',
+    breatheDone: 'That’s it. In the app, this starts with one tap when a hot flash begins.',
+    breatheStart: 'Breathe with me',
+    breatheStop: 'Stop',
+    breatheAgain: 'Again',
     diffTitle: 'Most menopause apps give you things to read. Cooler gives you something to do.',
     diffs: [
       ['Do something now, not just read', 'A hot flash starts, you tap one button and breathe with the circle for two minutes. Every day there is one short thing to do, not a feed of articles.'],
       ['Your patterns, not generic tips', 'After five check-ins you see what keeps repeating for you, like worse nights after afternoon coffee or better mood on days you moved.'],
       ['On your phone, not on our servers', 'Your logs, medicines and everything intimate stay on your phone. We never see them, so we can’t lose or sell them.'],
     ],
-    bodyKicker: 'Your body',
     bodyTitle: 'Feel at home in your body again',
     bodyText: 'After menopause, the body changes and many women stop trusting it. Cooler brings that back with short sessions you can do in your living room, no gym and no special kit.',
     bodyPoints: [
@@ -251,18 +256,57 @@ const en = lang === 'en' ? (copy as any) : null;
 
 {en && (
   <section class="section" id="why" data-section="why">
-    <div class="wrap stack-56">
-      <div class="stack-16 narrow">
-        <p class="kicker">{en.diffKicker}</p>
-        <h2 class="h-section">{en.diffTitle}</h2>
+    <div class="wrap why">
+      <h2 class="h-section why-title">{en.diffTitle}</h2>
+      <div class="breathe" data-breathe data-section="breathe_demo">
+        <div class="breathe-stage" aria-hidden="true">
+          <span class="breathe-ring"></span>
+          <span class="breathe-core"></span>
+          <span class="breathe-count serif" data-breathe-count></span>
+        </div>
+        <p class="breathe-cue" data-breathe-cue aria-live="polite">{en.breatheIdle}</p>
+        <button class="btn btn-primary" type="button" data-breathe-btn data-track="breathe_demo" data-track-place="why">{en.breatheStart}</button>
       </div>
-      <ul class="diffs">
+      <dl class="diffs">
         {en.diffs.map(([h, p]: string[]) => (
-          <li><h3>{h}</h3><p>{p}</p></li>
+          <div><dt>{h}</dt><dd>{p}</dd></div>
         ))}
-      </ul>
+      </dl>
     </div>
   </section>
+)}
+{en && (
+  <script is:inline define:vars={{ L: { idle: en.breatheIdle, inn: en.breatheIn, out: en.breatheOut, done: en.breatheDone, start: en.breatheStart, stop: en.breatheStop, again: en.breatheAgain } }}>
+    (function () {
+      var root = document.querySelector('[data-breathe]');
+      if (!root) return;
+      var btn = root.querySelector('[data-breathe-btn]');
+      var cue = root.querySelector('[data-breathe-cue]');
+      var count = root.querySelector('[data-breathe-count]');
+      var timers = [];
+      var running = false;
+      function clear() { timers.forEach(clearTimeout); timers = []; }
+      function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+      function phase(t0, secs, word, cls) {
+        at(t0, function () { root.className = 'breathe ' + cls; cue.textContent = word; });
+        for (var i = 0; i < secs; i++) (function (n) { at(t0 + n * 1000, function () { count.textContent = String(secs - n); }); })(i);
+      }
+      function stop(finished) {
+        clear(); running = false;
+        root.className = 'breathe';
+        count.textContent = '';
+        cue.textContent = finished ? L.done : L.idle;
+        btn.textContent = finished ? L.again : L.start;
+      }
+      btn.addEventListener('click', function () {
+        if (running) { stop(false); return; }
+        running = true; btn.textContent = L.stop;
+        var t = 0;
+        for (var c = 0; c < 2; c++) { phase(t, 4, L.inn, 'is-in'); t += 4000; phase(t, 6, L.out, 'is-out'); t += 6000; }
+        at(t, function () { stop(true); });
+      });
+    })();
+  </script>
 )}
 
 <section class="section section-deep" id="screens" data-section="screens">
@@ -313,7 +357,6 @@ const en = lang === 'en' ? (copy as any) : null;
   <section class="wrap" id="body" data-section="body">
     <div class="body-block">
       <div class="stack-24">
-        <p class="kicker kicker-light">{en.bodyKicker}</p>
         <h2 class="h-section">{en.bodyTitle}</h2>
         <p class="intimate-text">{en.bodyText}</p>
       </div>
@@ -502,10 +545,27 @@ const en = lang === 'en' ? (copy as any) : null;
 
   .cta-form { width: 100%; max-width: 620px; text-align: left; }
 
-  .diffs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
-  .diffs li { background: var(--white); border-radius: var(--radius); padding: clamp(22px, 3vw, 32px); display: grid; gap: 10px; align-content: start; }
-  .diffs h3 { font-size: clamp(22px, 2.2vw, 26px); line-height: 1.25; }
-  .diffs p { font-size: clamp(19px, 1.7vw, 21px); color: var(--ink-2); line-height: 1.5; }
+  .why { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: 'title breathe' 'diffs breathe'; gap: clamp(32px, 5vw, 64px) clamp(32px, 6vw, 96px); align-items: start; }
+  .why-title { grid-area: title; max-width: 18ch; }
+  .breathe { grid-area: breathe; display: grid; justify-items: center; gap: 20px; text-align: center; align-self: center; }
+  .diffs { grid-area: diffs; margin: 0; display: grid; gap: 28px; }
+  .diffs > div { display: grid; gap: 8px; padding-left: 22px; border-left: 3px solid var(--glass); }
+  .diffs dt { font: 600 clamp(22px, 2.2vw, 26px)/1.25 var(--sans); }
+  .diffs dd { margin: 0; font-size: clamp(19px, 1.7vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 46ch; }
+  @media (max-width: 900px) {
+    .why { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'title' 'breathe' 'diffs'; }
+  }
+
+  .breathe-stage { position: relative; width: min(300px, 72vw); aspect-ratio: 1; display: grid; place-items: center; }
+  .breathe-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px dashed var(--glass); }
+  .breathe-core { position: absolute; inset: 22%; border-radius: 50%; background: var(--lagoon); box-shadow: 0 0 0 14px var(--glass-light); transform: scale(0.72); transition: transform 1.2s ease-in-out; }
+  .breathe.is-in .breathe-core { transform: scale(1.32); transition-duration: 4s; }
+  .breathe.is-out .breathe-core { transform: scale(0.72); transition-duration: 6s; }
+  .breathe-count { position: relative; font-size: 56px; font-weight: 600; color: var(--white); min-height: 1.2em; }
+  .breathe-cue { font-size: clamp(20px, 2vw, 23px); line-height: 1.45; max-width: 26ch; min-height: 2.9em; color: var(--ink); }
+  @media (prefers-reduced-motion: reduce) {
+    .breathe-core, .breathe.is-in .breathe-core, .breathe.is-out .breathe-core { transition: none; transform: scale(1); }
+  }
   .body-block { border-radius: 40px; background: var(--lagoon-deep); color: var(--air); padding: clamp(32px, 6vw, 88px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(32px, 5vw, 72px); margin-block: clamp(48px, 7vw, 96px); }
   .body-block .h-section { color: var(--air); }
   .body-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; align-self: center; }
