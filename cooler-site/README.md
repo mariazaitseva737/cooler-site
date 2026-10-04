@@ -160,3 +160,24 @@ sitToStand: { ru: 'https://youtu.be/XXXXXXXX', en: '' },
 ```bash
 npm run dev:app   # http://localhost:5173/app/
 ```
+
+## 8. Рекламный тест (Meta Ads)
+
+На английском лендинге три вещи для теста:
+
+- **Первый экран под объявление.** Ссылка в объявлении содержит `utm_content=a_normal`, `b_body` или `c_doctor`, и подзаголовок на первом экране меняется под это объявление. Тексты — в `src/components/Landing.astro`, блок `variants`. Без метки показывается обычный текст.
+- **Email — главный шаг.** Форма «Join the founding group» стоит первой. Обещание: одна 10-минутная практика в неделю на почту и ранний доступ. Эти письма нужно действительно отправлять.
+- **Блок цены** (`#pricing`): Free и Founding member $29 за первый год, потом $59. Цены меняются в `src/i18n/ui.ts` (`FOUNDING_PRICE`, `FULL_PRICE_YEAR`).
+
+Переменные в Netlify (Environment variables), после изменения — Trigger deploy:
+
+| Переменная | Что это |
+|---|---|
+| `PUBLIC_META_PIXEL_ID` | ID пикселя из Meta Events Manager. Пусто = пикселя нет. Пиксель стоит только на страницах сайта, в приложение `/app/` он не попадает. Когда он включён, текст в блоке «Приватность» сам меняется и честно говорит о пикселе. |
+| `PUBLIC_CHECKOUT_URL` | Ссылка на оплату в Lemon Squeezy или Paddle. Пусто = кнопка «Become a founding member» только записывает интерес и показывает «скоро откроется, оставьте email». |
+
+В Lemon Squeezy или Paddle в настройках продукта укажите адрес возврата после оплаты: `https://<ваш-домен>/thanks/?paid=1`. Тогда страница покажет «Welcome, founding member!» и отправит в пиксель событие Purchase.
+
+События пикселя: PageView (каждая страница), Lead (email принят), ViewContent (увидели блок цены), InitiateCheckout (нажали «Become a founding member»), Purchase (вернулись после оплаты). Ни email, ни симптомы, ни ответы теста в пиксель не уходят.
+
+В Meta Ads цель кампании — событие Lead.

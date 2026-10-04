@@ -1,6 +1,6 @@
 ---
 import WaitlistForm from './WaitlistForm.astro';
-import { APP_NAME, APP_NAME_IN, APP_URL, appHref, ui, type Lang } from '../i18n/ui';
+import { APP_NAME, APP_NAME_IN, APP_URL, CHECKOUT_URL, FOUNDING_PRICE, FULL_PRICE_YEAR, PIXEL_ON, appHref, ui, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -57,7 +57,9 @@ const copy = {
     privacyText: 'В приложениях о женском здоровье уже были истории с передачей данных. Поэтому мы решили не хранить ваши отметки у себя вообще.',
     privacyCards: [
       ['Отметки хранятся на вашем телефоне', 'Симптомы, лечение и всё из интимного раздела остаются в браузере на телефоне. К нам на сервер они не попадают.'],
-      ['Мы ничего не передаём и не продаём', 'Ни рекламодателям, ни партнёрам, никому.'],
+      PIXEL_ON
+        ? ['Мы не продаём и не передаём ваши записи', 'На страницах сайта (не в приложении) стоит пиксель Meta: по нему мы видим, работает ли наша реклама. Он видит, какие страницы открывали, и никогда не видит симптомы, лекарства и всё, что вы вносите в приложение.']
+        : ['Мы ничего не передаём и не продаём', 'Ни рекламодателям, ни партнёрам, никому.'],
       ['Что мы всё-таки считаем', 'Какие страницы и экраны открывают и сколько людей возвращается. Для этого мы используем сервис Amplitude, IP-адрес не сохраняем. В приложении вы сами решаете, можно ли связывать эти визиты с вами. Записи, давление и лекарства туда не попадают никогда. Email у нас есть, только если вы сами его оставили.'],
     ],
     faqTitle: 'Частые вопросы',
@@ -119,7 +121,9 @@ const copy = {
     privacyText: 'Women’s health apps have been caught sharing user data before. So we decided not to keep your logs on our side at all.',
     privacyCards: [
       ['Your logs live on your phone', 'Symptoms, treatment and everything in the intimate health section stay in the browser on your phone. They never reach our servers.'],
-      ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
+      PIXEL_ON
+        ? ['We never sell or share your logs', 'On the pages of this website (not inside the app) we use the Meta pixel to see whether our ads work. It sees which pages were visited, never your symptoms, medicines or anything you enter in the app.']
+        : ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
       ['What we do count', 'Which pages and screens get opened, and how many people come back. We use a service called Amplitude for this and don’t store IP addresses. In the app, you decide whether those visits can be linked to you. Your entries, blood pressure and medicines never go there. We only have your email if you gave it to us.'],
     ],
     faqTitle: 'Questions',
@@ -132,25 +136,89 @@ const copy = {
     ],
     ctaTitle: 'Try it today. It takes a minute.',
     ctaText: 'It’s free, and you don’t need to sign up.',
+    // Hero copy per ad. The ad link carries utm_content=a_normal | b_body | c_doctor.
+    variants: {
+      a_normal: {
+        kicker: 'Life after menopause',
+        sub: 'So many new questions come up after menopause: what’s normal, what isn’t, and when it’s worth calling a doctor. Cooler gives you clear, calm answers and a 10-second daily check-in.',
+      },
+      b_body: {
+        kicker: 'For women after 50',
+        sub: 'Menopause isn’t the end of feeling good in your body. Cooler is a 10-minute daily practice of movement, breath and pelvic floor work, plus a check-in that shows what actually helps you.',
+      },
+      c_doctor: {
+        kicker: 'Before your next appointment',
+        sub: 'Thinking about HRT after menopause? Keep a simple medication diary, see how you feel week to week, and bring a clear one-page summary to your doctor.',
+      },
+    },
+    signupLabel: 'Join the founding group: one 10-minute practice in your inbox every week, and first access to the full version.',
+    signupButton: 'Join free',
+    signupNote: 'Free. Only practices and app news, unsubscribe in one click. Or open the app right away:',
+    pricingKicker: 'Pricing',
+    pricingTitle: 'Start free. Become a founding member if it helps.',
+    plans: [
+      {
+        name: 'Free',
+        price: '$0',
+        per: 'always',
+        points: ['10-second daily check-in', '“Hot flash started” breathing', 'Clear answers to “is this normal?”', 'Medication diary'],
+        cta: 'Start free',
+      },
+      {
+        name: 'Founding member',
+        price: `$${FOUNDING_PRICE}`,
+        per: `for your first year, then $${FULL_PRICE_YEAR} a year`,
+        points: ['Everything in Free', 'All 4–8 week programs: body confidence, pelvic floor, sleep, strength', 'One-page summary for your doctor', 'New programs first, and a say in what we build next'],
+        cta: 'Become a founding member',
+        refund: 'Full refund any time in your first 30 days.',
+      },
+    ],
+    checkoutSoon: 'Founding membership opens in a few days. Leave your email above and we’ll send you the link first, at the same price.',
   },
 }[lang];
+const en = lang === 'en' ? (copy as any) : null;
 ---
 <section class="wrap hero" data-section="hero">
   <div class="hero-text">
-  <p class="kicker">{copy.kicker}</p>
+  <p class="kicker" data-hero-kicker>{copy.kicker}</p>
   <h1 class="hero-title">{copy.h1}</h1>
-  <p class="hero-sub">{copy.sub}</p>
-  <div class="hero-actions" id="waitlist">
-    {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
-    <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
-    <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
-    <p class="note">{t.emailNote}</p>
-  </div>
+  <p class="hero-sub" data-hero-sub>{copy.sub}</p>
+  {en ? (
+    <div class="hero-actions" id="waitlist">
+      <WaitlistForm lang={lang} id="hero-email" source="hero" label={en.signupLabel} button={en.signupButton} buttonClass="btn btn-primary" />
+      <p class="note">{en.signupNote}</p>
+      <div class="hero-secondary">
+        {APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+        <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
+      </div>
+    </div>
+  ) : (
+    <div class="hero-actions" id="waitlist">
+      {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+      <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
+      <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
+      <p class="note">{t.emailNote}</p>
+    </div>
+  )}
   </div>
   <figure class="phone hero-phone" data-shot="hero_today">
     <img src={`/screens/${lang}-today.webp`} width="390" height="844" alt={copy.heroShotAlt} fetchpriority="high" />
   </figure>
 </section>
+{en && (
+  <script is:inline define:vars={{ variants: en.variants }}>
+    (function () {
+      var v = new URLSearchParams(location.search).get('utm_content');
+      var c = v && variants[v];
+      if (!c) return;
+      var k = document.querySelector('[data-hero-kicker]');
+      var p = document.querySelector('[data-hero-sub]');
+      if (k) k.textContent = c.kicker;
+      if (p) p.textContent = c.sub;
+      document.body.dataset.heroVariant = v;
+    })();
+  </script>
+)}
 
 <section class="section section-white" data-section="not_alone">
   <div class="wrap stack-56">
@@ -208,6 +276,43 @@ const copy = {
     </ol>
   </div>
 </section>
+
+{en && (
+  <section class="section section-white" id="pricing" data-section="pricing">
+    <div class="wrap stack-56">
+      <div class="stack-16 narrow">
+        <p class="kicker">{en.pricingKicker}</p>
+        <h2 class="h-section">{en.pricingTitle}</h2>
+      </div>
+      <div class="plans">
+        {en.plans.map((plan: any, i: number) => (
+          <div class={i === 1 ? 'plan plan-featured' : 'plan'}>
+            <h3>{plan.name}</h3>
+            <p class="plan-price"><span class="serif">{plan.price}</span> {plan.per}</p>
+            <ul class="plan-points">{plan.points.map((pt: string) => <li>{pt}</li>)}</ul>
+            {i === 0
+              ? (APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="pricing">{plan.cta}</a>)
+              : (CHECKOUT_URL
+                  ? <a class="btn btn-primary" href={CHECKOUT_URL} data-checkout data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</a>
+                  : <button class="btn btn-primary" type="button" data-checkout data-checkout-soon data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</button>)}
+            {plan.refund && <p class="plan-refund">{plan.refund}</p>}
+            {i === 1 && !CHECKOUT_URL && <p class="plan-soon" data-checkout-msg hidden>{en.checkoutSoon}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+{en && !CHECKOUT_URL && (
+  <script is:inline>
+    document.querySelectorAll('[data-checkout-soon]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var m = document.querySelector('[data-checkout-msg]');
+        if (m) m.hidden = false;
+      });
+    });
+  </script>
+)}
 
 <section class="wrap" id="intimate" data-section="intimate">
   <div class="intimate">
@@ -347,4 +452,21 @@ const copy = {
   .faq details p { font-size: clamp(19px, 1.8vw, 21px); color: var(--ink-2); padding-bottom: 22px; max-width: 760px; }
 
   .cta-form { width: 100%; max-width: 620px; text-align: left; }
+
+  .hero-secondary { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(16px, 2.5vw, 28px); }
+  .plan { background: var(--air); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; align-content: start; }
+  .plan-featured { background: var(--lagoon-deep); color: var(--air); }
+  .plan h3 { font-size: 26px; }
+  .plan-price { font-size: 19px; color: var(--ink-soft); }
+  .plan-price span { font-size: 48px; font-weight: 600; color: var(--ink); margin-right: 6px; }
+  .plan-featured .plan-price, .plan-featured .plan-refund, .plan-featured .plan-soon { color: #CFE6DF; }
+  .plan-featured .plan-price span, .plan-featured h3 { color: var(--air); }
+  .plan-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .plan-points li { font-size: 19px; line-height: 1.45; padding-left: 30px; position: relative; }
+  .plan-points li::before { content: ''; position: absolute; left: 4px; top: 9px; width: 14px; height: 8px; border-left: 2.5px solid var(--lagoon); border-bottom: 2.5px solid var(--lagoon); transform: rotate(-45deg); }
+  .plan-featured .plan-points li::before { border-color: var(--glass); }
+  .plan .btn { justify-self: start; }
+  .plan-featured .btn-primary { background: var(--glass); color: var(--lagoon-dark); }
+  .plan-refund, .plan-soon { font-size: 18px; }
 </style>

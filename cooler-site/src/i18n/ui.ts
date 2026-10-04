@@ -7,6 +7,11 @@ export type Lang = 'ru' | 'en';
 
 // The web app is built into /app/ of this site. Set PUBLIC_APP_URL only to point somewhere else.
 export const APP_URL: string = import.meta.env.PUBLIC_APP_URL || '/app/';
+// Ad test. Founding membership checkout (Lemon Squeezy or Paddle link). Empty = the button only records interest.
+export const CHECKOUT_URL: string = import.meta.env.PUBLIC_CHECKOUT_URL || '';
+export const FOUNDING_PRICE = 29;
+export const FULL_PRICE_YEAR = 59;
+export const PIXEL_ON: boolean = Boolean(import.meta.env.PUBLIC_META_PIXEL_ID);
 export const appHref = (lang: 'ru' | 'en') => `${APP_URL}${APP_URL.includes('?') ? '&' : '?'}lang=${lang}`;
 
 export const ui = {
