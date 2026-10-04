@@ -2,8 +2,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Replace with your real domain once it is connected in Netlify.
-const SITE = process.env.SITE_URL || 'https://cooler-site.netlify.app';
+// The real domain. Set SITE_URL in Netlify only to override it.
+const SITE = process.env.SITE_URL || 'https://cooler-app.com';
 
 export default defineConfig({
   site: SITE,
