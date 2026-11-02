@@ -38,8 +38,8 @@ export function Breathing({ onClose: close, place = 'today', mode = 'hot' }) {
   return createPortal(
     <div class="breath" role="dialog" aria-modal="true" aria-label={mode === 'calm' ? t.calmTitle : t.qHot}>
       <div class="row between">
-        <span style="font-size:17px;color:#BFDCD4">{mode === 'calm' ? t.calmTitle : `${t.hotLogged(fmtTime(time, lang))} · ${t.hotToday(count)}`}</span>
-        <button class="btn" style="min-height:44px;border:1.5px solid #4E8583;color:#F3F7F5;background:transparent;font-size:17px" onClick={() => onClose('close')}>{t.close}</button>
+        <span style="font-size:17px;color:#C3D2EA">{mode === 'calm' ? t.calmTitle : `${t.hotLogged(fmtTime(time, lang))} · ${t.hotToday(count)}`}</span>
+        <button class="btn" style="min-height:44px;border:1.5px solid #4A5F86;color:#F5F7FB;background:transparent;font-size:17px" onClick={() => onClose('close')}>{t.close}</button>
       </div>
       <div class="center">
         <div class="orb-wrap">
@@ -47,7 +47,7 @@ export function Breathing({ onClose: close, place = 'today', mode = 'hot' }) {
           <div class="orb-label"><span class="lab-in">{t.inhale}</span><span class="lab-out">{t.exhale}</span></div>
         </div>
         <p class="wave-text">{mode === 'calm' ? t.calmText : t.wave}</p>
-        <p style="font-size:18px;color:#BFDCD4">{t.rhythm}</p>
+        <p style="font-size:18px;color:#C3D2EA">{t.rhythm}</p>
       </div>
       <p style="text-align:center;font-size:20px;font-variant-numeric:tabular-nums" aria-live="off">{left > 0 ? t.timeLeft(m) : t.twoMinDone}</p>
       <button class="btn btn-glass btn-block" style="min-height:62px;font-size:21px" onClick={() => onClose('better')}>{t.better}</button>

@@ -95,12 +95,12 @@ function BpChart({ data }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="Blood pressure chart">
       {[140, 90].map((g) => (
-        <g><line x1={pad} x2={W - pad} y1={y(g)} y2={y(g)} stroke="#E58A4E" stroke-dasharray="4 4" stroke-width="1.2" />
+        <g><line x1={pad} x2={W - pad} y1={y(g)} y2={y(g)} stroke="#B08A45" stroke-dasharray="4 4" stroke-width="1.2" />
           <text x={W - pad} y={y(g) - 4} text-anchor="end" font-size="11" fill="#6E1F14">{g}</text></g>
       ))}
-      <path d={line('sys')} fill="none" stroke="#0B4F52" stroke-width="2.5" />
-      <path d={line('dia')} fill="none" stroke="#2E8A86" stroke-width="2.5" />
-      {data.map((d, i) => <g><circle cx={x(i)} cy={y(d.sys)} r="3.5" fill="#0B4F52" /><circle cx={x(i)} cy={y(d.dia)} r="3.5" fill="#2E8A86" /></g>)}
+      <path d={line('sys')} fill="none" stroke="#17336A" stroke-width="2.5" />
+      <path d={line('dia')} fill="none" stroke="#3E64A8" stroke-width="2.5" />
+      {data.map((d, i) => <g><circle cx={x(i)} cy={y(d.sys)} r="3.5" fill="#17336A" /><circle cx={x(i)} cy={y(d.dia)} r="3.5" fill="#3E64A8" /></g>)}
     </svg>
   );
 }
