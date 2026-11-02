@@ -36,6 +36,14 @@ const { screen, label } = Astro.props;
           <span class="m-pill" aria-hidden="true"></span>
           <div><span class="m-label">8:00 PM</span><span class="m-strong">Evening tablet</span></div>
         </div>
+        <div class="m-week">
+          <span class="m-label">Hot flashes this week</span>
+          <div class="m-bars">{[5, 4, 4, 3, 3, 2, 2].map((h, i) => <span style={`height:${h * 7}px`} class={i === 6 ? 'now' : ''}></span>)}</div>
+        </div>
+        <div class="m-practice m-live">
+          <span class="m-dot" aria-hidden="true"></span>
+          <div><span class="m-label">Live · Thu 7 PM</span><span class="m-strong">Dance together, 30 women</span></div>
+        </div>
         <span class="m-btn">Hot flash started</span>
       </div>
     )}
@@ -105,7 +113,7 @@ const { screen, label } = Astro.props;
 
 <style>
   .mock { margin: 0; border-radius: 38px; padding: 9px; background: #0F1B33; box-shadow: 0 30px 60px -34px rgba(15, 27, 51, 0.55); }
-  .mock-screen { border-radius: 30px; background: #F5F7FB; overflow: hidden; aspect-ratio: 390 / 690; display: flex; flex-direction: column; font-family: var(--sans); color: #0F1B33; }
+  .mock-screen { border-radius: 30px; background: #F5F7FB; overflow: hidden; aspect-ratio: 390 / 844; display: flex; flex-direction: column; font-family: var(--sans); color: #0F1B33; }
   .mock-status { display: flex; justify-content: space-between; padding: 12px 22px 4px; font-size: 12px; font-weight: 600; }
   .mock-dots { display: flex; gap: 3px; align-items: center; }
   .mock-dots i { width: 4px; height: 4px; border-radius: 50%; background: #0F1B33; }
@@ -137,6 +145,12 @@ const { screen, label } = Astro.props;
   .m-evening { background: #EAF0F8; border-color: #EAF0F8; }
   .m-moon { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #132952; box-shadow: inset -9px 0 0 #E9DCC0; }
   .m-pill { flex: none; width: 28px; height: 14px; border-radius: 7px; background: linear-gradient(90deg, #1F3F7A 50%, #D6E1F1 50%); }
+  .m-week { background: #fff; border: 1px solid #DCE4F0; border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+  .m-bars { display: flex; align-items: flex-end; gap: 6px; height: 36px; }
+  .m-bars span { flex: 1; background: #D6E1F1; border-radius: 3px; }
+  .m-bars span.now { background: #1F3F7A; }
+  .m-live { border-color: #E9DCC0; }
+  .m-dot { flex: none; width: 12px; height: 12px; margin: 0 8px; border-radius: 50%; background: #B08A45; box-shadow: 0 0 0 5px #F3EBDA; }
   .m-check { display: grid; gap: 6px; }
   .m-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .m-chips b { font-size: 12px; font-weight: 600; text-align: center; padding: 7px 0; border-radius: 8px; background: #fff; border: 1px solid #CAD5E6; }
