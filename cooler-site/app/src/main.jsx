@@ -3,8 +3,6 @@ import { useEffect, useState } from 'preact/hooks';
 import '@fontsource/source-sans-3/400.css';
 import '@fontsource/source-sans-3/600.css';
 import '@fontsource/source-sans-3/700.css';
-import '@fontsource/newsreader/400.css';
-import '@fontsource/newsreader/500.css';
 import './styles.css';
 import { getState, update, useStore, restoreFromDevice } from './lib/store.js';
 import { dayKey, daysBetween } from './lib/dates.js';

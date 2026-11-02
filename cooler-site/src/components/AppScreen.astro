@@ -19,14 +19,10 @@ const { screen, label } = Astro.props;
             <span class="m-strong m-light">The Star</span>
           </div>
           <div class="m-tile">
-            <span class="m-label">Your sky</span>
-            <span class="m-strong">Moon in Pisces</span>
-            <span class="m-small">A soft day. Good for slow plans.</span>
+            <span class="m-label">Last night</span>
+            <span class="m-strong">6 h 40 min</span>
+            <span class="m-small">2 hot flashes</span>
           </div>
-        </div>
-        <div class="m-quote">
-          <span class="m-label">Words for today</span>
-          <p>“My body still knows how to feel good.”</p>
         </div>
         <div class="m-practice">
           <span class="m-play" aria-hidden="true"></span>
@@ -37,8 +33,8 @@ const { screen, label } = Astro.props;
           <div class="m-chips"><b>Good</b><b>Okay</b><b>Hard</b></div>
         </div>
         <div class="m-practice m-evening">
-          <span class="m-moon" aria-hidden="true"></span>
-          <div><span class="m-label">Tonight · 7 min</span><span class="m-strong">New moon intention</span></div>
+          <span class="m-pill" aria-hidden="true"></span>
+          <div><span class="m-label">8:00 PM</span><span class="m-strong">Evening tablet</span></div>
         </div>
         <span class="m-btn">Hot flash started</span>
       </div>
@@ -54,9 +50,9 @@ const { screen, label } = Astro.props;
           <g fill="#E9DCC0" opacity=".85"><circle cx="38" cy="40" r="2.2"/><circle cx="122" cy="44" r="2.2"/><circle cx="34" cy="98" r="1.8"/><circle cx="126" cy="104" r="1.8"/><circle cx="56" cy="128" r="1.6"/><circle cx="106" cy="126" r="1.6"/></g>
           <path d="M24 168c9-5 18-5 28 0s19 5 28 0 19-5 28 0 18 5 28 0" stroke="#9FB4D8" stroke-width="2" fill="none"/>
           <path d="M24 182c9-5 18-5 28 0s19 5 28 0 19-5 28 0 18 5 28 0" stroke="#9FB4D8" stroke-width="2" fill="none" opacity=".6"/>
-          <text x="80" y="214" text-anchor="middle" fill="#E9DCC0" font-family="Newsreader, Georgia, serif" font-size="14" letter-spacing="2">THE STAR</text>
+          <text x="80" y="214" text-anchor="middle" fill="#E9DCC0" font-family="Source Sans 3, sans-serif" font-weight="600" font-size="14" letter-spacing="2">THE STAR</text>
         </svg>
-        <p class="m-reading">Hope after a hard stretch. Today is good for one small thing you have been putting off. Be gentle with yourself in the evening.</p>
+        <p class="m-reading">Hope after a hard stretch. Do one small thing you’ve been putting off.</p>
         <span class="m-btn m-btn-gold">Save to my journal</span>
       </div>
     )}
@@ -76,7 +72,7 @@ const { screen, label } = Astro.props;
         </svg>
         <div class="m-quote">
           <span class="m-label">Written for you</span>
-          <p class="m-text">The Moon moves through your fifth house today, the part of your chart about joy and play. You slept badly, so keep it light: music, a walk, someone who makes you laugh.</p>
+          <p class="m-text">Moon in your 5th house: a day for joy. You slept badly, so keep it light.</p>
         </div>
         <div class="m-row">
           <div class="m-tile"><span class="m-label">Good for</span><span class="m-small">Dancing, creative work</span></div>
@@ -109,7 +105,7 @@ const { screen, label } = Astro.props;
 
 <style>
   .mock { margin: 0; border-radius: 38px; padding: 9px; background: #0F1B33; box-shadow: 0 30px 60px -34px rgba(15, 27, 51, 0.55); }
-  .mock-screen { border-radius: 30px; background: #F5F7FB; overflow: hidden; aspect-ratio: 390 / 800; display: flex; flex-direction: column; font-family: var(--sans); color: #0F1B33; }
+  .mock-screen { border-radius: 30px; background: #F5F7FB; overflow: hidden; aspect-ratio: 390 / 690; display: flex; flex-direction: column; font-family: var(--sans); color: #0F1B33; }
   .mock-status { display: flex; justify-content: space-between; padding: 12px 22px 4px; font-size: 12px; font-weight: 600; }
   .mock-dots { display: flex; gap: 3px; align-items: center; }
   .mock-dots i { width: 4px; height: 4px; border-radius: 50%; background: #0F1B33; }
@@ -120,7 +116,7 @@ const { screen, label } = Astro.props;
   .mock:has(.mock-body-navy) .mock-dots i { background: #F5F7FB; }
   .m-date { font-size: 12px; color: #4B5873; letter-spacing: 0.04em; }
   .m-light-soft { color: #B9C7E0; text-transform: uppercase; letter-spacing: 0.14em; font-size: 11px; }
-  .m-hello { font: 500 22px/1.15 var(--serif); }
+  .m-hello { font: 700 21px/1.15 var(--sans); }
   .m-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .m-tile { background: #fff; border: 1px solid #DCE4F0; border-radius: 12px; padding: 10px; display: grid; gap: 4px; align-content: start; }
   .m-tile-navy { background: #132952; border-color: #132952; justify-items: start; }
@@ -131,7 +127,7 @@ const { screen, label } = Astro.props;
   .m-light { color: #fff; }
   .m-small { font-size: 12px; line-height: 1.35; color: #4B5873; }
   .m-quote { background: #EAF0F8; border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; }
-  .m-quote p { font: italic 400 16px/1.3 var(--serif); }
+  .m-quote p { font: 600 15px/1.35 var(--sans); }
   .m-quote .m-text { font: 400 13px/1.45 var(--sans); }
   .m-practice { display: flex; gap: 10px; align-items: center; background: #fff; border: 1px solid #DCE4F0; border-radius: 12px; padding: 10px; }
   .m-play { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #1F3F7A; position: relative; }
@@ -140,6 +136,7 @@ const { screen, label } = Astro.props;
   .m-play-sm::after { left: 11px; top: 8px; border-left-width: 9px; border-top-width: 6px; border-bottom-width: 6px; }
   .m-evening { background: #EAF0F8; border-color: #EAF0F8; }
   .m-moon { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #132952; box-shadow: inset -9px 0 0 #E9DCC0; }
+  .m-pill { flex: none; width: 28px; height: 14px; border-radius: 7px; background: linear-gradient(90deg, #1F3F7A 50%, #D6E1F1 50%); }
   .m-check { display: grid; gap: 6px; }
   .m-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .m-chips b { font-size: 12px; font-weight: 600; text-align: center; padding: 7px 0; border-radius: 8px; background: #fff; border: 1px solid #CAD5E6; }
@@ -149,7 +146,7 @@ const { screen, label } = Astro.props;
   .m-btn { margin-top: auto; display: block; text-align: center; font-size: 14px; font-weight: 600; padding: 11px 0; border-radius: 10px; background: #1F3F7A; color: #fff; width: 100%; }
   .m-btn-gold { background: #B08A45; color: #0F1B33; }
   .m-big-card { width: 62%; height: auto; margin-top: 4px; }
-  .m-reading { font: 400 15px/1.45 var(--serif); color: #E3E9F4; padding-inline: 4px; }
+  .m-reading { font: 400 15px/1.45 var(--sans); color: #E3E9F4; padding-inline: 4px; }
   .m-chart { width: 72%; height: auto; align-self: center; margin-block: 2px 4px; }
   .m-list-row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #DCE4F0; }
 </style>

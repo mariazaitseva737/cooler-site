@@ -18,7 +18,7 @@
   --gold-soft: #E9DCC0;
   --brick: #8E2B1E;
   --brick-ink: #6E1F14;
-  --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --serif: 'Source Sans 3', 'Segoe UI', system-ui, -apple-system, sans-serif; /* headings use the sans too: plainer, more serious */
   --sans: 'Source Sans 3', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --radius: 14px;
   --gutter: clamp(16px, 5vw, 80px);
@@ -63,7 +63,7 @@ p { margin: 0; text-wrap: pretty; }
 /* Header */
 .site-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 20px; }
 .logo { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
-.logo span { font: 500 28px/1 var(--serif); letter-spacing: -0.01em; }
+.logo span { font: 700 26px/1 var(--sans); letter-spacing: -0.01em; }
 .site-nav { display: flex; gap: 22px; font-size: 18px; }
 .site-nav a, .lang, .btn { white-space: nowrap; }
 .site-nav a { color: var(--ink); text-decoration: none; }
@@ -99,7 +99,7 @@ p { margin: 0; text-wrap: pretty; }
 .section { padding-block: clamp(64px, 9vw, 112px); }
 .section-white { background: var(--white); }
 .kicker { font-size: 15px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
-.h-section { font: 500 clamp(34px, 4.6vw, 54px)/1.12 var(--serif); letter-spacing: -0.015em; }
+.h-section { font: 700 clamp(30px, 3.8vw, 44px)/1.15 var(--sans); letter-spacing: -0.01em; }
 .lead { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.55; color: var(--ink-soft); }
 
 /* Footer */
@@ -109,5 +109,5 @@ p { margin: 0; text-wrap: pretty; }
 .disclaimer strong { font-size: 20px; color: var(--white); }
 .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px 32px; margin-top: 36px; }
 .footer-row nav { display: flex; flex-wrap: wrap; gap: 24px; }
-.footer-brand { font: 500 26px/1 var(--serif); color: var(--white); }
+.footer-brand { font: 700 24px/1 var(--sans); color: var(--white); }
 .page { min-height: 100vh; display: flex; flex-direction: column; }
