@@ -35,6 +35,7 @@
 | `section_viewed` | блок лендинга виден на 40% (один раз) | `section`: hero, not_alone, screens, features, intimate, privacy, faq, bottom_cta, subscribe, article_faq, article_sources, article_flag |
 | `screenshot_viewed` | скриншот приложения попал в экран | `screen`: hero_today, today, breathing, trends, doctor |
 | `cta_clicked` | клик по кнопке с `data-track` | `cta` (try_app), `place` (header, hero, screens, bottom, article) |
+| `cta_clicked` (cta = `module_interest`) | кнопка «I want this» у модуля, который ещё не готов (fake door) | `place` = модуль: dance, pelvic, meditation, brain, affirmations, subliminals, astrology, tarot, rituals, astrology_block. Сравнивайте клики по модулям, чтобы решить, что строить первым |
 | `app_link_clicked` | любой переход в /app/ | `place` |
 | `faq_opened` | открыли вопрос | `question_index`, `question` |
 | `lang_switched` | переключили RU/EN | `to` |

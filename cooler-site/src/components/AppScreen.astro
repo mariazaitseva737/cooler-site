@@ -1,0 +1,155 @@
+---
+// App screens drawn in HTML instead of screenshots, so the landing can show
+// modules that are still being built. Keep the copy short: these are pictures.
+interface Props { screen: 'today' | 'card' | 'sky' | 'practices'; label: string }
+const { screen, label } = Astro.props;
+---
+<figure class="mock" role="img" aria-label={label}>
+  <div class="mock-screen">
+    <div class="mock-status" aria-hidden="true"><span>8:04</span><span class="mock-dots"><i></i><i></i><i></i></span></div>
+
+    {screen === 'today' && (
+      <div class="mock-body" aria-hidden="true">
+        <p class="m-date">Tuesday, November 3</p>
+        <p class="m-hello">Good morning, Linda</p>
+        <div class="m-row">
+          <div class="m-tile m-tile-navy">
+            <span class="m-label m-label-gold">Your card</span>
+            <svg viewBox="0 0 40 56" class="m-mini-card"><rect x="1" y="1" width="38" height="54" rx="4" fill="#132952" stroke="#B08A45" stroke-width="1.2"/><path d="M20 14l2.4 7.6H30l-6.2 4.6 2.4 7.6L20 29.2l-6.2 4.6 2.4-7.6L10 21.6h7.6z" fill="#E9DCC0"/><path d="M8 44c4-2 8-2 12 0s8 2 12 0" stroke="#D6E1F1" stroke-width="1.2" fill="none"/></svg>
+            <span class="m-strong m-light">The Star</span>
+          </div>
+          <div class="m-tile">
+            <span class="m-label">Your sky</span>
+            <span class="m-strong">Moon in Pisces</span>
+            <span class="m-small">A soft day. Good for slow plans.</span>
+          </div>
+        </div>
+        <div class="m-quote">
+          <span class="m-label">Words for today</span>
+          <p>“My body still knows how to feel good.”</p>
+        </div>
+        <div class="m-practice">
+          <span class="m-play" aria-hidden="true"></span>
+          <div><span class="m-label">Today’s practice · 10 min</span><span class="m-strong">Dance: feel your hips again</span></div>
+        </div>
+        <div class="m-check">
+          <span class="m-small">How do you feel?</span>
+          <div class="m-chips"><b>Good</b><b>Okay</b><b>Hard</b></div>
+        </div>
+        <div class="m-practice m-evening">
+          <span class="m-moon" aria-hidden="true"></span>
+          <div><span class="m-label">Tonight · 7 min</span><span class="m-strong">New moon intention</span></div>
+        </div>
+        <span class="m-btn">Hot flash started</span>
+      </div>
+    )}
+
+    {screen === 'card' && (
+      <div class="mock-body mock-body-navy" aria-hidden="true">
+        <p class="m-date m-light-soft">Card of the day</p>
+        <svg viewBox="0 0 160 240" class="m-big-card">
+          <rect x="2" y="2" width="156" height="236" rx="10" fill="#0F2148" stroke="#B08A45" stroke-width="2"/>
+          <rect x="10" y="10" width="140" height="220" rx="6" fill="none" stroke="#B08A45" stroke-opacity=".45"/>
+          <path d="M80 52l7 21.5h22.6l-18.3 13.3 7 21.5L80 95l-18.3 13.3 7-21.5L50.4 73.5H73z" fill="#E9DCC0"/>
+          <g fill="#E9DCC0" opacity=".85"><circle cx="38" cy="40" r="2.2"/><circle cx="122" cy="44" r="2.2"/><circle cx="34" cy="98" r="1.8"/><circle cx="126" cy="104" r="1.8"/><circle cx="56" cy="128" r="1.6"/><circle cx="106" cy="126" r="1.6"/></g>
+          <path d="M24 168c9-5 18-5 28 0s19 5 28 0 19-5 28 0 18 5 28 0" stroke="#9FB4D8" stroke-width="2" fill="none"/>
+          <path d="M24 182c9-5 18-5 28 0s19 5 28 0 19-5 28 0 18 5 28 0" stroke="#9FB4D8" stroke-width="2" fill="none" opacity=".6"/>
+          <text x="80" y="214" text-anchor="middle" fill="#E9DCC0" font-family="Newsreader, Georgia, serif" font-size="14" letter-spacing="2">THE STAR</text>
+        </svg>
+        <p class="m-reading">Hope after a hard stretch. Today is good for one small thing you have been putting off. Be gentle with yourself in the evening.</p>
+        <span class="m-btn m-btn-gold">Save to my journal</span>
+      </div>
+    )}
+
+    {screen === 'sky' && (
+      <div class="mock-body" aria-hidden="true">
+        <p class="m-date">Your sky today</p>
+        <svg viewBox="0 0 200 200" class="m-chart">
+          <circle cx="100" cy="100" r="92" fill="#fff" stroke="#1F3F7A" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="#CAD5E6"/>
+          <circle cx="100" cy="100" r="36" fill="#EAF0F8" stroke="#CAD5E6"/>
+          <g stroke="#CAD5E6">{Array.from({ length: 12 }, (_, i) => { const a = (i * Math.PI) / 6; return <line x1={100 + 36 * Math.cos(a)} y1={100 + 36 * Math.sin(a)} x2={100 + 92 * Math.cos(a)} y2={100 + 92 * Math.sin(a)} />; })}</g>
+          <circle cx="152" cy="72" r="6" fill="#B08A45"/>
+          <circle cx="58" cy="146" r="5" fill="#1F3F7A"/>
+          <circle cx="62" cy="58" r="4" fill="#1F3F7A" opacity=".6"/>
+          <path d="M152 72L58 146" stroke="#B08A45" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="m-quote">
+          <span class="m-label">Written for you</span>
+          <p class="m-text">The Moon moves through your fifth house today, the part of your chart about joy and play. You slept badly, so keep it light: music, a walk, someone who makes you laugh.</p>
+        </div>
+        <div class="m-row">
+          <div class="m-tile"><span class="m-label">Good for</span><span class="m-small">Dancing, creative work</span></div>
+          <div class="m-tile"><span class="m-label">Go easy on</span><span class="m-small">Big talks, late coffee</span></div>
+        </div>
+      </div>
+    )}
+
+    {screen === 'practices' && (
+      <div class="mock-body" aria-hidden="true">
+        <p class="m-date">Practices</p>
+        <div class="m-chips m-chips-left"><b class="on">10 min</b><b>20 min</b><b>Before sleep</b></div>
+        {[
+          ['Dance', 'Feel your hips again', '10 min'],
+          ['Meditation', 'Cool down before sleep', '8 min'],
+          ['Mind', 'Find the word: memory game', '5 min'],
+          ['Subliminal', 'I feel at home in my body', '20 min'],
+          ['Ritual', 'New moon intention', '7 min'],
+        ].map(([k, h, t]) => (
+          <div class="m-list-row">
+            <span class="m-play m-play-sm"></span>
+            <div><span class="m-label">{k}</span><span class="m-strong">{h}</span></div>
+            <span class="m-small">{t}</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</figure>
+
+<style>
+  .mock { margin: 0; border-radius: 38px; padding: 9px; background: #0F1B33; box-shadow: 0 30px 60px -34px rgba(15, 27, 51, 0.55); }
+  .mock-screen { border-radius: 30px; background: #F5F7FB; overflow: hidden; aspect-ratio: 390 / 800; display: flex; flex-direction: column; font-family: var(--sans); color: #0F1B33; }
+  .mock-status { display: flex; justify-content: space-between; padding: 12px 22px 4px; font-size: 12px; font-weight: 600; }
+  .mock-dots { display: flex; gap: 3px; align-items: center; }
+  .mock-dots i { width: 4px; height: 4px; border-radius: 50%; background: #0F1B33; }
+  .mock-body { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 8px 16px 18px; }
+  .mock-body-navy { background: #132952; color: #F5F7FB; margin-top: -1px; align-items: center; text-align: center; gap: 14px; }
+  .mock:has(.mock-body-navy) .mock-screen { background: #132952; }
+  .mock:has(.mock-body-navy) .mock-status { color: #F5F7FB; }
+  .mock:has(.mock-body-navy) .mock-dots i { background: #F5F7FB; }
+  .m-date { font-size: 12px; color: #4B5873; letter-spacing: 0.04em; }
+  .m-light-soft { color: #B9C7E0; text-transform: uppercase; letter-spacing: 0.14em; font-size: 11px; }
+  .m-hello { font: 500 22px/1.15 var(--serif); }
+  .m-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .m-tile { background: #fff; border: 1px solid #DCE4F0; border-radius: 12px; padding: 10px; display: grid; gap: 4px; align-content: start; }
+  .m-tile-navy { background: #132952; border-color: #132952; justify-items: start; }
+  .m-mini-card { width: 26px; height: auto; }
+  .m-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #4B5873; }
+  .m-label-gold { color: #E9DCC0; }
+  .m-strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.25; }
+  .m-light { color: #fff; }
+  .m-small { font-size: 12px; line-height: 1.35; color: #4B5873; }
+  .m-quote { background: #EAF0F8; border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; }
+  .m-quote p { font: italic 400 16px/1.3 var(--serif); }
+  .m-quote .m-text { font: 400 13px/1.45 var(--sans); }
+  .m-practice { display: flex; gap: 10px; align-items: center; background: #fff; border: 1px solid #DCE4F0; border-radius: 12px; padding: 10px; }
+  .m-play { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #1F3F7A; position: relative; }
+  .m-play::after { content: ''; position: absolute; left: 13px; top: 10px; border-left: 11px solid #fff; border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
+  .m-play-sm { width: 28px; height: 28px; }
+  .m-play-sm::after { left: 11px; top: 8px; border-left-width: 9px; border-top-width: 6px; border-bottom-width: 6px; }
+  .m-evening { background: #EAF0F8; border-color: #EAF0F8; }
+  .m-moon { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #132952; box-shadow: inset -9px 0 0 #E9DCC0; }
+  .m-check { display: grid; gap: 6px; }
+  .m-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .m-chips b { font-size: 12px; font-weight: 600; text-align: center; padding: 7px 0; border-radius: 8px; background: #fff; border: 1px solid #CAD5E6; }
+  .m-chips-left { grid-template-columns: auto auto auto; justify-content: start; }
+  .m-chips-left b { padding: 6px 10px; }
+  .m-chips b.on { background: #1F3F7A; color: #fff; border-color: #1F3F7A; }
+  .m-btn { margin-top: auto; display: block; text-align: center; font-size: 14px; font-weight: 600; padding: 11px 0; border-radius: 10px; background: #1F3F7A; color: #fff; width: 100%; }
+  .m-btn-gold { background: #B08A45; color: #0F1B33; }
+  .m-big-card { width: 62%; height: auto; margin-top: 4px; }
+  .m-reading { font: 400 15px/1.45 var(--serif); color: #E3E9F4; padding-inline: 4px; }
+  .m-chart { width: 72%; height: auto; align-self: center; margin-block: 2px 4px; }
+  .m-list-row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #DCE4F0; }
+</style>

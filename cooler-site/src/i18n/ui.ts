@@ -79,7 +79,7 @@ export const ui = {
     test: '/test/',
     navTest: 'Symptom test',
     heroTest: 'Not sure where to start? Take the 2-minute symptom test',
-    navFeatures: 'Features',
+    navFeatures: 'What’s inside',
     navIntimate: 'Intimate health',
     navPrivacy: 'Privacy',
     navBlog: 'Journal',
