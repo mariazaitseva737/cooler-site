@@ -15,6 +15,16 @@ const copy = {
   sub: 'Symptoms, health and everything that makes you feel alive. One app, five minutes a day.',
   // Hero copy per ad. The ad link carries utm_content=a_normal | b_body | c_doctor.
   variants: {
+    // Post in a Facebook group inviting women to the free circle
+    fb_circle: {
+      kicker: 'Free 28-day circle',
+      h1: 'Join a free 28-day circle for women after menopause',
+      sub: '10 minutes of gentle dance a day, a weekly live class with me, and a simple app for sleep and hot flashes. 20 places.',
+      label: 'Save my place',
+      button: 'Join the circle',
+      source: 'fb_circle',
+      hideTry: true,
+    },
     a_normal: {
       kicker: 'Life after menopause',
       sub: 'So many new questions come up after menopause: what’s normal, what isn’t, and when it’s worth calling a doctor. Cooler gives you clear, calm answers and a 10-second daily check-in.',
@@ -198,17 +208,27 @@ const copy = {
   ],
   ctaTitle: 'Try it tomorrow morning. It takes five minutes.',
   ctaText: 'It’s free, and you don’t need to sign up.',
+
+  byLine: 'Made by Mary Zaitseva, dance coach',
+  founderKicker: 'Who’s behind Cooler',
+  founderTitle: 'Hi, I’m Mary',
+  founderText: [
+    'I’m a dance coach, a two-time world champion in ballroom show dance and a Blackpool finalist.',
+    'I’m not in menopause myself. I started Cooler when my mom went through it, and I saw how little real help there was. Her doctor said “it’s your age,” and the apps were made for 25-year-olds.',
+    'So I’m building what I wanted for her: health first, and then everything that helps you feel alive in your body again. I teach the live classes myself.',
+  ],
 };
 ---
 <section class="hero-band" data-section="hero">
   <div class="wrap hero">
     <div class="hero-text">
       <p class="kicker" data-hero-kicker>{copy.kicker}</p>
-      <h1 class="hero-title">{copy.h1}</h1>
+      <h1 class="hero-title" data-hero-h1>{copy.h1}</h1>
       <p class="hero-sub" data-hero-sub>{copy.sub}</p>
+      <a class="byline" href="#founder"><img src="/mary.jpg" width="48" height="48" alt="" /><span>{copy.byLine}</span></a>
       <div class="hero-actions" id="waitlist">
         <WaitlistForm lang={lang} id="hero-email" source="hero" label={copy.signupLabel} button={copy.signupButton} buttonClass="btn btn-primary" />
-        {APP_URL && <a class="hero-try" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+        {APP_URL && <a class="hero-try" data-hero-try href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
       </div>
     </div>
     <div class="hero-phone" data-shot="hero_today">
@@ -225,6 +245,13 @@ const copy = {
     var p = document.querySelector('[data-hero-sub]');
     if (k) k.textContent = c.kicker;
     if (p) p.textContent = c.sub;
+    var h = document.querySelector('[data-hero-h1]');
+    if (h && c.h1) h.textContent = c.h1;
+    var form = document.querySelector('#waitlist form');
+    if (form && c.label) { var l = form.querySelector('.field-label'); if (l) l.textContent = c.label; }
+    if (form && c.button) { var b = form.querySelector('button[type=submit]'); if (b) b.textContent = c.button; }
+    if (form && c.source) { var src = form.querySelector('input[name=source]'); if (src) src.value = c.source; form.dataset.trackPlace = c.source; }
+    if (c.hideTry) { var t = document.querySelector('[data-hero-try]'); if (t) t.hidden = true; }
     document.body.dataset.heroVariant = v;
   })();
 </script>
@@ -247,7 +274,18 @@ const copy = {
   </div>
 </section>
 
-<section class="section section-white" id="features" data-section="all_in_one">
+<section class="section section-white" id="founder" data-section="founder">
+  <div class="wrap founder">
+    <img class="founder-photo" src="/mary.jpg" width="480" height="480" alt="Mary Zaitseva, founder of Cooler" loading="lazy" />
+    <div class="stack-16">
+      <p class="kicker">{copy.founderKicker}</p>
+      <h2 class="h-section">{copy.founderTitle}</h2>
+      {copy.founderText.map((x) => <p class="founder-p">{x}</p>)}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features" data-section="all_in_one">
   <div class="wrap stack-56">
     <div class="stack-24 narrow">
       <h2 class="h-section">{copy.allTitle}</h2>
@@ -484,6 +522,12 @@ const copy = {
     .hero-phone { width: min(310px, 80vw); justify-self: center; }
   }
   .hero-title { font: 700 clamp(38px, 5vw, 64px)/1.1 var(--sans); letter-spacing: -0.015em; max-width: 16ch; color: var(--ink); }
+  .byline { justify-self: start; display: inline-flex; align-items: center; gap: 12px; color: var(--ink-2); text-decoration: none; font-size: 17px; font-weight: 600; }
+  .byline img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+  .founder { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; max-width: 1100px; }
+  .founder-photo { width: 100%; height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
+  .founder-p { font-size: clamp(19px, 1.8vw, 21px); line-height: 1.55; color: var(--ink-2); max-width: 60ch; }
+  @media (max-width: 760px) { .founder { grid-template-columns: minmax(0, 1fr); } .founder-photo { width: 180px; } }
   .hero-try { justify-self: start; font-size: 19px; font-weight: 600; text-underline-offset: 5px; }
   .hero-sub { font-size: clamp(19px, 1.9vw, 22px); line-height: 1.6; max-width: 640px; color: var(--ink-2); }
   .hero-actions { display: grid; gap: 18px; max-width: 640px; padding-top: 4px; scroll-margin-top: 24px; }
@@ -509,7 +553,7 @@ const copy = {
   .pillar-head p { font-size: 19px; color: var(--ink-soft); }
   .modules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 14px; }
   @media (min-width: 1100px) { .modules:has(> :nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .module { background: var(--air); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 22px 22px 20px; display: grid; gap: 10px; align-content: start; }
+  .module { background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 22px 22px 20px; display: grid; gap: 10px; align-content: start; }
   .module-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
   .module h4 { margin: 0; font: 600 21px/1.25 var(--sans); }
   .module p { font-size: 18px; line-height: 1.45; color: var(--ink-soft); }
