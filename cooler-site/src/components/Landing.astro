@@ -1,245 +1,219 @@
 ---
+// English landing. The Russian one (switched off for the US test) is in LandingRu.astro.
 import WaitlistForm from './WaitlistForm.astro';
-import { APP_NAME, APP_NAME_IN, APP_URL, CHECKOUT_URL, FOUNDING_PRICE, FULL_PRICE_YEAR, PIXEL_ON, appHref, ui, type Lang } from '../i18n/ui';
+import AppScreen from './AppScreen.astro';
+import { APP_URL, CHECKOUT_URL, FOUNDING_PRICE, FULL_PRICE_YEAR, PIXEL_ON, appHref, ui, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = ui[lang];
-const name = APP_NAME[lang];
 const tryHref = appHref(lang);
 
 const copy = {
-  ru: {
-    kicker: 'Для женщин после менопаузы',
-    h1: 'Впереди ещё тридцать лет. Пусть они будут хорошими.',
-    sub: `${name} поможет пережить приливы, плохой сон и перепады настроения. А когда они пройдут, напомнит позаботиться о костях, сердце и мышцах. Приложение работает на русском и английском.`,
-    shotsKicker: 'Как это выглядит',
-    shotsTitle: 'Крупный текст, понятные кнопки, ничего лишнего',
-    shots: [
-      ['today', 'Главный экран', 'Лекарства на сегодня, отметка дня и кнопка на случай прилива.'],
-      ['breathing', 'Начался прилив', 'Две минуты спокойного дыхания: вдох на 4, выдох на 6.'],
-      ['trends', 'Динамика', 'Что влияет на приливы и сон именно у вас. Видно уже через неделю.'],
-      ['doctor', 'К врачу', 'Итог за 30 дней и ваши вопросы. Можно показать на приёме или отправить.'],
-    ],
-    heroShotAlt: 'Главный экран приложения: лекарства на сегодня и кнопка «Начался прилив»',
-    notAloneTitle: 'Узнаёте себя? Вы не одна',
-    notAloneSub: 'Так бывает у очень многих. Просто вслух об этом говорят редко.',
-    situations: [
-      'Три часа ночи. Вы проснулись мокрая и то сбрасываете одеяло, то снова натягиваете.',
-      'Посреди фразы вылетело слово, самое простое. И вы ждёте, когда оно вернётся.',
-      'Срываетесь на близких и сами не понимаете почему.',
-      'В гостях или на работе вдруг бросает в жар, и хочется скорее выйти на воздух.',
-      'По утрам колени и пальцы плохо слушаются, и расходиться приходится дольше, чем раньше.',
-      'Врач говорит «это возраст, потерпите», и вы уходите ни с чем.',
-    ],
-    notAloneEnd: 'У всего этого есть понятные причины. И со многим можно что-то сделать.',
-    featuresKicker: 'Возможности',
-    featuresTitle: `Что можно делать в ${APP_NAME_IN}`,
-    features: [
-      ['Переждать прилив', 'Нажмите большую кнопку «Начался прилив», и круг на экране две минуты будет подсказывать, когда вдыхать и когда выдыхать.'],
-      ['Отметить день за полминуты', 'Отметьте, как сегодня с приливами, сном, настроением, силами и суставами. Приложение подскажет, что можно сделать с тем, что беспокоит больше всего.'],
-      ['Увидеть свои закономерности', 'Через пять отметок вы увидите, что повторяется именно у вас. Например, что после кофе во второй половине дня приливы сильнее.'],
-      ['Беречь кости, сердце и силу', 'Программы силовых тренировок, упражнений для тазового дна и для сна. Напоминания о лечении, если вы его получаете, и список обследований, которые пора пройти.'],
-      ['Понимать, что происходит', 'Короткие ответы на вопросы, которые неловко или некогда задать врачу. Рядом с русским термином стоит английский: пригодится, если вы лечитесь за границей.'],
-    ],
-    terms: [['приливы', 'hot flashes'], ['ЗГТ', 'HRT'], ['денситометрия', 'bone density scan']],
-    intimateKicker: 'Интимное здоровье',
-    intimateTitle: 'Об интимном можно говорить спокойно',
-    intimateText: 'После менопаузы у многих появляются сухость, дискомфорт или боль во время секса, а при кашле или смехе может подтекать. Само это обычно не проходит, но почти всегда решается. И секс после менопаузы — это нормально.',
-    intimatePoints: [
-      'Раздел открывается, только когда вы сами захотите',
-      'В уведомлениях на экране не будет интимных слов',
-      'Упражнения для тазового дна по простому расписанию',
-      'Термины на двух языках, чтобы обсудить это с врачом',
-    ],
-    privacyKicker: 'Приватность',
-    privacyTitle: 'Ваши данные остаются у вас',
-    privacyText: 'В приложениях о женском здоровье уже были истории с передачей данных. Поэтому мы решили не хранить ваши отметки у себя вообще.',
-    privacyCards: [
-      ['Отметки хранятся на вашем телефоне', 'Симптомы, лечение и всё из интимного раздела остаются в браузере на телефоне. К нам на сервер они не попадают.'],
-      PIXEL_ON
-        ? ['Мы не продаём и не передаём ваши записи', 'На страницах сайта (не в приложении) стоит пиксель Meta: по нему мы видим, работает ли наша реклама. Он видит, какие страницы открывали, и никогда не видит симптомы, лекарства и всё, что вы вносите в приложение.']
-        : ['Мы ничего не передаём и не продаём', 'Ни рекламодателям, ни партнёрам, никому.'],
-      ['Что мы всё-таки считаем', 'Какие страницы и экраны открывают и сколько людей возвращается. Для этого мы используем сервис Amplitude, IP-адрес не сохраняем. В приложении вы сами решаете, можно ли связывать эти визиты с вами. Записи, давление и лекарства туда не попадают никогда. Email у нас есть, только если вы сами его оставили.'],
-    ],
-    faqTitle: 'Частые вопросы',
-    faq: [
-      ['После последних месячных прошло больше 5 лет. Мне подойдёт?', 'Да. Приливы могли уже пройти, а заботиться о костях, мышцах, сердце и сне всё равно нужно. Для этого есть раздел «Моё здоровье».'],
-      ['А если месячные были меньше года назад?', 'Возможно, у вас ещё перименопауза, то есть переходный период. Приложение подойдёт и в этом случае: с приливами, сном и настроением оно помогает так же.'],
-      ['Нужно что-то скачивать?', 'Нет. Приложение открывается в браузере телефона. Его можно вынести на главный экран, мы покажем, как это сделать.'],
-      ['Я не очень дружу с приложениями', 'Мы это учли. Текст крупный, кнопки большие, у каждой иконки есть подпись. Отметка дня занимает полминуты.'],
-      ['Вы советуете гормональную терапию?', 'Мы рассказываем, что о ней известно, и не пугаем и не рекламируем. Подходит ли она вам, решаете вы с врачом.'],
-    ],
-    ctaTitle: 'Попробуйте сегодня. Это займёт минуту.',
-    ctaText: 'Это бесплатно, регистрироваться не нужно.',
-  },
-  en: {
-    kicker: 'For women after menopause',
-    h1: 'Thirty more years ahead. They can be good ones.',
-    sub: `${name} is a daily wellness practice for life after menopause: a 10-second check-in, short sessions for your body, clear answers about what’s normal, and a one-page summary for your doctor.`,
-    shotsKicker: 'What it looks like',
-    shotsTitle: 'Open it, do one thing, get on with your day',
-    shots: [
-      ['today', 'Today', 'One practice for the day and a one-tap check-in. That’s the whole morning routine.'],
-      ['program', 'Bones & strength', '15-minute sessions with a chair and a water bottle, three times a week.'],
-      ['trends', 'Trends', 'After a week you start seeing what makes your hot flashes and sleep better or worse.'],
-      ['doctor', 'For your doctor', 'Your last 30 days and your questions on one page. Show it at the appointment.'],
-    ],
-    heroShotAlt: 'The app’s Today screen: today’s strength session and a one-tap “How do you feel today?” check-in',
-    notAloneTitle: 'Sound familiar? You’re not alone',
-    notAloneSub: 'It happens to a lot of women. People just rarely say it out loud.',
-    situations: [
-      'It’s 3 a.m. You wake up drenched and keep kicking the blanket off and pulling it back on.',
-      'Halfway through a sentence, a simple word just disappears, and you wait for it to come back.',
-      'You snap at the people you love and can’t explain why.',
-      'At work or at a friend’s place, a wave of heat hits and all you want is to get outside.',
-      'In the morning your knees and fingers are stiff, and it takes longer to get going than it used to.',
-      'Your doctor says “it’s just your age, you’ll have to live with it,” and you leave with nothing.',
-    ],
-    notAloneEnd: 'All of this has real causes. And a lot of it can be helped.',
-    featuresKicker: 'Features',
-    featuresTitle: `What can you do with the ${name} app?`,
-    features: [
-      ['One practice a day', 'Open the app and one thing is waiting: a 15-minute strength session, or two minutes of calm breathing on a rest day.'],
-      ['Check in with one tap', 'Good, okay, hard or very hard. Add details only if you want to, and get one tip for whatever is bothering you most.'],
-      ['Get ready for the days that matter', 'Add a flight, a doctor’s visit, a big meeting or a family celebration. Two days before, Cooler shows you how to get ready, based on what bothers you: hot flashes on a plane, sleep before a talk, the questions to ask your doctor.'],
-      ['Get through a hot flash', 'Tap “Hot flash started” and breathe with the circle for two minutes. The app logs it for you, so later you can see what sets them off.'],
-      ['Understand what’s going on', 'Short, honest answers to the questions you feel awkward about or never get time to ask your doctor.'],
-    ],
-    terms: [['hot flashes', 'приливы'], ['HRT', 'ЗГТ'], ['bone density scan', 'денситометрия']],
-    intimateKicker: 'Intimate health',
-    intimateTitle: 'Intimate health, without the awkwardness',
-    intimateText: 'After menopause, many women notice dryness, discomfort or pain during sex, or a little leaking when they cough or laugh. It usually doesn’t go away on its own, but it can almost always be treated. And sex after menopause is completely normal.',
-    intimatePoints: [
-      'This section only opens when you choose to open it',
-      'Notifications on your lock screen never mention anything intimate',
-      'Pelvic floor exercises on a simple schedule',
-      'Plain words and questions to bring it up with your doctor',
-    ],
-    privacyKicker: 'Privacy',
-    privacyTitle: 'Your data stays with you',
-    privacyText: 'Women’s health apps have been caught sharing user data before. So we decided not to keep your logs on our side at all.',
-    privacyCards: [
-      ['Your logs live on your phone', 'Symptoms, treatment and everything in the intimate health section stay in the browser on your phone. They never reach our servers.'],
-      PIXEL_ON
-        ? ['We never sell or share your logs', 'On the pages of this website (not inside the app) we use the Meta pixel to see whether our ads work. It sees which pages were visited, never your symptoms, medicines or anything you enter in the app.']
-        : ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
-      ['What we do count', 'Which pages and screens get opened, and how many people come back. We use a service called Amplitude for this and don’t store IP addresses. In the app, you decide whether those visits can be linked to you. Your entries, blood pressure and medicines never go there. We only have your email if you gave it to us.'],
-    ],
-    faqTitle: 'Questions',
-    faq: [
-      ['My last period was more than 5 years ago. Is this for me?', 'Yes. Your hot flashes may be over, but your bones, muscles, heart and sleep still need looking after. That’s what the “My health” section is for.'],
-      ['What if my last period was less than a year ago?', 'You may still be in perimenopause, the transition stage. The app works for that too. It helps with hot flashes, sleep and mood the same way.'],
-      ['Do I need to download anything?', 'No. The app opens in your phone’s browser. You can add it to your home screen, and we’ll show you how.'],
-      ['I’m not great with apps', 'We kept that in mind. The text is large, the buttons are big, and every icon has a label. Logging your day takes about 30 seconds.'],
-      ['Do you recommend hormone therapy?', 'We explain what’s known about it, without scare stories and without selling anything. Whether it’s right for you is up to you and your doctor.'],
-    ],
-    ctaTitle: 'Try it today. It takes a minute.',
-    ctaText: 'It’s free, and you don’t need to sign up.',
-    // Hero copy per ad. The ad link carries utm_content=a_normal | b_body | c_doctor.
-    variants: {
-      a_normal: {
-        kicker: 'Life after menopause',
-        sub: 'So many new questions come up after menopause: what’s normal, what isn’t, and when it’s worth calling a doctor. Cooler gives you clear, calm answers and a 10-second daily check-in.',
-      },
-      b_body: {
-        kicker: 'For women after 50',
-        sub: 'Menopause isn’t the end of feeling good in your body. Cooler is a short daily practice: 15-minute strength sessions you can do at home with a chair, calm breathing, and a one-tap check-in that shows what helps you.',
-      },
-      c_doctor: {
-        kicker: 'Before your next appointment',
-        sub: 'HRT after menopause comes with a lot of questions. Keep a simple medication diary, see how you feel week to week, and bring a clear one-page summary to your doctor.',
-      },
+  kicker: 'For women after menopause',
+  h1: 'Thirty more years ahead. Let’s fill them with life.',
+  sub: 'Cooler brings together everything that keeps a woman full and alive: dance and movement, meditation and a sharp mind, your personal astrology and a card for the day, and calm care for your health. One app, a few minutes every morning.',
+  // Hero copy per ad. The ad link carries utm_content=a_normal | b_body | c_doctor.
+  variants: {
+    a_normal: {
+      kicker: 'Life after menopause',
+      sub: 'So many new questions come up after menopause: what’s normal, what isn’t, and when it’s worth calling a doctor. Cooler gives you clear, calm answers and a 10-second daily check-in.',
     },
-    signupLabel: 'Join the founding group: one 10-minute practice in your inbox every week, and first access to the full version.',
-    signupButton: 'Join free',
-    testLink: 'Wondering if what you feel is normal? See how much symptoms affect you, 2 minutes',
-    signupNote: 'Free. Only practices and app news, unsubscribe in one click. Or open the app right away:',
-    pricingKicker: 'Pricing',
-    pricingTitle: 'Start free. Become a founding member if it helps.',
-    plans: [
-      {
-        name: 'Free',
-        price: '$0',
-        per: 'always',
-        points: ['10-second daily check-in', '“Hot flash started” breathing', 'Clear answers to “is this normal?”', 'Medication diary'],
-        cta: 'Start free',
-      },
-      {
-        name: 'Founding member',
-        price: `$${FOUNDING_PRICE}`,
-        per: `for your first year, then $${FULL_PRICE_YEAR} a year`,
-        points: ['Everything in Free', 'Every program as it launches: strength (ready now), pelvic floor, sleep, body confidence', 'One-page summary for your doctor', 'New programs first, and a say in what we build next'],
-        cta: 'Become a founding member',
-        refund: 'Full refund any time in your first 30 days.',
-      },
-    ],
-    breatheIdle: 'Try it now: two slow breaths, in for 4, out for 6.',
-    breatheIn: 'Breathe in',
-    breatheOut: 'Breathe out',
-    breatheDone: 'That’s it. In the app, this starts with one tap when a hot flash begins.',
-    breatheStart: 'Breathe with me',
-    breatheStop: 'Stop',
-    breatheAgain: 'Again',
-    diffTitle: 'Most menopause apps give you things to read. Cooler gives you something to do.',
-    diffs: [
-      ['Do something now, not just read', 'A hot flash starts, you tap one button and breathe with the circle for two minutes. Every day there is one short thing to do, not a feed of articles.'],
-      ['Your patterns, not generic tips', 'After five check-ins you see what keeps repeating for you, like worse nights after afternoon coffee or better mood on days you moved.'],
-      ['On your phone, not on our servers', 'Your logs, medicines and everything intimate stay on your phone. We never see them, so we can’t lose or sell them.'],
-    ],
-    bodyTitle: 'Feel at home in your body again',
-    bodyText: 'After menopause, the body changes and many women stop trusting it. Cooler brings that back with short sessions you can do in your living room, no gym and no special kit.',
-    bodyPoints: [
-      ['Strength, ready now', '8 weeks, 3 sessions a week, about 15 minutes. Chair, wall and stairs. Builds muscle and bone and trains balance.'],
-      ['Pelvic floor', 'A few minutes a day on a simple schedule. Helps with leaking and with how intimacy feels.'],
-      ['Movement and dance, coming next', 'Gentle practices created by a professional dance coach to help you move freely and feel confident again. Founding members get them first.'],
-    ],
-    checkoutSoon: 'Founding membership opens in a few days. Leave your email above and we’ll send you the link first, at the same price.',
+    b_body: {
+      kicker: 'For women after 50',
+      sub: 'Menopause isn’t the end of feeling good in your body. Cooler is a short daily practice: 15-minute strength sessions you can do at home with a chair, calm breathing, and a one-tap check-in that shows what helps you.',
+    },
+    c_doctor: {
+      kicker: 'Before your next appointment',
+      sub: 'HRT after menopause comes with a lot of questions. Keep a simple medication diary, see how you feel week to week, and bring a clear one-page summary to your doctor.',
+    },
   },
-}[lang];
-const en = lang === 'en' ? (copy as any) : null;
+  signupLabel: 'Join the founding group: one 10-minute practice in your inbox every week, and first access to everything new.',
+  signupButton: 'Join free',
+  signupNote: 'Free. Only practices and app news, unsubscribe in one click. Or open the app right away:',
+  testLink: 'Wondering if what you feel is normal? See how much symptoms affect you, 2 minutes',
+  heroShotAlt: 'Cooler’s morning screen: today’s tarot card, a personal astrology note, words for the day, a 10-minute dance practice and a one-tap check-in',
+
+  notAloneTitle: 'Sound familiar? You’re not alone',
+  notAloneSub: 'It happens to a lot of women. People just rarely say it out loud.',
+  situations: [
+    'It’s 3 a.m. You wake up drenched and keep kicking the blanket off and pulling it back on.',
+    'Halfway through a sentence, a simple word just disappears, and you wait for it to come back.',
+    'You look in the mirror and don’t quite recognise the woman who used to love dancing.',
+    'You snap at the people you love and can’t explain why.',
+    'Some days you feel switched off, like life is happening to someone else.',
+    'Your doctor says “it’s just your age, you’ll have to live with it,” and you leave with nothing.',
+  ],
+  notAloneEnd: 'You don’t need to fix one symptom. You need to feel like yourself again. That takes the body, the mind and the soul together.',
+
+  allTitle: 'Not another tracker. Everything that makes you feel alive, in one place.',
+  allLead: 'Feeling good after 50 isn’t only about symptoms. It’s your body, your mind, your inner life and your health. Usually they live in five different apps, a notebook and a deck of cards in a drawer. Cooler puts them together and gives you one gentle plan for each day.',
+  ready: 'Ready now',
+  soon: 'Coming soon',
+  want: 'I want this',
+  wanted: 'Noted. You’ll get it first.',
+  pillars: [
+    {
+      id: 'body',
+      title: 'Body',
+      line: 'Feel at home in your body again',
+      modules: [
+        ['dance', 'Dance practices', 'Ten-minute sessions from a professional dance coach. Hips, posture, the way you walk into a room. No steps to memorise, just music and your body.', 0],
+        ['strength', 'Strength for bones', '8 weeks, 3 sessions a week, about 15 minutes. A chair, a wall and the stairs. Builds muscle and bone and trains balance.', 1],
+        ['pelvic', 'Pelvic floor', 'A few minutes a day on a simple schedule. Helps with leaking and with how intimacy feels.', 0],
+      ],
+    },
+    {
+      id: 'mind',
+      title: 'Mind',
+      line: 'Stay clear, calm and quick',
+      modules: [
+        ['meditation', 'Meditations', 'Short guided sessions for falling asleep, for worry, and for the moments when a hot flash makes everything feel like too much.', 0],
+        ['brain', 'Brain training', 'Five-minute games for memory, focus and finding the right word, so it stops slipping away mid-sentence.', 0],
+        ['affirmations', 'Affirmations', 'One sentence for the day, picked for how you checked in this morning. Read it, say it, keep it on your lock screen.', 0],
+        ['subliminals', 'Subliminals', 'Calm music with quiet affirmations underneath. For walks, housework or falling asleep with headphones on.', 0],
+      ],
+    },
+    {
+      id: 'soul',
+      title: 'Inner world',
+      line: 'Listen to yourself',
+      modules: [
+        ['astrology', 'Personal astrology', 'A daily reading written for you from your birth chart, not a newspaper horoscope for a whole sign. It also knows how you slept and how you feel today.', 0],
+        ['tarot', 'Card of the day', 'Draw one card each morning and get a short reading about your day in plain words. Save the ones that hit home.', 0],
+        ['rituals', 'Esoteric practices', 'New moon intentions, full moon letting go, candle and breath rituals to open and close the day.', 0],
+      ],
+    },
+    {
+      id: 'health',
+      title: 'Health',
+      line: 'Take care of the basics, calmly',
+      modules: [
+        ['checkin', 'One-tap check-in', 'Good, okay, hard or very hard. After a week you see what makes your sleep and hot flashes better or worse.', 1],
+        ['hotflash', 'Hot flash breathing', 'Tap one button and breathe with the circle for two minutes. The app logs it for you.', 1],
+        ['meds', 'Medication diary', 'Pills, patches, gels. Reminders that never say what the medicine is for.', 1],
+        ['doctor', 'Summary for your doctor', 'Your last 30 days and your questions on one page. Show it at the appointment.', 1],
+      ],
+    },
+  ] as { id: string; title: string; line: string; modules: [string, string, string, number][] }[],
+
+  morningTitle: 'Five minutes in the morning. The whole day feels different.',
+  morningLead: 'Open Cooler with your coffee. Everything is already waiting for you, chosen for how you feel today.',
+  screens: [
+    ['today', 'Your morning', 'Your card, your sky, words for the day and one practice. Tap how you feel, and you’re done.'],
+    ['card', 'Card of the day', 'Turn the card and read what it says about today. Short, warm and in plain words.'],
+    ['sky', 'Your sky', 'Your birth chart, today’s sky and how you slept, put together into one personal note.'],
+    ['practices', 'Practices', 'Dance, meditation, brain games, subliminals and rituals, sorted by how much time you have.'],
+  ],
+
+  astroKicker: 'Personal astrology',
+  astroTitle: 'Astrology that actually knows you',
+  astroText: 'Most horoscopes are written for millions of people at once. Yours is written every morning for one person.',
+  astroPoints: [
+    ['Your full chart', 'Your birth date, time and city, not just your sun sign. Moon, rising sign and houses included.'],
+    ['Your real day', 'The reading takes in how you slept and how you checked in, so the advice fits the day you’re actually having.'],
+    ['Ask your own question', 'Something on your mind? Ask it in your own words and get an answer based on your chart.'],
+  ],
+
+  diffTitle: 'Most menopause apps give you things to read. Cooler gives you something to do.',
+  diffs: [
+    ['Do something now, not just read', 'A hot flash starts, you tap one button and breathe with the circle for two minutes. Every day there is one short thing to do, not a feed of articles.'],
+    ['Made for you, not for everyone', 'Your card, your chart, your check-ins. After a few days the app knows what helps you and builds the day around it.'],
+    ['On your phone, not on our servers', 'Your logs, medicines and everything intimate stay on your phone. We never see them, so we can’t lose or sell them.'],
+  ],
+  breatheIdle: 'Try it now: two slow breaths, in for 4, out for 6.',
+  breatheIn: 'Breathe in',
+  breatheOut: 'Breathe out',
+  breatheDone: 'That’s it. In the app, this starts with one tap when a hot flash begins.',
+  breatheStart: 'Breathe with me',
+  breatheStop: 'Stop',
+  breatheAgain: 'Again',
+
+  pricingTitle: 'Start free. Become a founding member if it helps.',
+  plans: [
+    {
+      name: 'Free',
+      price: '$0',
+      per: 'always',
+      points: ['10-second daily check-in', '“Hot flash started” breathing', 'Clear answers to “is this normal?”', 'Medication diary'],
+      cta: 'Start free',
+    },
+    {
+      name: 'Founding member',
+      price: `$${FOUNDING_PRICE}`,
+      per: `for your first year, then $${FULL_PRICE_YEAR} a year`,
+      points: ['Everything in Free', 'Your personal astrology reading and card of the day, every morning', 'Every practice as it launches: dance, meditation, brain training, subliminals, rituals, strength and pelvic floor', 'One-page summary for your doctor', 'New modules first, and a say in what we build next'],
+      cta: 'Become a founding member',
+      refund: 'Full refund any time in your first 30 days.',
+    },
+  ],
+  checkoutSoon: 'Founding membership opens in a few days. Leave your email above and we’ll send you the link first, at the same price.',
+
+  intimateTitle: 'Intimate health, without the awkwardness',
+  intimateText: 'After menopause, many women notice dryness, discomfort or pain during sex, or a little leaking when they cough or laugh. It usually doesn’t go away on its own, but it can almost always be treated. And sex after menopause is completely normal.',
+  intimatePoints: [
+    'This section only opens when you choose to open it',
+    'Notifications on your lock screen never mention anything intimate',
+    'Pelvic floor exercises on a simple schedule',
+    'Plain words and questions to bring it up with your doctor',
+  ],
+
+  privacyTitle: 'Your data stays with you',
+  privacyText: 'Women’s health apps have been caught sharing user data before. So we decided not to keep your logs on our side at all.',
+  privacyCards: [
+    ['Your logs live on your phone', 'Symptoms, treatment and everything in the intimate health section stay in the browser on your phone. They never reach our servers.'],
+    ['Your birth details', 'To write your astrology reading, we send your birth date, time and city to our AI provider. Only those, never your name, symptoms or medicines.'],
+    PIXEL_ON
+      ? ['We never sell or share your logs', 'On the pages of this website (not inside the app) we use the Meta pixel to see whether our ads work. It sees which pages were visited, never your symptoms, medicines or anything you enter in the app.']
+      : ['We don’t share or sell anything', 'Not to advertisers, not to partners, not to anyone.'],
+    ['What we do count', 'Which pages and screens get opened, and how many people come back. We use a service called Amplitude for this and don’t store IP addresses. In the app, you decide whether those visits can be linked to you. Your entries, blood pressure and medicines never go there. We only have your email if you gave it to us.'],
+  ],
+
+  faqTitle: 'Questions',
+  faq: [
+    ['Do I have to use all of it?', 'No. In the first minute you pick what speaks to you. Some women only want dance and the check-in, others start every day with their card. Everything else stays out of the way.'],
+    ['Do astrology and tarot mix with the health advice?', 'No. Your card and your reading are for reflection and mood. Anything about your health lives in the Health section, where we stick to what research says.'],
+    ['My last period was more than 5 years ago. Is this for me?', 'Yes. Your hot flashes may be over, but your body, your mind and your sleep still deserve care. Most of Cooler isn’t about symptoms at all.'],
+    ['Do I need to download anything?', 'No. The app opens in your phone’s browser. You can add it to your home screen, and we’ll show you how.'],
+    ['I’m not great with apps', 'We kept that in mind. The text is large, the buttons are big, and every icon has a label. Your morning takes about five minutes.'],
+    ['Do you recommend hormone therapy?', 'We explain what’s known about it, without scare stories and without selling anything. Whether it’s right for you is up to you and your doctor.'],
+  ],
+  ctaTitle: 'Try it tomorrow morning. It takes five minutes.',
+  ctaText: 'It’s free, and you don’t need to sign up.',
+};
 ---
-<section class="wrap hero" data-section="hero">
-  <div class="hero-text">
-  <p class="kicker" data-hero-kicker>{copy.kicker}</p>
-  <h1 class="hero-title">{copy.h1}</h1>
-  <p class="hero-sub" data-hero-sub>{copy.sub}</p>
-  {en ? (
-    <div class="hero-actions" id="waitlist">
-      <WaitlistForm lang={lang} id="hero-email" source="hero" label={en.signupLabel} button={en.signupButton} buttonClass="btn btn-primary" />
-      <p class="note">{en.signupNote}</p>
-      <div class="hero-secondary">
-        {APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
-        <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{en.testLink}</a>
+<section class="hero-band" data-section="hero">
+  <div class="wrap hero">
+    <div class="hero-text">
+      <p class="kicker" data-hero-kicker>{copy.kicker}</p>
+      <h1 class="hero-title">{copy.h1}</h1>
+      <p class="hero-sub" data-hero-sub>{copy.sub}</p>
+      <div class="hero-actions" id="waitlist">
+        <WaitlistForm lang={lang} id="hero-email" source="hero" label={copy.signupLabel} button={copy.signupButton} buttonClass="btn btn-primary" />
+        <p class="note">{copy.signupNote}</p>
+        <div class="hero-secondary">
+          {APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
+          <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{copy.testLink}</a>
+        </div>
       </div>
     </div>
-  ) : (
-    <div class="hero-actions" id="waitlist">
-      {APP_URL && <a class="btn btn-primary btn-lg" href={tryHref} data-track="try_app" data-track-place="hero">{t.tryFree}</a>}
-      <a class="hero-test" href={t.test} data-track="symptom_test" data-track-place="hero">{t.heroTest}</a>
-      <WaitlistForm lang={lang} id="hero-email" source="hero" buttonClass={APP_URL ? 'btn btn-outline' : 'btn btn-primary'} />
-      <p class="note">{t.emailNote}</p>
+    <div class="hero-phone" data-shot="hero_today">
+      <AppScreen screen="today" label={copy.heroShotAlt} />
     </div>
-  )}
   </div>
-  <figure class="phone hero-phone" data-shot="hero_today">
-    <img src={`/screens/${lang}-today.webp`} width="390" height="844" alt={copy.heroShotAlt} fetchpriority="high" />
-  </figure>
 </section>
-{en && (
-  <script is:inline define:vars={{ variants: en.variants }}>
-    (function () {
-      var v = new URLSearchParams(location.search).get('utm_content');
-      var c = v && variants[v];
-      if (!c) return;
-      var k = document.querySelector('[data-hero-kicker]');
-      var p = document.querySelector('[data-hero-sub]');
-      if (k) k.textContent = c.kicker;
-      if (p) p.textContent = c.sub;
-      document.body.dataset.heroVariant = v;
-    })();
-  </script>
-)}
+<script is:inline define:vars={{ variants: copy.variants }}>
+  (function () {
+    var v = new URLSearchParams(location.search).get('utm_content');
+    var c = v && variants[v];
+    if (!c) return;
+    var k = document.querySelector('[data-hero-kicker]');
+    var p = document.querySelector('[data-hero-sub]');
+    if (k) k.textContent = c.kicker;
+    if (p) p.textContent = c.sub;
+    document.body.dataset.heroVariant = v;
+  })();
+</script>
 
 <section class="section section-white" data-section="not_alone">
   <div class="wrap stack-56">
@@ -254,144 +228,159 @@ const en = lang === 'en' ? (copy as any) : null;
   </div>
 </section>
 
-{en && (
-  <section class="section" id="why" data-section="why">
-    <div class="wrap why">
-      <h2 class="h-section why-title">{en.diffTitle}</h2>
-      <div class="breathe" data-breathe data-section="breathe_demo">
-        <div class="breathe-stage" aria-hidden="true">
-          <span class="breathe-ring"></span>
-          <span class="breathe-core"></span>
-          <span class="breathe-count serif" data-breathe-count></span>
-        </div>
-        <p class="breathe-cue" data-breathe-cue aria-live="polite">{en.breatheIdle}</p>
-        <button class="btn btn-primary" type="button" data-breathe-btn data-track="breathe_demo" data-track-place="why">{en.breatheStart}</button>
-      </div>
-      <dl class="diffs plain-list">
-        {en.diffs.map(([h, p]: string[]) => (
-          <div><dt>{h}</dt><dd>{p}</dd></div>
-        ))}
-      </dl>
+<section class="section" id="features" data-section="all_in_one">
+  <div class="wrap stack-56">
+    <div class="stack-24 narrow">
+      <h2 class="h-section">{copy.allTitle}</h2>
+      <p class="lead">{copy.allLead}</p>
     </div>
-  </section>
-)}
-{en && (
-  <script is:inline define:vars={{ L: { idle: en.breatheIdle, inn: en.breatheIn, out: en.breatheOut, done: en.breatheDone, start: en.breatheStart, stop: en.breatheStop, again: en.breatheAgain } }}>
-    (function () {
-      var root = document.querySelector('[data-breathe]');
-      if (!root) return;
-      var btn = root.querySelector('[data-breathe-btn]');
-      var cue = root.querySelector('[data-breathe-cue]');
-      var count = root.querySelector('[data-breathe-count]');
-      var timers = [];
-      var running = false;
-      function clear() { timers.forEach(clearTimeout); timers = []; }
-      function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
-      function phase(t0, secs, word, cls) {
-        at(t0, function () { root.className = 'breathe ' + cls; cue.textContent = word; });
-        for (var i = 0; i < secs; i++) (function (n) { at(t0 + n * 1000, function () { count.textContent = String(secs - n); }); })(i);
-      }
-      function stop(finished) {
-        clear(); running = false;
-        root.className = 'breathe';
-        count.textContent = '';
-        cue.textContent = finished ? L.done : L.idle;
-        btn.textContent = finished ? L.again : L.start;
-      }
-      btn.addEventListener('click', function () {
-        if (running) { stop(false); return; }
-        running = true; btn.textContent = L.stop;
-        var t = 0;
-        for (var c = 0; c < 2; c++) { phase(t, 4, L.inn, 'is-in'); t += 4000; phase(t, 6, L.out, 'is-out'); t += 6000; }
-        at(t, function () { stop(true); });
-      });
-    })();
-  </script>
-)}
+    <div class="pillars">
+      {copy.pillars.map((p, pi) => (
+        <section class="pillar" id={`pillar-${p.id}`} data-section={`pillar_${p.id}`} aria-labelledby={`pillar-${p.id}-h`}>
+          <header class="pillar-head">
+            <span class="pillar-num serif">{String(pi + 1).padStart(2, '0')}</span>
+            <h3 id={`pillar-${p.id}-h`} class="serif">{p.title}</h3>
+            <p>{p.line}</p>
+          </header>
+          <ul class="modules" role="list">
+            {p.modules.map(([id, name, desc, ready]) => (
+              <li class="module">
+                <div class="module-top">
+                  <h4>{name}</h4>
+                  <span class={ready ? 'tag tag-ready' : 'tag'}>{ready ? copy.ready : copy.soon}</span>
+                </div>
+                <p>{desc}</p>
+                {!ready && (
+                  <button class="want" type="button" data-want data-track="module_interest" data-track-place={id}>{copy.want}</button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </div>
+</section>
+<script is:inline define:vars={{ wanted: copy.wanted }}>
+  document.querySelectorAll('[data-want]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      b.textContent = wanted;
+      b.disabled = true;
+      b.classList.add('is-done');
+    });
+  });
+</script>
 
 <section class="section section-deep" id="screens" data-section="screens">
-  <div class="wrap stack-56 shots-wrap">
-    <div class="stack-16 narrow">
-      <h2 class="h-section">{copy.shotsTitle}</h2>
+  <div class="wrap stack-56">
+    <div class="stack-24 narrow">
+      <h2 class="h-section">{copy.morningTitle}</h2>
+      <p class="lead lead-light">{copy.morningLead}</p>
     </div>
     <ul class="shots" role="list">
-      {copy.shots.map(([id, h, p]) => (
+      {copy.screens.map(([id, h, p]) => (
         <li data-shot={id}>
-          <figure class="phone"><img src={`/screens/${lang}-${id}.webp`} width="390" height="844" alt={`${h}. ${p}`} loading="lazy" decoding="async" /></figure>
+          <AppScreen screen={id as any} label={`${h}. ${p}`} />
           <h3>{h}</h3>
           <p>{p}</p>
         </li>
       ))}
     </ul>
-    {APP_URL && <a class="btn btn-glass btn-lg shots-cta" href={tryHref} data-track="try_app" data-track-place="screens">{t.tryFree}</a>}
+    {APP_URL && <a class="btn btn-light btn-lg shots-cta" href={tryHref} data-track="try_app" data-track-place="screens">{t.tryFree}</a>}
   </div>
 </section>
 
-<section class="section" id="features" data-section="features">
+<section class="section section-white" id="astrology" data-section="astrology">
+  <div class="wrap astro">
+    <div class="stack-24">
+      <p class="kicker">{copy.astroKicker}</p>
+      <h2 class="h-section">{copy.astroTitle}</h2>
+      <p class="lead">{copy.astroText}</p>
+      <button class="btn btn-outline want-lg" type="button" data-want data-track="module_interest" data-track-place="astrology_block">{copy.want}</button>
+    </div>
+    <dl class="plain-list">
+      {copy.astroPoints.map(([h, p]) => (
+        <div><dt>{h}</dt><dd>{p}</dd></div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<section class="section" id="why" data-section="why">
+  <div class="wrap why">
+    <h2 class="h-section why-title">{copy.diffTitle}</h2>
+    <div class="breathe" data-breathe data-section="breathe_demo">
+      <div class="breathe-stage" aria-hidden="true">
+        <span class="breathe-ring"></span>
+        <span class="breathe-core"></span>
+        <span class="breathe-count serif" data-breathe-count></span>
+      </div>
+      <p class="breathe-cue" data-breathe-cue aria-live="polite">{copy.breatheIdle}</p>
+      <button class="btn btn-primary" type="button" data-breathe-btn data-track="breathe_demo" data-track-place="why">{copy.breatheStart}</button>
+    </div>
+    <dl class="diffs plain-list">
+      {copy.diffs.map(([h, p]) => (
+        <div><dt>{h}</dt><dd>{p}</dd></div>
+      ))}
+    </dl>
+  </div>
+</section>
+<script is:inline define:vars={{ L: { idle: copy.breatheIdle, inn: copy.breatheIn, out: copy.breatheOut, done: copy.breatheDone, start: copy.breatheStart, stop: copy.breatheStop, again: copy.breatheAgain } }}>
+  (function () {
+    var root = document.querySelector('[data-breathe]');
+    if (!root) return;
+    var btn = root.querySelector('[data-breathe-btn]');
+    var cue = root.querySelector('[data-breathe-cue]');
+    var count = root.querySelector('[data-breathe-count]');
+    var timers = [];
+    var running = false;
+    function clear() { timers.forEach(clearTimeout); timers = []; }
+    function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+    function phase(t0, secs, word, cls) {
+      at(t0, function () { root.className = 'breathe ' + cls; cue.textContent = word; });
+      for (var i = 0; i < secs; i++) (function (n) { at(t0 + n * 1000, function () { count.textContent = String(secs - n); }); })(i);
+    }
+    function stop(finished) {
+      clear(); running = false;
+      root.className = 'breathe';
+      count.textContent = '';
+      cue.textContent = finished ? L.done : L.idle;
+      btn.textContent = finished ? L.again : L.start;
+    }
+    btn.addEventListener('click', function () {
+      if (running) { stop(false); return; }
+      running = true; btn.textContent = L.stop;
+      var t = 0;
+      for (var c = 0; c < 2; c++) { phase(t, 4, L.inn, 'is-in'); t += 4000; phase(t, 6, L.out, 'is-out'); t += 6000; }
+      at(t, function () { stop(true); });
+    });
+  })();
+</script>
+
+<section class="section section-white" id="pricing" data-section="pricing">
   <div class="wrap stack-56">
     <div class="stack-16 narrow">
-      <h2 class="h-section">{copy.featuresTitle}</h2>
+      <h2 class="h-section">{copy.pricingTitle}</h2>
     </div>
-    <ul class="features">
-      {copy.features.map(([h, p], i) => (
-        <li>
-          <h3>{h}</h3>
-          <div class="stack-16">
-            <p>{p}</p>
-            {i === 4 && lang === 'ru' && (
-              <ul class="chips" aria-label={lang === 'ru' ? 'Примеры терминов' : 'Example terms'}>
-                {copy.terms.map(([a, b]) => <li><strong>{a}</strong> <span>{b}</span></li>)}
-              </ul>
-            )}
-          </div>
-        </li>
+    <div class="plans">
+      {copy.plans.map((plan: any, i: number) => (
+        <div class={i === 1 ? 'plan plan-featured' : 'plan'}>
+          <h3>{plan.name}</h3>
+          <p class="plan-price"><span class="serif">{plan.price}</span> {plan.per}</p>
+          <ul class="plan-points">{plan.points.map((pt: string) => <li>{pt}</li>)}</ul>
+          {i === 0
+            ? (APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="pricing">{plan.cta}</a>)
+            : (CHECKOUT_URL
+                ? <a class="btn btn-primary" href={CHECKOUT_URL} data-checkout data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</a>
+                : <button class="btn btn-primary" type="button" data-checkout data-checkout-soon data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</button>)}
+          {plan.refund && <p class="plan-refund">{plan.refund}</p>}
+          {i === 1 && !CHECKOUT_URL && <p class="plan-soon" data-checkout-msg hidden>{copy.checkoutSoon}</p>}
+        </div>
       ))}
-    </ul>
+    </div>
   </div>
 </section>
-
-{en && (
-  <section class="section" id="body" data-section="body">
-    <div class="wrap body-wrap">
-      <div class="stack-24">
-        <h2 class="h-section">{en.bodyTitle}</h2>
-        <p class="lead">{en.bodyText}</p>
-      </div>
-      <dl class="plain-list">
-        {en.bodyPoints.map(([h, p]: string[]) => (
-          <div><dt>{h}</dt><dd>{p}</dd></div>
-        ))}
-      </dl>
-    </div>
-  </section>
-)}
-
-{en && (
-  <section class="section section-white" id="pricing" data-section="pricing">
-    <div class="wrap stack-56">
-      <div class="stack-16 narrow">
-        <h2 class="h-section">{en.pricingTitle}</h2>
-      </div>
-      <div class="plans">
-        {en.plans.map((plan: any, i: number) => (
-          <div class={i === 1 ? 'plan plan-featured' : 'plan'}>
-            <h3>{plan.name}</h3>
-            <p class="plan-price"><span class="serif">{plan.price}</span> {plan.per}</p>
-            <ul class="plan-points">{plan.points.map((pt: string) => <li>{pt}</li>)}</ul>
-            {i === 0
-              ? (APP_URL && <a class="btn btn-outline" href={tryHref} data-track="try_app" data-track-place="pricing">{plan.cta}</a>)
-              : (CHECKOUT_URL
-                  ? <a class="btn btn-primary" href={CHECKOUT_URL} data-checkout data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</a>
-                  : <button class="btn btn-primary" type="button" data-checkout data-checkout-soon data-price={FOUNDING_PRICE} data-track="founding_checkout" data-track-place="pricing">{plan.cta}</button>)}
-            {plan.refund && <p class="plan-refund">{plan.refund}</p>}
-            {i === 1 && !CHECKOUT_URL && <p class="plan-soon" data-checkout-msg hidden>{en.checkoutSoon}</p>}
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-)}
-{en && !CHECKOUT_URL && (
+{!CHECKOUT_URL && (
   <script is:inline>
     document.querySelectorAll('[data-checkout-soon]').forEach(function (b) {
       b.addEventListener('click', function () {
@@ -463,112 +452,132 @@ const en = lang === 'en' ? (copy as any) : null;
   .stack-16 { display: grid; gap: 16px; }
   .stack-24 { display: grid; gap: 24px; align-content: start; }
   .stack-56 { display: grid; gap: clamp(32px, 5vw, 56px); }
-  .narrow { max-width: 860px; }
+  .narrow { max-width: 900px; }
   .center { justify-items: center; text-align: center; }
 
-  .hero { padding-block: clamp(40px, 7vw, 96px) clamp(64px, 8vw, 112px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 5vw, 80px); align-items: center; max-width: 1440px; }
-  .hero-text { display: grid; gap: 24px; }
-  .phone { margin: 0; border-radius: 40px; padding: 10px; background: var(--ink); box-shadow: 0 30px 60px -30px rgba(16, 48, 47, 0.45); }
-  .phone img { display: block; width: 100%; height: auto; border-radius: 30px; }
-  .hero-phone { width: clamp(260px, 24vw, 340px); transform: rotate(2deg); }
+  /* Hero */
+  .hero-band { background: linear-gradient(180deg, var(--white) 0%, var(--air) 100%); border-bottom: 1px solid var(--line-soft); }
+  .hero { padding-block: clamp(40px, 6vw, 88px) clamp(56px, 7vw, 104px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 5vw, 96px); align-items: center; }
+  .hero-text { display: grid; gap: 26px; }
+  .hero-phone { width: clamp(270px, 24vw, 340px); }
   @media (max-width: 960px) {
     .hero { grid-template-columns: minmax(0, 1fr); }
-    .hero-phone { width: min(300px, 78vw); justify-self: center; transform: none; }
+    .hero-phone { width: min(310px, 80vw); justify-self: center; }
   }
-  .section-deep { background: var(--lagoon-deep, #0B4446); color: var(--air); }
-  .section-deep .h-section { color: var(--air); }
+  .hero-title { font: 400 clamp(42px, 6vw, 78px)/1.06 var(--serif); letter-spacing: -0.02em; max-width: 15ch; color: var(--ink); }
+  .hero-sub { font-size: clamp(19px, 1.9vw, 22px); line-height: 1.6; max-width: 640px; color: var(--ink-2); }
+  .hero-actions { display: grid; gap: 18px; max-width: 640px; padding-top: 4px; scroll-margin-top: 24px; }
+  .hero-test { justify-self: start; font-size: 19px; font-weight: 600; text-underline-offset: 5px; }
+  .hero-secondary { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  .note { font-size: 17px; color: var(--ink-soft); }
+
+  /* Not alone */
+  .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 28px clamp(32px, 5vw, 64px); }
+  .situations li { border-top: 1px solid var(--line); padding-top: 18px; font-size: clamp(19px, 1.8vw, 21px); line-height: 1.55; max-width: 40ch; }
+  .closing { font-size: clamp(24px, 2.6vw, 32px); line-height: 1.35; max-width: 900px; color: var(--lagoon); }
+
+  /* Pillars */
+  .pillars { display: grid; gap: clamp(28px, 4vw, 48px); }
+  .pillar { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(20px, 4vw, 64px); padding-top: clamp(24px, 3vw, 36px); border-top: 1px solid var(--ink); }
+  .pillar-head { display: grid; gap: 8px; align-content: start; }
+  .pillar-num { font-size: 18px; color: var(--gold); letter-spacing: 0.08em; }
+  .pillar-head h3 { font-size: clamp(32px, 3.4vw, 44px); font-weight: 400; line-height: 1.05; }
+  .pillar-head p { font-size: 19px; color: var(--ink-soft); }
+  .modules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 14px; }
+  @media (min-width: 1100px) { .modules:has(> :nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .module { background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 22px 22px 20px; display: grid; gap: 10px; align-content: start; }
+  .module-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .module h4 { margin: 0; font: 600 21px/1.25 var(--sans); }
+  .module p { font-size: 18px; line-height: 1.5; color: var(--ink-2); }
+  .tag { flex: none; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 9px; border-radius: 6px; background: var(--gold-soft); color: #5E4719; }
+  .tag-ready { background: var(--glass); color: var(--lagoon-deep); }
+  .want { justify-self: start; margin-top: 4px; min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1.5px solid var(--lagoon); background: transparent; color: var(--lagoon); font: 600 17px/1 var(--sans); cursor: pointer; }
+  .want:hover { background: var(--glass-light); }
+  .want.is-done { border-color: transparent; background: var(--glass-light); color: var(--ink-2); cursor: default; }
+  @media (max-width: 820px) { .pillar { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Screens */
+  .section-deep { background: var(--lagoon-deep); color: var(--air); }
+  .section-deep .h-section { color: var(--white); }
+  .lead-light { color: #C9D5EA; }
   .shots { list-style: none; padding: 0; margin: 0; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.5vw, 36px); }
   .shots li { display: grid; gap: 12px; align-content: start; }
-  .shots .phone { background: #0A2E2D; box-shadow: none; margin-bottom: 8px; }
-  .shots h3 { font: 600 22px/1.25 var(--sans); color: var(--air); }
-  .shots p { font-size: 18px; line-height: 1.5; color: #CFE6DF; }
-  .shots-wrap { grid-template-columns: minmax(0, 1fr); }
+  .shots li :global(.mock) { margin-bottom: 8px; background: #0A1630; box-shadow: none; }
+  .shots h3 { font: 600 22px/1.25 var(--sans); color: var(--white); }
+  .shots p { font-size: 18px; line-height: 1.5; color: #C9D5EA; }
   .shots-cta { justify-self: start; }
+  .btn-light { background: var(--white); color: var(--lagoon-deep); }
+  .btn-light:hover { background: var(--glass); color: var(--lagoon-deep); }
   @media (max-width: 1100px) {
-    .shots { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(270px, 74vw); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; margin-inline: calc(-1 * var(--gutter, 20px)); padding-inline: var(--gutter, 20px); scroll-padding-inline: var(--gutter, 20px); }
+    .shots { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(280px, 76vw); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; margin-inline: calc(-1 * var(--gutter, 20px)); padding-inline: var(--gutter, 20px); scroll-padding-inline: var(--gutter, 20px); }
     .shots li { scroll-snap-align: start; }
   }
-  .hero-title { font: 600 clamp(40px, 6.4vw, 80px)/1.05 var(--serif); letter-spacing: -0.025em; max-width: 1000px; }
-  .hero-sub { font-size: clamp(19px, 2vw, 23px); line-height: 1.55; max-width: 720px; }
-  .hero-actions { display: grid; gap: 18px; max-width: 640px; padding-top: 8px; scroll-margin-top: 24px; }
-  .hero-actions > .btn { justify-self: start; }
-  .hero-test { justify-self: start; font-size: 19px; font-weight: 500; text-underline-offset: 5px; }
-  .note { font-size: 18px; color: var(--ink-soft); }
 
-  .situations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 28px clamp(32px, 5vw, 64px); }
-  .situations li { border-top: 1.5px solid var(--line); padding-top: 18px; font-size: clamp(19px, 1.8vw, 22px); line-height: 1.5; max-width: 40ch; }
-  .closing { font-size: clamp(24px, 2.6vw, 32px); line-height: 1.35; max-width: 900px; }
+  /* Astrology */
+  .astro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .want-lg { justify-self: start; }
+  .want-lg.is-done { background: var(--glass-light); border-color: transparent; color: var(--ink-2); }
+  @media (max-width: 900px) { .astro { grid-template-columns: minmax(0, 1fr); } }
 
-  .features { list-style: none; margin: 0; padding: 0; }
-  .features > li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 32px; padding-block: 32px; border-top: 1.5px solid var(--line); align-items: baseline; }
-  .features > li:last-child { border-bottom: 1.5px solid var(--line); }
-  .features h3 { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.25; }
-  .features p { font-size: clamp(19px, 1.7vw, 21px); color: var(--ink-2); }
-  @media (max-width: 860px) {
-    .features > li { grid-template-columns: 1fr; gap: 10px; padding-block: 26px; }
-  }
-  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .chips li { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; padding: 0 18px; border-radius: 22px; background: var(--glass-light); font-size: 18px; }
-  .chips span { color: var(--ink-soft); }
+  /* Lists */
+  .plain-list { margin: 0; display: grid; gap: 28px; }
+  .plain-list > div { display: grid; gap: 8px; padding-left: 22px; border-left: 2px solid var(--gold); }
+  .plain-list dt { font: 600 clamp(21px, 2vw, 24px)/1.3 var(--sans); }
+  .plain-list dd { margin: 0; font-size: clamp(18px, 1.6vw, 20px); line-height: 1.55; color: var(--ink-2); max-width: 48ch; }
 
-  .intimate { border-radius: 40px; background: var(--lagoon-deep); color: var(--air); padding: clamp(32px, 6vw, 88px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(32px, 5vw, 72px); }
-  .kicker-light { color: var(--glass); }
-  .intimate-text { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.6; color: #E3EFEB; }
-  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; align-self: center; }
-  .checks li { background: rgba(255,255,255,0.07); border-radius: 22px; padding: 20px 24px 20px 58px; font-size: clamp(19px, 1.7vw, 21px); line-height: 1.45; position: relative; }
-  .checks li::before { content: ''; position: absolute; left: 24px; top: 26px; width: 16px; height: 9px; border-left: 2.5px solid var(--glass); border-bottom: 2.5px solid var(--glass); transform: rotate(-45deg); }
-
-  .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(32px, 6vw, 72px); align-items: start; }
-  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
-
-  .faq details { border-top: 1.5px solid var(--line); padding-block: 6px; }
-  .faq details:last-child { border-bottom: 1.5px solid var(--line); }
-  .faq summary { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; font-size: clamp(20px, 2vw, 24px); font-weight: 600; cursor: pointer; list-style: none; }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq .plus { font-size: 32px; font-weight: 400; color: var(--lagoon); transition: transform .2s; }
-  .faq details[open] .plus { transform: rotate(45deg); }
-  .faq details p { font-size: clamp(19px, 1.8vw, 21px); color: var(--ink-2); padding-bottom: 22px; max-width: 760px; }
-
-  .cta-form { width: 100%; max-width: 620px; text-align: left; }
-
+  /* Why + breathe */
   .why { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: 'title breathe' 'diffs breathe'; gap: clamp(32px, 5vw, 64px) clamp(32px, 6vw, 96px); align-items: start; }
   .why-title { grid-area: title; max-width: 18ch; }
   .breathe { grid-area: breathe; display: grid; justify-items: center; gap: 20px; text-align: center; align-self: center; }
   .diffs { grid-area: diffs; }
-  .plain-list { margin: 0; display: grid; gap: 28px; }
-  .plain-list > div { display: grid; gap: 8px; padding-left: 22px; border-left: 3px solid var(--glass); }
-  .plain-list dt { font: 600 clamp(22px, 2.2vw, 26px)/1.25 var(--sans); }
-  .plain-list dd { margin: 0; font-size: clamp(19px, 1.7vw, 21px); line-height: 1.5; color: var(--ink-2); max-width: 46ch; }
-  @media (max-width: 900px) {
-    .why { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'title' 'breathe' 'diffs'; }
-  }
-
+  @media (max-width: 900px) { .why { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'title' 'breathe' 'diffs'; } }
   .breathe-stage { position: relative; width: min(300px, 72vw); aspect-ratio: 1; display: grid; place-items: center; }
-  .breathe-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px dashed var(--glass); }
+  .breathe-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--glass); }
   .breathe-core { position: absolute; inset: 22%; border-radius: 50%; background: var(--lagoon); box-shadow: 0 0 0 14px var(--glass-light); transform: scale(0.72); transition: transform 1.2s ease-in-out; }
   .breathe.is-in .breathe-core { transform: scale(1.32); transition-duration: 4s; }
   .breathe.is-out .breathe-core { transform: scale(0.72); transition-duration: 6s; }
-  .breathe-count { position: relative; font-size: 56px; font-weight: 600; color: var(--white); min-height: 1.2em; }
-  .breathe-cue { font-size: clamp(20px, 2vw, 23px); line-height: 1.45; max-width: 26ch; min-height: 2.9em; color: var(--ink); }
+  .breathe-count { position: relative; font-size: 56px; font-weight: 500; color: var(--white); min-height: 1.2em; }
+  .breathe-cue { font-size: clamp(20px, 2vw, 22px); line-height: 1.45; max-width: 26ch; min-height: 2.9em; color: var(--ink); }
   @media (prefers-reduced-motion: reduce) {
     .breathe-core, .breathe.is-in .breathe-core, .breathe.is-out .breathe-core { transition: none; transform: scale(1); }
   }
-  .body-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
-  @media (max-width: 900px) { .body-wrap { grid-template-columns: minmax(0, 1fr); } }
-  .hero-secondary { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+
+  /* Pricing */
   .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(16px, 2.5vw, 28px); }
-  .plan { background: var(--air); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; align-content: start; }
-  .plan-featured { background: var(--lagoon-deep); color: var(--air); }
-  .plan h3 { font-size: 26px; }
-  .plan-price { font-size: 19px; color: var(--ink-soft); }
-  .plan-price span { font-size: 48px; font-weight: 600; color: var(--ink); margin-right: 6px; }
-  .plan-featured .plan-price, .plan-featured .plan-refund, .plan-featured .plan-soon { color: #CFE6DF; }
-  .plan-featured .plan-price span, .plan-featured h3 { color: var(--air); }
+  .plan { background: var(--air); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; align-content: start; }
+  .plan-featured { background: var(--lagoon-deep); border-color: var(--lagoon-deep); color: var(--air); }
+  .plan h3 { font-size: 24px; }
+  .plan-price { font-size: 18px; color: var(--ink-soft); }
+  .plan-price span { font-size: 48px; font-weight: 500; color: var(--ink); margin-right: 6px; }
+  .plan-featured .plan-price, .plan-featured .plan-refund, .plan-featured .plan-soon { color: #C9D5EA; }
+  .plan-featured .plan-price span, .plan-featured h3 { color: var(--white); }
   .plan-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .plan-points li { font-size: 19px; line-height: 1.45; padding-left: 30px; position: relative; }
-  .plan-points li::before { content: ''; position: absolute; left: 4px; top: 9px; width: 14px; height: 8px; border-left: 2.5px solid var(--lagoon); border-bottom: 2.5px solid var(--lagoon); transform: rotate(-45deg); }
-  .plan-featured .plan-points li::before { border-color: var(--glass); }
+  .plan-points li::before { content: ''; position: absolute; left: 4px; top: 9px; width: 14px; height: 8px; border-left: 2px solid var(--lagoon); border-bottom: 2px solid var(--lagoon); transform: rotate(-45deg); }
+  .plan-featured .plan-points li::before { border-color: var(--gold-soft); }
   .plan .btn { justify-self: start; }
-  .plan-featured .btn-primary { background: var(--glass); color: var(--lagoon-dark); }
-  .plan-refund, .plan-soon { font-size: 18px; }
+  .plan-featured .btn-primary { background: var(--gold); color: var(--ink); }
+  .plan-featured .btn-primary:hover { background: #C29A52; }
+  .plan-refund, .plan-soon { font-size: 17px; }
+
+  /* Intimate */
+  .intimate { border-radius: var(--radius); background: var(--lagoon-deep); color: var(--air); padding: clamp(32px, 6vw, 88px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(32px, 5vw, 72px); }
+  .intimate .h-section { color: var(--white); }
+  .intimate-text { font-size: clamp(19px, 1.8vw, 21px); line-height: 1.6; color: #DCE4F0; }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; align-self: center; }
+  .checks li { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px 22px 18px 56px; font-size: clamp(18px, 1.7vw, 20px); line-height: 1.45; position: relative; }
+  .checks li::before { content: ''; position: absolute; left: 24px; top: 25px; width: 15px; height: 8px; border-left: 2px solid var(--gold-soft); border-bottom: 2px solid var(--gold-soft); transform: rotate(-45deg); }
+
+  .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(32px, 6vw, 72px); align-items: start; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  .faq details { border-top: 1px solid var(--line); padding-block: 6px; }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; font-size: clamp(20px, 2vw, 23px); font-weight: 600; cursor: pointer; list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq .plus { font-size: 30px; font-weight: 400; color: var(--lagoon); transition: transform .2s; }
+  .faq details[open] .plus { transform: rotate(45deg); }
+  .faq details p { font-size: clamp(19px, 1.8vw, 20px); color: var(--ink-2); padding-bottom: 22px; max-width: 760px; }
+
+  .cta-form { width: 100%; max-width: 620px; text-align: left; }
 </style>

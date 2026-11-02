@@ -4,9 +4,9 @@ import { createPortal } from 'preact/compat';
 export function Logo({ size = 30 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 34 34" fill="none" aria-hidden="true">
-      <circle cx="17" cy="17" r="15.5" stroke="#0B5C5E" stroke-width="2" />
-      <path d="M7 14c3.3-2.6 6.7-2.6 10 0s6.7 2.6 10 0" stroke="#0B5C5E" stroke-width="2" stroke-linecap="round" />
-      <path d="M7 20c3.3-2.6 6.7-2.6 10 0s6.7 2.6 10 0" stroke="#0B5C5E" stroke-width="2" stroke-linecap="round" opacity=".55" />
+      <circle cx="17" cy="17" r="15.5" stroke="#1F3F7A" stroke-width="2" />
+      <path d="M7 14c3.3-2.6 6.7-2.6 10 0s6.7 2.6 10 0" stroke="#1F3F7A" stroke-width="2" stroke-linecap="round" />
+      <path d="M7 20c3.3-2.6 6.7-2.6 10 0s6.7 2.6 10 0" stroke="#1F3F7A" stroke-width="2" stroke-linecap="round" opacity=".55" />
     </svg>
   );
 }
