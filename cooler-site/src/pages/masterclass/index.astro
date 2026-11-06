@@ -123,6 +123,10 @@ const c = {
         <p class="mc-p">{c.hostText}</p>
       </div>
     </div>
+    <div class="wrap mc-gallery">
+      <figure><img src="/mary-dance-live.jpg" width="660" height="1100" alt="Mary dancing at a live event, women around her filming" loading="lazy" /><figcaption>Dancing with women at a live event</figcaption></figure>
+      <figure><img src="/mary-dance-competition.jpg" width="660" height="1095" alt="Mary on the competition floor with her dance partner" loading="lazy" /><figcaption>On the competition floor</figcaption></figure>
+    </div>
   </section>
 
   <section class="section mc-form-band" id="signup" data-section="mc_form">
@@ -299,6 +303,10 @@ const c = {
   .mc-host { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; max-width: 1000px; }
   .mc-host img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
   @media (max-width: 700px) { .mc-host { grid-template-columns: minmax(0, 1fr); } .mc-host img { width: 140px; } }
+  .mc-gallery { margin-top: clamp(28px, 4vw, 48px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 2vw, 24px); max-width: 1000px; }
+  .mc-gallery figure { margin: 0; display: grid; gap: 10px; }
+  .mc-gallery img { width: 100%; height: auto; aspect-ratio: 3 / 5; object-fit: cover; border-radius: var(--radius); }
+  .mc-gallery figcaption { font-size: 16px; color: var(--ink-soft); }
   .mc-p { font-size: clamp(19px, 1.8vw, 21px); line-height: 1.55; color: var(--ink-2); max-width: 60ch; }
 
   .mc-form-band { scroll-margin-top: 16px; }
