@@ -92,7 +92,7 @@ const c = {
         </dl>
         <a class="btn btn-primary btn-lg mc-cta" href="#signup" data-track="masterclass_cta" data-track-place="hero">{c.cta}</a>
       </div>
-      <img class="mc-photo" src="/mary.jpg" width="480" height="480" alt="Mary Zaitseva, your host" />
+      <figure class="mc-photo-wrap"><img class="mc-photo" src="/mary-dance-hero.jpg" width="366" height="367" alt="Mary Zaitseva dancing" /><figcaption>Photo: SPKRASH</figcaption></figure>
     </div>
   </section>
 
@@ -274,6 +274,9 @@ const c = {
   .mc-hero-text { display: grid; gap: 22px; justify-items: start; }
   .mc-hero h1 { font: 700 clamp(40px, 5.5vw, 68px)/1.08 var(--sans); letter-spacing: -0.015em; }
   .mc-sub { font-size: clamp(19px, 1.9vw, 22px); line-height: 1.55; max-width: 34em; color: var(--ink-2); }
+  .mc-photo-wrap { margin: 0; display: grid; justify-items: center; gap: 6px; }
+  .mc-photo-wrap figcaption { font-size: 13px; color: var(--ink-soft); }
+  @media (max-width: 860px) { .mc-photo-wrap { order: -1; justify-items: start; } }
   .mc-photo { width: clamp(220px, 26vw, 360px); height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
   @media (max-width: 860px) {
     .mc-hero-grid { grid-template-columns: minmax(0, 1fr); }
