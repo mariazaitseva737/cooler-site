@@ -10,6 +10,7 @@ const tryHref = appHref(lang);
 <header class="wrap site-header">
   <a class="logo" href={home}><Logo /><span>{APP_NAME[lang]}</span></a>
   <nav class="site-nav" aria-label={t.navAria}>
+    {lang === 'en' && <a class="keep nav-live" href="/masterclass/" data-track="masterclass_cta" data-track-place="header">Free class Nov 21</a>}
     <a href={`${home}#features`}>{t.navFeatures}</a>
     <a href={`${home}#intimate`}>{t.navIntimate}</a>
     <a href={`${home}#privacy`}>{t.navPrivacy}</a>

@@ -1,0 +1,333 @@
+---
+// Free live masterclass on Zoom. The sign-up form doubles as customer research:
+// a few one-tap questions about what women already use, spend and want.
+// Submissions land in Netlify → Forms → masterclass.
+import Base from '../../layouts/Base.astro';
+
+// Saturday, November 21, 2026, 6:00 PM Eastern (EST, UTC-5) = 23:00 UTC
+const START_UTC = '2026-11-21T23:00:00Z';
+const END_UTC = '2026-11-22T00:15:00Z';
+
+const c = {
+  kicker: 'Free live masterclass on Zoom',
+  h1: 'Come back to yourself',
+  sub: 'One evening for women who’ve been putting themselves last and feel ready to live fully again, with love, pleasure and a body that feels like home.',
+  date: 'Saturday, November 21',
+  time: '6:00 PM ET',
+  length: '75 minutes',
+  cta: 'Save my free spot',
+
+  whatTitle: 'What we’ll do together',
+  what: [
+    ['Reconnect', 'Gentle practices to notice your body again and hear what you actually want.'],
+    ['Dance', 'An easy, sensual dance combination. No experience needed, just music and you.'],
+    ['Take it home', 'A 10-minute routine you can repeat every morning.'],
+  ],
+
+  forTitle: 'This is for you if',
+  forList: [
+    'You’ve spent years taking care of everyone else',
+    'You don’t quite recognise yourself in the mirror lately',
+    'You miss feeling desired, playful and free',
+    'You’re ready to try, even if you haven’t danced in decades',
+  ],
+
+  hostKicker: 'Your host',
+  hostName: 'Mary Zaitseva',
+  hostText: 'Two-time World Showdance Champion and Blackpool finalist. I’ve taught women to feel at home in their bodies for years. I’m building Cooler, an app for life after menopause, after watching my mom go through it with almost no support.',
+
+  formTitle: 'Save your spot',
+  formLead: 'Free. Takes one minute. The answers help me shape the class around you.',
+  q: {
+    name: 'First name',
+    email: 'Email',
+    emailNote: 'The Zoom link goes here.',
+    age: 'Your age',
+    ages: ['Under 45', '45–49', '50–54', '55–59', '60–64', '65+'],
+    stage: 'Where are you right now?',
+    stages: ['Still having periods', 'Periods are irregular', 'No period for 12+ months', 'Not sure'],
+    want: 'What would you most like to feel again?',
+    wantNote: 'Pick any.',
+    wants: ['Confident in my body', 'Desire and pleasure', 'Energy', 'Calm and good sleep', 'Like myself', 'Connected to other women'],
+    uses: 'What do you already do for yourself?',
+    usesNote: 'Pick any.',
+    usesList: ['Hormone therapy (HRT)', 'Supplements', 'Fitness, yoga or dance classes', 'A wellness or menopause app', 'Therapist or coach', 'Meditation', 'Nothing yet'],
+    spend: 'About how much do you spend on your wellbeing each month?',
+    spendHint: 'Classes, apps, supplements, beauty. A rough guess is fine.',
+    spends: ['$0', 'Under $25', '$25–75', '$75–150', '$150+'],
+    next: 'If you love the class, would you join a 4-week live program with me?',
+    nexts: ['Yes, I’d pay for that', 'Maybe, depends on the price', 'Probably not'],
+    note: 'Anything you’d like me to know? (optional)',
+    replay: 'Send me the replay if I can’t make it live',
+    submit: 'Save my free spot',
+    error: 'Something went wrong. Please try again in a minute.',
+  },
+
+  faqTitle: 'Questions',
+  faq: [
+    ['Is it really free?', 'Yes. No card, no catch.'],
+    ['Do I need to turn on my camera?', 'No. Camera on or off, it’s up to you.'],
+    ['I haven’t danced in years. Is that okay?', 'That’s exactly who it’s for. The steps are simple, and you can do them sitting down if you need to.'],
+    ['Will there be a recording?', 'Yes, if you tick the box in the form, I’ll send you the replay.'],
+  ],
+};
+---
+<Base
+  lang="en"
+  title="Come back to yourself: a free live masterclass with Mary Zaitseva"
+  description="Free 75-minute Zoom masterclass on November 21 at 6 PM ET. Gentle practices to reconnect with yourself and an easy dance combination for women ready to live fully again."
+  path="/masterclass/"
+  alternates={{ en: '/masterclass/' }}
+>
+  <section class="mc-hero" data-section="mc_hero">
+    <div class="wrap mc-hero-grid">
+      <div class="mc-hero-text">
+        <p class="kicker">{c.kicker}</p>
+        <h1>{c.h1}</h1>
+        <p class="mc-sub">{c.sub}</p>
+        <dl class="mc-when">
+          <div><dt>Date</dt><dd>{c.date}</dd></div>
+          <div><dt>Time</dt><dd>{c.time}<span class="mc-local" data-local hidden></span></dd></div>
+          <div><dt>Length</dt><dd>{c.length}</dd></div>
+        </dl>
+        <a class="btn btn-primary btn-lg mc-cta" href="#signup" data-track="masterclass_cta" data-track-place="hero">{c.cta}</a>
+      </div>
+      <img class="mc-photo" src="/mary.jpg" width="480" height="480" alt="Mary Zaitseva, your host" />
+    </div>
+  </section>
+
+  <section class="section section-white" data-section="mc_what">
+    <div class="wrap mc-stack">
+      <h2 class="h-section">{c.whatTitle}</h2>
+      <ol class="mc-what">
+        {c.what.map(([h, p], i) => (
+          <li><span class="mc-num">{i + 1}</span><h3>{h}</h3><p>{p}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" data-section="mc_for">
+    <div class="wrap mc-two">
+      <h2 class="h-section">{c.forTitle}</h2>
+      <ul class="mc-checks">{c.forList.map((x) => <li>{x}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section section-white" data-section="mc_host">
+    <div class="wrap mc-host">
+      <img src="/mary.jpg" width="480" height="480" alt="" loading="lazy" />
+      <div class="mc-stack-sm">
+        <p class="kicker">{c.hostKicker}</p>
+        <h2 class="h-section">{c.hostName}</h2>
+        <p class="mc-p">{c.hostText}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mc-form-band" id="signup" data-section="mc_form">
+    <div class="wrap mc-form-wrap">
+      <div class="mc-stack-sm">
+        <h2 class="h-section">{c.formTitle}</h2>
+        <p class="mc-p">{c.formLead}</p>
+      </div>
+
+      <form class="mc-form" name="masterclass" method="POST" action="/masterclass/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="masterclass" />
+        <input type="hidden" name="source" value="" data-source />
+        <input type="hidden" name="wants" value="" />
+        <input type="hidden" name="uses" value="" />
+        <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+        <div class="mc-row">
+          <label class="mc-field">
+            <span class="mc-label">{c.q.name}</span>
+            <input class="input" name="name" autocomplete="given-name" required />
+          </label>
+          <label class="mc-field">
+            <span class="mc-label">{c.q.email}</span>
+            <input class="input" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+            <span class="mc-hint">{c.q.emailNote}</span>
+          </label>
+        </div>
+
+        <fieldset>
+          <legend class="mc-label">{c.q.age}</legend>
+          <div class="chips">{c.q.ages.map((v) => <label class="chip"><input type="radio" name="age" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mc-label">{c.q.stage}</legend>
+          <div class="chips">{c.q.stages.map((v) => <label class="chip"><input type="radio" name="stage" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mc-label">{c.q.want} <span class="mc-hint-inline">{c.q.wantNote}</span></legend>
+          <div class="chips">{c.q.wants.map((v) => <label class="chip"><input type="checkbox" data-multi="wants" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mc-label">{c.q.uses} <span class="mc-hint-inline">{c.q.usesNote}</span></legend>
+          <div class="chips">{c.q.usesList.map((v) => <label class="chip"><input type="checkbox" data-multi="uses" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mc-label">{c.q.spend}</legend>
+          <p class="mc-hint">{c.q.spendHint}</p>
+          <div class="chips">{c.q.spends.map((v) => <label class="chip"><input type="radio" name="spend" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mc-label">{c.q.next}</legend>
+          <div class="chips chips-col">{c.q.nexts.map((v) => <label class="chip"><input type="radio" name="program" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <label class="mc-field">
+          <span class="mc-label">{c.q.note}</span>
+          <textarea class="input mc-textarea" name="note" rows="3"></textarea>
+        </label>
+
+        <label class="mc-tick"><input type="checkbox" name="replay" value="yes" /><span>{c.q.replay}</span></label>
+
+        <button class="btn btn-primary btn-lg" type="submit">{c.q.submit}</button>
+        <p class="form-error" role="alert" hidden>{c.q.error}</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section section-white" data-section="mc_faq">
+    <div class="wrap mc-two">
+      <h2 class="h-section">{c.faqTitle}</h2>
+      <dl class="mc-faq">{c.faq.map(([q, a]) => <div><dt>{q}</dt><dd>{a}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ START_UTC }}>
+    (function () {
+      // Show the time in the visitor's own zone when it isn't Eastern
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (tz && tz !== 'America/New_York') {
+          var s = new Date(START_UTC).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+          var el = document.querySelector('[data-local]');
+          if (el) { el.textContent = ' (' + s + ' your time)'; el.hidden = false; }
+        }
+      } catch (e) {}
+      var p = new URLSearchParams(location.search);
+      var src = document.querySelector('[data-source]');
+      if (src) src.value = [p.get('utm_source'), p.get('utm_campaign'), p.get('utm_content')].filter(Boolean).join(' / ') || 'direct';
+    })();
+  </script>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>('form.mc-form');
+    if (form) {
+      const track = (e: string, p: Record<string, unknown> = {}) => (window as any).coolerTrack?.(e, p);
+      let started = false;
+      form.addEventListener('input', () => {
+        if (!started) { started = true; track('masterclass_form_started'); }
+      });
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // Netlify Forms keeps one value per field name, so join the multi-picks
+        ['wants', 'uses'].forEach((k) => {
+          const picked = [...form.querySelectorAll<HTMLInputElement>(`[data-multi="${k}"]:checked`)].map((i) => i.value);
+          (form.elements.namedItem(k) as HTMLInputElement).value = picked.join('; ');
+        });
+        const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        const err = form.querySelector<HTMLElement>('.form-error');
+        if (btn) btn.disabled = true;
+        if (err) err.hidden = true;
+        const fd = new FormData(form);
+        try {
+          const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(fd as any).toString(),
+          });
+          if (!res.ok) throw new Error(String(res.status));
+          // Only the answers' categories go to analytics, never name, email or notes
+          track('masterclass_signed_up', {
+            age: fd.get('age') || '', stage: fd.get('stage') || '', spend: fd.get('spend') || '',
+            program: fd.get('program') || '', uses: fd.get('uses') || '', wants: fd.get('wants') || '',
+            replay: fd.get('replay') === 'yes',
+          });
+          await ((window as any).coolerFlush?.() ?? Promise.resolve());
+          window.location.assign('/masterclass/thanks/');
+        } catch (x) {
+          track('masterclass_form_failed', { reason: String((x as Error)?.message || 'network').slice(0, 40) });
+          if (err) err.hidden = false;
+          if (btn) btn.disabled = false;
+        }
+      });
+    }
+  </script>
+</Base>
+
+<style>
+  .mc-hero { background: linear-gradient(180deg, var(--white) 0%, var(--air) 100%); border-bottom: 1px solid var(--line-soft); }
+  .mc-hero-grid { padding-block: clamp(40px, 6vw, 88px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .mc-hero-text { display: grid; gap: 22px; justify-items: start; }
+  .mc-hero h1 { font: 700 clamp(40px, 5.5vw, 68px)/1.08 var(--sans); letter-spacing: -0.015em; }
+  .mc-sub { font-size: clamp(19px, 1.9vw, 22px); line-height: 1.55; max-width: 34em; color: var(--ink-2); }
+  .mc-photo { width: clamp(220px, 26vw, 360px); height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
+  @media (max-width: 860px) {
+    .mc-hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .mc-photo { order: -1; width: 140px; }
+  }
+  .mc-when { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 12px; }
+  .mc-when div { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 12px 18px; }
+  .mc-when dt { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .mc-when dd { margin: 4px 0 0; font-size: 20px; font-weight: 700; }
+  .mc-local { display: block; font-size: 15px; font-weight: 400; color: var(--ink-soft); }
+  .mc-cta { margin-top: 6px; }
+
+  .mc-stack { display: grid; gap: clamp(28px, 4vw, 48px); }
+  .mc-stack-sm { display: grid; gap: 14px; align-content: start; }
+  .mc-what { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+  .mc-what li { background: var(--air); border-radius: var(--radius); padding: 24px; display: grid; gap: 10px; align-content: start; }
+  .mc-num { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--lagoon); color: var(--white); font-weight: 700; }
+  .mc-what h3 { font-size: 23px; }
+  .mc-what p { font-size: 19px; line-height: 1.5; color: var(--ink-2); }
+
+  .mc-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(28px, 6vw, 72px); align-items: start; }
+  @media (max-width: 860px) { .mc-two { grid-template-columns: minmax(0, 1fr); } }
+  .mc-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .mc-checks li { background: var(--white); border: 1px solid var(--line-soft); border-radius: 10px; padding: 16px 20px 16px 52px; font-size: clamp(19px, 1.8vw, 21px); position: relative; }
+  .mc-checks li::before { content: ''; position: absolute; left: 22px; top: 23px; width: 14px; height: 8px; border-left: 2px solid var(--lagoon); border-bottom: 2px solid var(--lagoon); transform: rotate(-45deg); }
+
+  .mc-host { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; max-width: 1000px; }
+  .mc-host img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
+  @media (max-width: 700px) { .mc-host { grid-template-columns: minmax(0, 1fr); } .mc-host img { width: 140px; } }
+  .mc-p { font-size: clamp(19px, 1.8vw, 21px); line-height: 1.55; color: var(--ink-2); max-width: 60ch; }
+
+  .mc-form-band { scroll-margin-top: 16px; }
+  .mc-form-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  @media (max-width: 960px) { .mc-form-wrap { grid-template-columns: minmax(0, 1fr); } }
+  .mc-form { background: var(--white); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: clamp(20px, 3.5vw, 40px); display: grid; gap: 26px; }
+  .mc-form fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
+  .mc-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 18px; }
+  .mc-field { display: grid; gap: 8px; }
+  .mc-label { font-size: 19px; font-weight: 700; padding: 0; }
+  .mc-hint, .mc-hint-inline { font-size: 16px; font-weight: 400; color: var(--ink-soft); }
+  .mc-form .input { width: 100%; }
+  .mc-textarea { min-height: 96px; padding-block: 12px; resize: vertical; font: inherit; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips-col { flex-direction: column; align-items: stretch; }
+  .chip { position: relative; cursor: pointer; }
+  .chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .chip span { display: block; min-height: 48px; padding: 12px 16px; border: 1.5px solid var(--line); border-radius: 8px; font-size: 17px; line-height: 1.3; background: var(--white); }
+  .chip:hover span { border-color: var(--lagoon); }
+  .chip input:checked + span { background: var(--lagoon); border-color: var(--lagoon); color: var(--white); }
+  .chip input:focus-visible + span { outline: 3px solid var(--apricot); outline-offset: 2px; }
+  .mc-tick { display: flex; gap: 12px; align-items: center; font-size: 18px; cursor: pointer; }
+  .mc-tick input { width: 22px; height: 22px; accent-color: var(--lagoon); }
+  .mc-form .btn { justify-self: start; }
+  .form-error { font-size: 18px; color: var(--brick-ink); }
+  button[disabled] { opacity: 0.6; cursor: wait; }
+
+  .mc-faq { margin: 0; display: grid; gap: 24px; }
+  .mc-faq div { padding-left: 20px; border-left: 2px solid var(--gold); display: grid; gap: 6px; }
+  .mc-faq dt { font-size: 21px; font-weight: 700; }
+  .mc-faq dd { margin: 0; font-size: 19px; line-height: 1.5; color: var(--ink-2); }
+</style>
