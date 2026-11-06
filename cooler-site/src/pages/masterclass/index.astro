@@ -46,6 +46,9 @@ const c = {
     ages: ['Under 45', '45–49', '50–54', '55–59', '60–64', '65+'],
     stage: 'Where are you right now?',
     stages: ['Still having periods', 'Periods are irregular', 'No period for 12+ months', 'Not sure'],
+    life: 'What’s changed in your life in the last few years?',
+    lifeNote: 'Pick any.',
+    lifes: ['My kids have left home', 'Divorce or separation', 'A new relationship', 'Retirement', 'Menopause', 'Loss of someone close', 'Nothing big'],
     want: 'What would you most like to feel again?',
     wantNote: 'Pick any.',
     wants: ['Confident in my body', 'Desire and pleasure', 'Energy', 'Calm and good sleep', 'Like myself', 'Connected to other women'],
@@ -141,6 +144,7 @@ const c = {
         <input type="hidden" name="source" value="" data-source />
         <input type="hidden" name="wants" value="" />
         <input type="hidden" name="uses" value="" />
+        <input type="hidden" name="life" value="" />
         <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
 
         <div class="mc-progress" aria-hidden="true" hidden>
@@ -156,6 +160,11 @@ const c = {
         <fieldset class="mc-step" data-step="stage" data-auto>
           <legend class="mc-label">{c.q.stage}</legend>
           <div class="chips chips-col">{c.q.stages.map((v) => <label class="chip"><input type="radio" name="stage" value={v} /><span>{v}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset class="mc-step" data-step="life">
+          <legend class="mc-label">{c.q.life} <span class="mc-hint-inline">{c.q.lifeNote}</span></legend>
+          <div class="chips chips-col">{c.q.lifes.map((v) => <label class="chip"><input type="checkbox" data-multi="life" value={v} /><span>{v}</span></label>)}</div>
         </fieldset>
 
         <fieldset class="mc-step" data-step="wants">
@@ -281,7 +290,7 @@ const c = {
         e.preventDefault();
         if (cur !== steps.length - 1) { show(cur + 1); return; }
         // Netlify Forms keeps one value per field name, so join the multi-picks
-        ['wants', 'uses'].forEach((k) => {
+        ['wants', 'uses', 'life'].forEach((k) => {
           const picked = [...form.querySelectorAll<HTMLInputElement>(`[data-multi="${k}"]:checked`)].map((i) => i.value);
           (form.elements.namedItem(k) as HTMLInputElement).value = picked.join('; ');
         });
@@ -300,7 +309,7 @@ const c = {
           // Only the answers' categories go to analytics, never name, email or notes
           track('masterclass_signed_up', {
             age: fd.get('age') || '', stage: fd.get('stage') || '', spend: fd.get('spend') || '',
-            program: fd.get('program') || '', uses: fd.get('uses') || '', wants: fd.get('wants') || '',
+            program: fd.get('program') || '', uses: fd.get('uses') || '', wants: fd.get('wants') || '', life: fd.get('life') || '',
             replay: fd.get('replay') === 'yes',
           });
           await ((window as any).coolerFlush?.() ?? Promise.resolve());
