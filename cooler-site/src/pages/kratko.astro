@@ -1,0 +1,99 @@
+---
+// Short Russian page about what Cooler will be. Made to be screenshotted on a phone
+// and shared (stories, Telegram). Standalone: no site header, since /ru/* redirects to the US site.
+import '@fontsource/source-sans-3/400.css';
+import '@fontsource/source-sans-3/600.css';
+import '@fontsource/source-sans-3/700.css';
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import Analytics from '../components/Analytics.astro';
+
+const inside = [
+  ['Танец', 'практики от чемпионки мира'],
+  ['Сила и баланс', '15 минут для мышц и костей'],
+  ['Сон и спокойствие', 'медитации и дыхание'],
+  ['Мозг', 'игры на память и фокус'],
+  ['Слова на день', 'аффирмации и сублиминалы'],
+  ['Астрология и таро', 'личный прогноз и карта дня'],
+  ['Самочувствие', 'трекер, витамины, лекарства'],
+  ['Вместе', 'живые классы и круги женщин'],
+];
+
+const pillars = [
+  ['Двигаться', 'каждый день понемногу'],
+  ['Спать и восстанавливаться', 'без гонки и чувства вины'],
+  ['Быть рядом с людьми', 'и не терять себя'],
+];
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cooler: всё для долгой и яркой жизни женщины</title>
+    <meta name="description" content="Танец, сила, сон, мозг, астрология и живые классы. Практики и программы для долгой, здоровой и наполненной жизни в одном приложении." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#F5F7FB" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Analytics />
+  </head>
+  <body>
+    <main class="k">
+      <section class="k-card" id="inside" data-section="ru_inside">
+        <div class="k-brand"><Logo /><span>Cooler</span></div>
+        <h1>Всё, что делает женщину живой и наполненной, в одном приложении</h1>
+        <p class="k-sub">Практики и программы для долгой, здоровой и яркой жизни. Несколько минут в день.</p>
+        <ul class="k-list">
+          {inside.map(([h, p]) => <li><strong>{h}</strong> <span>{p}</span></li>)}
+        </ul>
+        <p class="k-foot">Скоро запуск · cooler-app.com</p>
+      </section>
+
+      <section class="k-block" data-section="ru_longevity">
+        <p class="kicker">Про долголетие</p>
+        <h2>Долгая жизнь строится из простых вещей, которые делаешь каждый день</h2>
+        <ol class="k-pillars">
+          {pillars.map(([h, p], i) => <li><span class="k-num">{i + 1}</span><div><strong>{h}</strong><span>{p}</span></div></li>)}
+        </ol>
+      </section>
+
+      <section class="k-block k-author" data-section="ru_author">
+        <img src="/mary.jpg" width="480" height="480" alt="Мария Зайцева" />
+        <div>
+          <strong>Мария Зайцева</strong>
+          <span>Двукратная чемпионка мира по шоу-танцу, финалистка Блэкпула, продакт-менеджер</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  body { background: var(--air); }
+  .k { width: min(100%, 560px); margin-inline: auto; padding: 16px 16px 48px; display: grid; gap: 16px; }
+  .k-card { background: var(--lagoon-deep); color: var(--white); border-radius: 20px; padding: 22px 20px 18px; display: grid; gap: 14px; }
+  .k-brand { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--sans); }
+  .k-brand :global(svg) { width: 30px; height: 30px; }
+  .k-brand :global(svg *) { stroke: var(--white); }
+  .k-card h1 { font: 700 clamp(25px, 6.6vw, 32px)/1.15 var(--sans); letter-spacing: -0.01em; }
+  .k-sub { font-size: 17px; line-height: 1.4; color: #C9D5EA; }
+  .k-list { list-style: none; margin: 2px 0 0; padding: 0; display: grid; gap: 9px; }
+  .k-list li { position: relative; padding-left: 20px; font-size: 16.5px; line-height: 1.35; color: #DCE4F0; }
+  .k-list li::before { content: ''; position: absolute; left: 2px; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+  .k-list strong { color: var(--white); font-weight: 700; }
+  .k-list span::before { content: '- '; }
+  .k-foot { margin-top: 2px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.14); font-size: 15px; font-weight: 600; color: var(--gold-soft); letter-spacing: 0.02em; }
+
+  .k-block { background: var(--white); border: 1px solid var(--line-soft); border-radius: 20px; padding: 24px 22px; display: grid; gap: 14px; }
+  .k-block h2 { font: 700 22px/1.25 var(--sans); }
+  .k-pillars { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .k-pillars li { display: flex; gap: 14px; align-items: center; }
+  .k-num { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--glass); color: var(--lagoon-deep); font-weight: 700; }
+  .k-pillars strong { display: block; font-size: 18px; }
+  .k-pillars div span { font-size: 16px; color: var(--ink-soft); }
+
+  .k-author { grid-template-columns: 64px 1fr; align-items: center; gap: 16px; }
+  .k-author img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+  .k-author strong { display: block; font-size: 18px; }
+  .k-author span { font-size: 15px; line-height: 1.4; color: var(--ink-soft); }
+</style>
